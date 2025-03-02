@@ -4,9 +4,21 @@
       <div class="logo">
         <NuxtLink to="/">Home</NuxtLink>
       </div>
+
+      <!-- Barre de recherche -->
+      <div class="search-container">
+        <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="Search..."
+            class="search-input"
+        />
+      </div>
+
       <div class="menu-icon" @click="toggleSidebar">
         &#9776; <!-- Icône de menu -->
       </div>
+
       <ul :class="{ 'active': isSidebarOpen }" class="nav-links">
         <li><NuxtLink to="/biography">Biography</NuxtLink></li>
         <li><NuxtLink to="/metahism">Metahism</NuxtLink></li>
@@ -14,6 +26,7 @@
         <li><NuxtLink to="/analyses">Analyses</NuxtLink></li>
       </ul>
     </div>
+
     <div class="sidebar" :class="{ 'open': isSidebarOpen }">
       <button class="close-btn" @click="toggleSidebar">&times;</button>
       <ul>
@@ -32,6 +45,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 const isSidebarOpen = ref(false);
 const isHidden = ref(false);
 const isOpaque = ref(false);
+const searchQuery = ref(""); // Variable pour stocker la requête de recherche
 
 const navbarHeight = 70; // Hauteur estimée de la navbar pour décider quand elle disparaît
 let lastScrollY = 0;
@@ -48,14 +62,18 @@ const handleScroll = () => {
 
   // Logique de disparition naturelle
   if (currentScrollY > navbarHeight && currentScrollY > lastScrollY) {
-    // Disparaître "naturellement" quand on défile assez bas
     isHidden.value = true;
   } else if (currentScrollY < lastScrollY) {
-    // Réapparaître immédiatement lorsqu'on défile vers le haut
     isHidden.value = false;
   }
 
   lastScrollY = currentScrollY; // Mise à jour de la position précédente
+};
+
+// Fonction pour gérer les recherches (placeholder)
+const handleSearch = () => {
+  console.log("Recherche en cours :", searchQuery.value);
+  // Implémentez ici la logique pour vos recherches
 };
 
 onMounted(() => {
@@ -166,6 +184,30 @@ nav {
   cursor: pointer;
 }
 
+/* Barre de recherche */
+.search-container {
+  flex: 1; /* Prend l'espace restant entre le logo et les liens */
+  margin: 0 20px; /* Espacement côté gauche et droit */
+  display: flex;
+  justify-content: center; /* Centrer la barre de recherche */
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px; /* Largeur maximum sur grands écrans */
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #cc0000; /* Bordure colorée quand focus */
+}
+
+
 /* Styles responsives */
 @media (max-width: 768px) {
   .menu-icon {
@@ -175,5 +217,24 @@ nav {
   .nav-links {
     display: none; /* Masquer les liens de la navbar sur mobile */
   }
+
+  .search-container {
+    flex: 100%; /* Faire prendre tout l'espace disponible en mode mobile */
+    margin: 10px 0; /* Ajouter un espace vertical au-dessus et en dessous */
+    order: 3; /* Positionner la barre en bas après le menu */
+  }
+
+  .search-input {
+    max-width: none; /* Laisser la barre prendre tout l'espace disponible sur mobile */
+  }
+
+  .menu-icon {
+    display: block; /* Afficher le menu burger */
+  }
+
+  .nav-links {
+    display: none; /* Masquer les liens de navigation en mode mobile */
+  }
+
 }
 </style>
