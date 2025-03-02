@@ -3,12 +3,12 @@
     <div class="carousel-wrapper">
       <NuxtLink :to="link">
         <h2>{{ title }}</h2>
-      </NuxtLink>
       <div ref="carousel" class="carousel" @scroll="handleScroll">
         <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
           <img :src="image" class="carousel-image" alt="Oeuvre" />
         </div>
       </div>
+      </NuxtLink>
     </div>
   </div>
 </template>

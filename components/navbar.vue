@@ -27,11 +27,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const isSidebarOpen = ref(false);
 const isHidden = ref(false);
 const isOpaque = ref(false);
+
+const navbarHeight = 70; // Hauteur estimée de la navbar pour décider quand elle disparaît
 let lastScrollY = 0;
 
 const toggleSidebar = () => {
@@ -42,52 +44,59 @@ const handleScroll = () => {
   const currentScrollY = window.scrollY;
 
   // Gestion de l'opacité
-  isOpaque.value = currentScrollY > 0; // Devenir opaque si on a défilé
+  isOpaque.value = currentScrollY > 0; // Devient opaque si on défile vers le bas
 
-  // Disparition de la navbar
-  if (currentScrollY > lastScrollY && currentScrollY > 50) {
-    isHidden.value = true; // Cache la navbar quand on fait défiler vers le bas
+  // Logique de disparition naturelle
+  if (currentScrollY > navbarHeight && currentScrollY > lastScrollY) {
+    // Disparaître "naturellement" quand on défile assez bas
+    isHidden.value = true;
   } else if (currentScrollY < lastScrollY) {
-    isHidden.value = false; // Réaffiche la navbar quand on fait défiler vers le haut
+    // Réapparaître immédiatement lorsqu'on défile vers le haut
+    isHidden.value = false;
   }
 
-  lastScrollY = currentScrollY;
+  lastScrollY = currentScrollY; // Mise à jour de la position précédente
 };
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
 });
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <style scoped>
 nav {
-  background-color: rgba(51, 51, 51, 0); /* Couleur de fond initiale transparente */
+  background-color: rgba(51, 51, 51, 0); /* Couleur de fond initiale */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
   padding: 20px;
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Transition pour l'effet de disparition et d'opacité */
+  transition: transform 0.5s ease, background-color 0.3s ease; /* Transition adoucie */
 }
 
 .hidden {
-  transform: translateY(-100%); /* Cache la navbar en la déplaçant vers le haut */
+  transform: translateY(-100%); /* Déplacer l'élément en dehors de la vue */
 }
 
+/* Opaque quand on défile */
 .opaque {
-  background-color: rgba(51, 51, 51, 1); /* Couleur de fond opaque */
+  background-color: #acacac;
 }
 
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+.logo a {
+  color: #000000; /* Même couleur que les autres liens */
+  text-decoration: none; /* Supprime la décoration (par exemple, soulignement) */
+  transition: color 0.3s ease; /* Ajoute une transition fluide pour le changement de couleur */
 }
 
-.logo {
-  color: #525252; /* Couleur du lien Home */
-  font-size: 1.5em;
+.logo a:hover {
+  color: #cc0000; /* Applique la même couleur de survol */
 }
 
 .menu-icon {
@@ -98,17 +107,18 @@ nav {
 
 .nav-links {
   list-style-type: none;
-  margin: 0;
   padding: 0;
   display: flex;
+  /* Décalage du groupe vers la gauche */
+  margin: 0 0 0 -20px;
 }
 
 .nav-links li {
-  margin-right: 20px;
+  margin-right: 30px; /* Augmente l'espace entre les liens */
 }
 
 .nav-links a {
-  color: #525252; /* Couleur des liens */
+  color: #000000; /* Couleur des liens */
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -117,6 +127,12 @@ nav {
   color: #cc0000; /* Couleur des liens au survol */
 }
 
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px; /* Ajout de padding au conteneur */
+}
 /* Styles pour la sidebar */
 .sidebar {
   position: fixed;
