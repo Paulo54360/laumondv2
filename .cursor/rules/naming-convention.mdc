@@ -1,0 +1,153 @@
+# Conventions de Nommage
+
+## Layouts
+```
+layouts/
+├── default.vue              # Layout par défaut
+├── error.vue               # Layout pour les pages d'erreur
+└── gallery.vue             # Layout spécifique pour les galeries
+```
+
+## Components
+```
+components/
+├── base/                   # Composants de base réutilisables
+│   ├── BaseButton.vue
+│   ├── BaseInput.vue
+│   └── BaseImage.vue
+├── layout/                 # Composants spécifiques aux layouts
+│   ├── TheHeader.vue
+│   ├── TheFooter.vue
+│   └── TheNavigation.vue
+├── gallery/               # Composants liés aux galeries
+│   ├── GalleryGrid.vue
+│   ├── GalleryItem.vue
+│   └── GalleryFilter.vue
+└── home/                  # Composants spécifiques à la page d'accueil
+    ├── HeroSection.vue
+    └── FeaturedWorks.vue
+```
+
+## Pages
+```
+pages/
+├── index.vue              # Landing page
+├── metahism/
+│   ├── index.vue         # Page principale du métahisme
+│   └── [category].vue    # Pages dynamiques par catégorie
+├── gallery/
+│   ├── index.vue         # Galerie principale
+│   └── [id].vue          # Page détaillée d'une œuvre
+└── contact.vue           # Page de contact
+```
+
+## Composables
+```
+composables/
+├── useArtworks.ts        # Gestion des œuvres d'art
+├── useS3Images.ts        # Gestion des images S3
+└── useSearch.ts          # Logique de recherche
+```
+
+## Stores
+```
+stores/
+├── artwork.ts            # Store pour les œuvres
+└── ui.ts                # Store pour l'interface utilisateur
+```
+
+## Assets
+```
+assets/
+├── styles/
+│   ├── _variables.scss   # Variables SCSS
+│   ├── _mixins.scss     # Mixins SCSS
+│   └── main.scss        # Styles principaux
+└── images/
+    └── common/          # Images communes
+```
+
+## Conventions de nommage
+
+1. **Composants**
+   - Préfixes selon le type :
+     - `Base*` : Composants de base réutilisables
+     - `The*` : Composants uniques (header, footer)
+     - `Gallery*` : Composants liés à la galerie
+     - `Home*` : Composants de la page d'accueil
+
+2. **Props**
+   ```typescript
+   interface IButtonProps {
+     variant: 'primary' | 'secondary'
+     size: 'sm' | 'md' | 'lg'
+     isLoading?: boolean
+   }
+   ```
+
+3. **Composables**
+   - Préfixe `use` obligatoire
+   - Nommage descriptif de la fonctionnalité
+
+4. **Types et Interfaces**
+   ```typescript
+   interface IArtwork {
+     id: string
+     title: Record<'fr' | 'en', string>
+     category: ArtworkCategory
+     imageUrl: string
+   }
+
+   type ArtworkCategory = 'painting' | 'sculpture' | 'digital'
+   ```
+
+5. **Classes CSS**
+   ```scss
+   .gallery {
+     &__item { /* ... */ }
+     &__image { /* ... */ }
+     &--featured { /* ... */ }
+   }
+   ```
+
+## Structure des Layouts
+
+1. **default.vue**
+   ```vue
+   <template>
+     <div class="layout-default">
+       <TheHeader />
+       <main class="layout-default__content">
+         <slot />
+       </main>
+       <TheFooter />
+     </div>
+   </template>
+   ```
+
+2. **gallery.vue**
+   ```vue
+   <template>
+     <div class="layout-gallery">
+       <TheHeader variant="transparent" />
+       <aside class="layout-gallery__sidebar">
+         <GalleryFilter />
+       </aside>
+       <main class="layout-gallery__content">
+         <slot />
+       </main>
+     </div>
+   </template>
+   ```
+
+## Règles de réutilisation
+
+1. **Composants de base**
+   - Doivent être génériques et réutilisables
+   - Documentation des props obligatoire
+   - Tests unitaires requis
+
+2. **Layouts**
+   - Un layout par type de page
+   - Gestion cohérente des transitions
+   - Responsive par défaut 

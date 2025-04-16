@@ -1,0 +1,31 @@
+# Vue.js Rules
+
+## Component Structure
+- ✓ Use `<script setup>` syntax
+- ✓ Order: script, template, style
+- ✓ Style should be scoped by default
+- ✓ Keep components focused and small
+
+## Props & Emits
+- ✓ Props must have type definitions
+- ✓ Props must have default values
+- ✓ Use TypeScript for prop types
+- ✓ Define emits with TypeScript types
+
+## Template Rules
+- ✓ Use PascalCase for components in template
+- ✓ Use kebab-case for custom events
+- ✓ Maximum 1 expression per v-if/v-for
+- ✓ No side effects in template expressions
+
+## Composition API
+- ✓ Use composables for reusable logic
+- ✓ Define refs with type annotations
+- ✓ Group related reactive state
+- ✓ Use computed properties for derived state
+
+## State Management
+- ✓ Use Pinia for global state
+- ✓ Keep component state local when possible
+- ✓ Use provide/inject for deep props
+- ✓ Document state management decisions 

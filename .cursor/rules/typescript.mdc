@@ -1,0 +1,25 @@
+# TypeScript Rules
+
+## Type Safety
+- ✓ No `any` type allowed
+- ✓ Explicit return types required
+- ✓ Use type inference when obvious
+- ✓ Enable strict mode in tsconfig
+
+## Interface & Type Rules
+- ✓ Prefer interfaces over type aliases for objects
+- ✓ Use readonly for immutable properties
+- ✓ Document complex types with JSDoc
+- ✓ Use union types over enums
+
+## Class Rules
+- ✓ Explicit member accessibility (public/private)
+- ✓ Implement interfaces when possible
+- ✓ Use abstract classes for common behavior
+- ✓ Constructor parameters should be private readonly when possible
+
+## Best Practices
+- ✓ Use nullish coalescing over OR operator
+- ✓ Use optional chaining for nullable values
+- ✓ Prefer async/await over Promises
+- ✓ Use type guards for runtime checks 

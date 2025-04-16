@@ -1,0 +1,121 @@
+---
+description: Todolist
+globs: 
+---
+
+# Code Quality Checklist
+
+## Avant chaque commit
+- [ ] Exécuter `npm run lint`
+- [ ] Vérifier les erreurs TypeScript
+- [ ] Formater le code avec Prettier
+- [ ] Vérifier les règles de Clean Code
+- [ ] Tester les changements localement
+
+## Revue de code
+- [ ] Vérifier la conformité aux règles de nommage
+- [ ] Vérifier la documentation du code
+- [ ] Vérifier la gestion des erreurs
+- [ ] Vérifier les performances
+- [ ] Vérifier la réutilisabilité du code
+
+## Tests
+- [ ] Écrire des tests unitaires
+- [ ] Écrire des tests d'intégration si nécessaire
+- [ ] Vérifier la couverture de code
+- [ ] Tester les cas limites
+- [ ] Documenter les scénarios de test
+
+## Documentation
+- [ ] Mettre à jour le README si nécessaire
+- [ ] Documenter les nouvelles fonctionnalités
+- [ ] Ajouter des commentaires JSDoc
+- [ ] Documenter les breaking changes
+- [ ] Mettre à jour la documentation API
+
+# Projet Laumond.com V2 - Plan d'exécution
+
+## 1. Configuration initiale
+- [ ] Setup du projet Nuxt 3
+- [ ] Configuration TypeScript
+- [ ] Configuration i18n pour FR/EN
+- [ ] Setup AWS S3 avec @aws-sdk/client-s3
+- [ ] Configuration des variables d'environnement
+- [ ] Setup du système de routing
+
+## 2. Architecture & Structure
+- [ ] Création de la structure des dossiers Nuxt
+- [ ] Mise en place des layouts
+- [ ] Configuration des composants globaux
+- [ ] Setup des composants réutilisables
+- [ ] Configuration du store Pinia
+- [ ] Setup des composables pour S3
+
+## 3. Service de données
+- [ ] Création du service S3 pour les images
+- [ ] Création du système de mapping images/titres
+- [ ] Mise en place du cache des données
+- [ ] Configuration du système de recherche
+- [ ] Setup de l'indexation des œuvres
+
+## 4. Landing Page
+- [ ] Design de la page d'accueil
+- [ ] Création des sections principales
+- [ ] Intégration des animations
+- [ ] Optimisation des performances
+- [ ] Tests de responsive design
+
+## 5. Fonctionnalités principales
+- [ ] Implémentation de la barre de recherche
+  - [ ] Interface de recherche
+  - [ ] Logique de filtrage
+  - [ ] Autocomplétion des titres
+  - [ ] UI/UX des résultats
+- [ ] Système de navigation
+  - [ ] Menu principal
+  - [ ] Navigation entre les œuvres
+  - [ ] Transitions de pages
+
+## 6. Pages du site
+- [ ] Page Accueil/Landing
+- [ ] Page Métahisme
+- [ ] Galerie des œuvres
+- [ ] Page Contact
+- [ ] Pages individuelles des œuvres
+
+## 7. Internationalisation
+- [ ] Configuration des routes i18n
+- [ ] Intégration des traductions FR/EN
+- [ ] Tests des contenus traduits
+- [ ] UI/UX multilingue
+
+## 8. Optimisation
+- [ ] Optimisation des images
+  - [ ] Lazy loading
+  - [ ] Formats adaptifs
+  - [ ] Compression
+- [ ] Performance
+  - [ ] Lighthouse audit
+  - [ ] Core Web Vitals
+  - [ ] SEO optimization
+
+## 9. Tests & Qualité
+- [ ] Tests unitaires
+- [ ] Tests d'intégration
+- [ ] Tests de performance
+- [ ] Tests multilingues
+- [ ] Tests cross-browser
+
+## 10. Déploiement
+- [ ] Configuration du déploiement
+- [ ] Tests en environnement de staging
+- [ ] Migration des données
+- [ ] Déploiement production
+- [ ] Monitoring post-déploiement
+
+## Maintenance
+- [ ] Documentation technique
+- [ ] Guide de maintenance
+- [ ] Procédures de backup
+- [ ] Plan de mise à jour
+- [ ] Monitoring des performances

@@ -1,4 +1,4 @@
-import type { RouteLocationNormalized } from 'vue-router'
+import type { RouteLocationNormalized } from 'vue-router';
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use({
@@ -9,10 +9,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         savedPosition: { left: number; top: number } | null
       ) => {
         if (to.hash) {
-          return { el: to.hash, behavior: 'smooth' }
+          return { el: to.hash, behavior: 'smooth' };
         }
-        return { top: 0, behavior: 'smooth' }
-      }
-    }
-  })
-}) 
+        return { top: 0, behavior: 'smooth' };
+      };
+    },
+  });
+});

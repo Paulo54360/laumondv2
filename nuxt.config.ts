@@ -1,15 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { defineNuxtConfig } from 'nuxt/config'
+import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   ssr: false,
-  
+
   app: {
     head: {
       title: 'Patrick Laumond - Art',
       meta: [
-        { name: 'description', content: `Découvrez l'univers artistique unique de Patrick Laumond` },
+        {
+          name: 'description',
+          content: `Découvrez l'univers artistique unique de Patrick Laumond`,
+        },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
     },
@@ -24,7 +27,7 @@ export default defineNuxtConfig({
   i18n: {
     locales: [
       { code: 'fr', iso: 'fr-FR', file: 'fr.json' },
-      { code: 'en', iso: 'en-US', file: 'en.json' }
+      { code: 'en', iso: 'en-US', file: 'en.json' },
     ],
     defaultLocale: 'fr',
     langDir: 'locales/',
@@ -32,9 +35,6 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: true },
-  css:  ['./app.vue'],
-  modules: [
-    '@nuxt/image',
-    '@nuxtjs/i18n'
-  ]
-})
+  css: ['./app.vue'],
+  modules: ['@nuxt/image', '@nuxtjs/i18n'],
+});

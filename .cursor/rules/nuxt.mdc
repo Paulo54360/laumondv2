@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+---
+# Nuxt.js Rules
+
+## Project Structure
+- ✓ Follow Nuxt 3 directory structure
+- ✓ Use auto-imports appropriately
+- ✓ Keep pages simple, logic in components
+- ✓ Use layouts for common UI structures
+
+## Composables
+- ✓ Place in composables/ directory
+- ✓ Use useAsyncData for data fetching
+- ✓ Implement error handling
+- ✓ Document composable purpose and usage
+
+## Routing
+- ✓ Use file-based routing
+- ✓ Implement middleware when needed
+- ✓ Define route meta in pages
+- ✓ Use route validation
+
+## Performance
+- ✓ Use Nuxt Image for optimized images
+- ✓ Implement lazy loading
+- ✓ Use server components when appropriate
+- ✓ Optimize component imports
+
+## Plugins
+- ✓ Register global plugins in plugins/
+- ✓ Use typed plugins
+- ✓ Document plugin configuration
+- ✓ Keep plugins focused and minimal 

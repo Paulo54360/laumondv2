@@ -1,0 +1,124 @@
+# Base de données SQLite - Plan d'implémentation
+
+## 1. Configuration initiale
+- [ ] Installer les dépendances nécessaires
+  - [ ] `@nuxtjs/prisma` pour l'ORM
+  - [ ] `@prisma/client` pour le client Prisma
+  - [ ] `sqlite3` pour SQLite
+- [ ] Configurer Prisma avec SQLite
+- [ ] Créer le fichier de configuration Prisma (`schema.prisma`)
+
+## 2. Schéma de la base de données
+
+### Table Authentication
+- [ ] Créer la table `User`
+  ```prisma
+  model User {
+    id        Int      @id @default(autoincrement())
+    username  String   @unique
+    password  String   // Stocké avec hachage
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  }
+  ```
+
+### Table Artworks
+- [ ] Créer la table `Artwork`
+  ```prisma
+  model Artwork {
+    id            Int      @id @default(autoincrement())
+    title         String
+    category      Category @relation(fields: [categoryId], references: [id])
+    categoryId    Int
+    subcategory   String?  // Sous-dossier dans la catégorie
+    folderPath    String   // Chemin du dossier contenant l'œuvre
+    imageUrls     String[] // Liste des URLs des images
+    description   String?  // Contenu du fichier .txt associé
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+  }
+  ```
+
+### Table Categories
+- [ ] Créer la table `Category`
+  ```prisma
+  model Category {
+    id        Int       @id @default(autoincrement())
+    name      String    @unique // transcriptions, archetype, deploiement, drawing
+    path      String    // Chemin du dossier de la catégorie
+    artworks  Artwork[]
+  }
+  ```
+
+## 3. Scripts et Utilitaires
+- [ ] Créer un script de migration de base de données
+- [ ] Créer un script pour le seeding initial
+  - [ ] Ajouter l'utilisateur Patrick Laumond
+  - [ ] Ajouter les catégories principales avec leurs chemins
+- [ ] Créer un script pour scanner et importer les œuvres
+  - [ ] Scanner les dossiers d'images par catégorie
+  - [ ] Lire les fichiers .txt associés
+  - [ ] Extraire les informations (nom, images, description)
+  - [ ] Structurer les données pour la base
+
+## 4. API et Services
+
+### Service d'authentification
+- [ ] Créer le service d'authentification
+  - [ ] Fonction de login
+  - [ ] Middleware de vérification
+  - [ ] Gestion des sessions
+
+### Service des œuvres
+- [ ] Créer le service de gestion des œuvres
+  - [ ] Récupération par catégorie
+  - [ ] Récupération par sous-catégorie
+  - [ ] Recherche par nom
+  - [ ] Récupération des détails d'une œuvre
+  - [ ] Récupération des images associées
+
+## 5. Composants et Interfaces
+
+### Interface d'administration
+- [ ] Créer une interface de connexion sécurisée
+- [ ] Créer une interface d'administration des œuvres
+  - [ ] Liste des œuvres par catégorie
+  - [ ] Ajout/Modification/Suppression
+  - [ ] Gestion des fichiers (images et .txt)
+  - [ ] Prévisualisation des images
+
+### Interface publique
+- [ ] Adapter les composants existants pour utiliser la base de données
+  - [ ] Mise à jour du composant Gallery
+  - [ ] Mise à jour du composant AnalysisContent
+  - [ ] Mise à jour des pages d'affichage
+  - [ ] Optimisation du chargement des images
+
+## 6. Tests et Validation
+- [ ] Écrire les tests unitaires
+  - [ ] Tests des modèles
+  - [ ] Tests des services
+  - [ ] Tests des API
+- [ ] Écrire les tests d'intégration
+- [ ] Tester la sécurité
+  - [ ] Tests de l'authentification
+  - [ ] Tests des permissions
+  - [ ] Tests de validation des données
+- [ ] Tester la gestion des fichiers
+  - [ ] Upload d'images
+  - [ ] Lecture des fichiers .txt
+  - [ ] Vérification des chemins
+
+## 7. Documentation
+- [ ] Documenter la structure de la base de données
+- [ ] Documenter les API
+- [ ] Documenter les procédures d'administration
+- [ ] Documenter la structure des dossiers et fichiers
+- [ ] Créer un guide de maintenance
+
+## 8. Déploiement
+- [ ] Préparer l'environnement de production
+- [ ] Configurer les sauvegardes de la base de données
+- [ ] Mettre en place les procédures de mise à jour
+- [ ] Configurer la gestion des fichiers en production
+- [ ] Tests en production 

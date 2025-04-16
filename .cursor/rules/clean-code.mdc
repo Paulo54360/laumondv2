@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+---
+# Clean Code Rules
+
+## Naming Conventions
+- ✓ Use PascalCase for component names
+- ✓ Use camelCase for variables and functions
+- ✓ Use UPPER_SNAKE_CASE for constants
+- ✓ Prefix interfaces with 'I'
+
+## Function Rules
+- ✓ Functions should do one thing
+- ✓ Maximum 3 parameters per function
+- ✓ Function names should be verbs
+- ✓ Keep functions under 20 lines
+
+## Component Rules
+- ✓ One component per file
+- ✓ Component names must be multi-word
+- ✓ Props must have types and default values
+- ✓ Use composition API with `<script setup>`
+
+## Code Organization
+- ✓ Import order: built-in > external > internal
+- ✓ Group related code together
+- ✓ Maximum line length: 100 characters
+- ✓ No unused imports or variables 

@@ -1,34 +1,34 @@
 <template>
   <div class="carousel">
-    <swiper
-        :slides-per-view="1"
-        :breakpoints="{
+    <Swiper
+      :slides-per-view="1"
+      :breakpoints="{
         412: { slidesPerView: 1 },
         620: { slidesPerView: 2 },
         820: { slidesPerView: 3 },
         1440: { slidesPerView: 4 },
       }"
-        navigation
+      navigation
     >
-      <swiper-slide v-for="(image, index) in images" :key="index">
+      <SwiperSlide v-for="(image, index) in images" :key="index">
         <NuxtImg :src="image" alt="Oeuvre" />
-      </swiper-slide>
-    </swiper>
+      </SwiperSlide>
+    </Swiper>
   </div>
 </template>
 
 <script setup>
-import {Swiper, SwiperSlide} from 'swiper/vue';
+  import { Swiper, SwiperSlide } from 'swiper/vue';
 
-defineProps({
-  images: Array
-});
+  defineProps({
+    images: Array,
+  });
 </script>
 
 <style>
-.carousel {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+  .carousel {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 </style>

@@ -1,64 +1,81 @@
 <template>
-<footer class="footer">
+  <footer class="footer">
     <div class="container">
       <p class="footer-text">
         &copy; Patrick Laumond • Tous droits réservés - patrick@laumond.com - Paris.
-      <br>Photos: &copy;Philippe Tapissier &nbsp;&nbsp; - &nbsp;&nbsp; Développement: Paul Convert</p>
-      <a href="https://www.facebook.com/metahisme/?locale=fr_FR" target="_blank" rel="noopener noreferrer" class="social-link">
+        <br />Photos: &copy;Philippe Tapissier &nbsp;&nbsp; - &nbsp;&nbsp; Développement: Paul
+        Convert
+      </p>
+      <a
+        href="https://www.facebook.com/metahisme/?locale=fr_FR"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="social-link"
+      >
         <i class="fab fa-facebook-f"></i>
       </a>
-      <a href=" https://www.instagram.com/metahisme/" target="_blank" rel="noopener noreferrer" class="social-link">
+      <a
+        href=" https://www.instagram.com/metahisme/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="social-link"
+      >
         <i class="fab fa-instagram"></i>
       </a>
-      <a href="https://laumond.tumblr.com/" target="_blank" rel="noopener noreferrer" class="social-link">
+      <a
+        href="https://laumond.tumblr.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="social-link"
+      >
         <i class="fab fa-tumblr"></i>
       </a>
-          </div>
+    </div>
   </footer>
 </template>
 <style scoped>
-.footer {
+  .footer {
     background-color: #f5f5f5;
     padding: 20px 0;
     width: 100%;
     text-align: center;
     margin-top: auto;
-}
+  }
 
-.container {
+  .container {
     max-width: 960px;
     margin: 0 auto;
-}
+  }
 
-.footer-text {
+  .footer-text {
     display: flex;
     text-align: center;
     justify-content: center;
-}
+  }
 
-.social-links {
+  .social-links {
     margin-top: 10px;
-}
+  }
 
-.social-link {
+  .social-link {
     display: inline-block;
     margin-right: 10px;
     color: #333;
     font-size: 20px;
-}
+  }
 
-.social-link i {
+  .social-link i {
     display: inline-block;
     width: 20px;
     height: 20px;
-}
+  }
 
-/* Utilisez la bibliothèque Font Awesome pour les icônes */
-@import '~@fortawesome/fontawesome-free/css/all.min.css';
+  /* Utilisez la bibliothèque Font Awesome pour les icônes */
+  @import '~@fortawesome/fontawesome-free/css/all.min.css';
 
-
-@media screen and (max-width:1024px) {
+  @media screen and (max-width: 1024px) {
     .footer-text {
-        font-size: 0.7em;
+      font-size: 0.7em;
     }
-}</style>
+  }
+</style>
