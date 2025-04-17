@@ -1,22 +1,14 @@
 import { PrismaClient } from '@prisma/client'
 import { categoryTitles } from './update-descriptions'
 
-interface Image {
-  title: string
-  path: string
-}
-
-interface CategoryData {
-  title: string
-  images: Image[]
-}
-
 const categoryMapping: Record<string, { name: string; path: string }> = {
-  transcriptions: { name: 'Transcriptions', path: 'transcriptions' },
-  archetype: { name: 'Archétype', path: 'archetype' },
-  deploiement: { name: 'Déploiement', path: 'deploiement' },
-  drawing: { name: 'Dessin', path: 'drawing' },
+  transcriptions: { name: 'Transcriptions', path: 'Transcriptions' },
+  archetype: { name: 'Archétype', path: 'Archetypes' },
+  deploiement: { name: 'Déploiement', path: 'Deployments' },
+  drawing: { name: 'Dessin', path: 'Drawings' },
 }
+
+const S3_BASE_URL = 'https://plaumondpicture.s3.eu-west-3.amazonaws.com';
 
 const prisma = new PrismaClient()
 
@@ -33,36 +25,50 @@ async function syncDatabase() {
         prisma.category.create({
           data: {
             name,
-            path,
+            path: `images/${key}`,
           },
         })
       )
     )
 
     const categoryMap = new Map(
-      categories.map((category) => [category.path, category.id])
+      categories.map((category) => [category.name.toLowerCase(), category.id])
     )
 
     let totalImages = 0
 
     // Importation des images
     for (const [categoryKey, artworks] of Object.entries(categoryTitles)) {
-      const categoryId = categoryMap.get(categoryMapping[categoryKey].path)
-      if (!categoryId) continue
+      const categoryId = categoryMap.get(categoryMapping[categoryKey].name.toLowerCase())
+      if (!categoryId) {
+        console.log(`Catégorie non trouvée: ${categoryKey}`)
+        continue
+      }
 
-      for (const artwork of artworks) {
-        const imageUrls = artwork.images.map((image) => {
-          const fullImagePath = `images/${categoryMapping[categoryKey].path}/${image.path}`
-          console.log(`Importation de l'image: ${fullImagePath}`)
-          return fullImagePath
+      for (const [folderId, artwork] of Object.entries(artworks)) {
+        const imageUrls = Object.keys(artwork.images).map((imageId) => {
+          const s3Path = `${S3_BASE_URL}/${categoryMapping[categoryKey].path}/${folderId}/${imageId}.jpg`
+          console.log(`Importation de l'image: ${s3Path}`)
+          return s3Path
         })
 
-        await prisma.artwork.create({
-          data: {
+        await prisma.artwork.upsert({
+          where: {
+            title_categoryId: {
+              title: artwork.title,
+              categoryId: categoryId
+            }
+          },
+          update: {
+            subcategory: folderId,
+            folderPath: `${categoryMapping[categoryKey].path}/${folderId}`,
+            imageUrls: JSON.stringify(imageUrls),
+          },
+          create: {
             title: artwork.title,
             categoryId,
-            subcategory: '',
-            folderPath: `images/${categoryMapping[categoryKey].path}`,
+            subcategory: folderId,
+            folderPath: `${categoryMapping[categoryKey].path}/${folderId}`,
             imageUrls: JSON.stringify(imageUrls),
           },
         })
