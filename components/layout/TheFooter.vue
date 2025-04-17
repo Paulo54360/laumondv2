@@ -33,46 +33,47 @@
     </div>
   </footer>
 </template>
+
 <style lang="scss" scoped>
-  .footer {
-    background-color: #f5f5f5;
-    padding: 20px 0;
-    width: 100%;
-    text-align: center;
-    margin-top: auto;
-  }
+.footer {
+  background-color: #f5f5f5;
+  padding: 20px 0;
+  width: 100%;
+  text-align: center;
+  margin-top: auto;
+}
 
-  .container {
-    max-width: 960px;
-    margin: 0 auto;
-  }
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
 
+.footer-text {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.social-links {
+  margin-top: 10px;
+}
+
+.social-link {
+  display: inline-block;
+  margin-right: 10px;
+  color: #333;
+  font-size: 20px;
+}
+
+.social-link i {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+@media screen and (max-width: 1024px) {
   .footer-text {
-    display: flex;
-    text-align: center;
-    justify-content: center;
+    font-size: 0.7em;
   }
-
-  .social-links {
-    margin-top: 10px;
-  }
-
-  .social-link {
-    display: inline-block;
-    margin-right: 10px;
-    color: #333;
-    font-size: 20px;
-  }
-
-  .social-link i {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-  }
-
-  @media screen and (max-width: 1024px) {
-    .footer-text {
-      font-size: 0.7em;
-    }
-  }
-</style>
+}
+</style> 
