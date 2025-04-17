@@ -1,51 +1,50 @@
-import { PrismaClient } from '@prisma/client';
+import { createClient } from '@supabase/supabase-js'
 
-const prisma = new PrismaClient();
-
+// Fonction de gestion de la recherche
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
-  const searchTerm = query.q as string;
-
-  if (!searchTerm) {
-    return {
-      artworks: []
-    };
-  }
-
   try {
-    const artworks = await prisma.artwork.findMany({
-      where: {
-        OR: [
-          {
-            title: {
-              contains: searchTerm,
-              mode: 'insensitive'
-            }
-          },
-          {
-            description: {
-              contains: searchTerm,
-              mode: 'insensitive'
-            }
-          }
-        ]
-      },
-      include: {
-        category: true
-      },
-      orderBy: {
-        title: 'asc'
-      }
-    });
-
+    // Récupération du terme de recherche
+    const query = getQuery(event)
+    const searchTerm = query.q ? String(query.q) : ''
+    
+    // Initialisation du client Supabase
+    const supabaseUrl = process.env.SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_KEY
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Erreur de configuration Supabase')
+    }
+    
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    
+    // Recherche dans la base de données
+    const { data, error } = await supabase
+      .from('artworks')
+      .select(`
+        *,
+        categories (
+          name,
+          path
+        )
+      `)
+      .or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
+      .limit(20)
+    
+    if (error) throw error
+    
+    // Retour des résultats
     return {
-      artworks
-    };
+      artworks: data || []
+    }
+    
   } catch (error) {
-    console.error('Erreur lors de la recherche:', error);
-    throw createError({
+    console.error('Erreur lors de la recherche:', error)
+    
+    // En cas d'erreur, on renvoie un code d'erreur et un message
+    return createError({
       statusCode: 500,
-      message: 'Une erreur est survenue lors de la recherche'
-    });
+      statusMessage: 'Erreur lors de la recherche',
+      data: error
+    })
   }
-}); 
+}) 

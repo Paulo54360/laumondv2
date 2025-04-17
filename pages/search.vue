@@ -89,7 +89,7 @@ interface IArtwork {
   id: number;
   title: string;
   description: string | null;
-  imageUrls: string;
+  imageUrls: string[] | string;
   category: ICategory;
   subcategory: string | null;
   folderPath: string;
@@ -108,8 +108,12 @@ const selectedArtwork = ref<IArtwork | null>(null);
 const currentImageIndex = ref(0);
 
 function getImageUrls(artwork: IArtwork): string[] {
+  if (Array.isArray(artwork.imageUrls)) {
+    return artwork.imageUrls;
+  }
+  
   try {
-    return JSON.parse(artwork.imageUrls);
+    return typeof artwork.imageUrls === 'string' ? JSON.parse(artwork.imageUrls) : [];
   } catch (e) {
     console.error('Erreur lors du parsing des URLs:', e);
     return [];
