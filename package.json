@@ -16,8 +16,6 @@
     "update:structure": "tsx scripts/update-folder-structure.ts",
     "list:txt": "tsx scripts/list-txt-contents.ts",
     "import:artworks": "tsx scripts/import-artworks-from-files.ts",
-    "db:seed-descriptions": "tsx scripts/seed-descriptions.ts",
-    "db:sync": "tsx scripts/sync-database.ts",
     "test:connection": "tsx scripts/test-connection.ts",
     "db:import-data": "tsx scripts/import-data.ts",
     "test:search": "tsx scripts/test-search.ts"

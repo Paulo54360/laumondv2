@@ -102,6 +102,4 @@
     font-style: italic;
     text-align: left;
   }
-
-  /*# sourceMappingURL=metahisme.component.css.map */
 </style>

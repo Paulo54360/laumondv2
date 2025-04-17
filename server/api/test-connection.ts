@@ -6,13 +6,25 @@ export default defineEventHandler(async (event) => {
     const supabaseUrl = process.env.SUPABASE_URL
     const supabaseKey = process.env.SUPABASE_KEY
     
+    // Liste de toutes les variables d'environnement commençant par SUPABASE ou liées à la base de données
+    const envKeys = Object.keys(process.env).filter(key => 
+      key.includes('SUPABASE') || 
+      key.includes('DATABASE') || 
+      key.includes('URL')
+    );
+    
     // Informations de diagnostic
     const diagnostics = {
       env: {
         hasSupabaseUrl: !!supabaseUrl,
         hasSupabaseKey: !!supabaseKey,
         nodeEnv: process.env.NODE_ENV,
-        currentTime: new Date().toISOString()
+        currentTime: new Date().toISOString(),
+        // Liste des clés d'environnement pertinentes
+        relevantEnvKeys: envKeys,
+        // Valeurs tronquées pour la sécurité
+        supabaseUrlValue: supabaseUrl ? `${supabaseUrl.substring(0, 10)}...` : null,
+        supabaseKeyValue: supabaseKey ? `${supabaseKey.substring(0, 10)}...` : null
       },
       connectionTest: null,
       error: null

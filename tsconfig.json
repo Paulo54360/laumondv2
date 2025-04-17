@@ -17,6 +17,6 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["scripts/**/*", "prisma/**/*"],
+  "include": ["scripts/**/*"],
   "exclude": ["node_modules"]
 }
