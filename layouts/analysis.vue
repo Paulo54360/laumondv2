@@ -8,6 +8,10 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import TheHeader from '~/components/layout/TheHeader.vue';
+</script>
+
 <style scoped lang="scss">
 .layout-analysis {
   min-height: 100vh;

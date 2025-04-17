@@ -41,6 +41,8 @@
 </template>
 
 <script setup lang="ts">
+import TheHeader from '~/components/layout/TheHeader.vue';
+
 interface ITab {
   id: 'info' | 'description' | 'details'
   label: string

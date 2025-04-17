@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { ref, computed, provide } from 'vue';
-import TheHeader from '~/components/TheHeader.vue';
+import TheHeader from '~/components/layout/TheHeader.vue';
 
 const imageUrls = ref<string[]>([
   '/images/gallery/image1.jpg',

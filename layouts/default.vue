@@ -9,7 +9,8 @@
 </template>
 
 <script setup lang="ts">
-// Composants de layout importés automatiquement grâce à l'auto-import de Nuxt
+import TheHeader from '~/components/layout/TheHeader.vue';
+import TheFooter from '~/components/layout/TheFooter.vue';
 </script>
 
 <style lang="scss" scoped>
