@@ -35,6 +35,18 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: true },
-  css: ['./app.vue'],
+  css: [
+    '@fortawesome/fontawesome-free/css/all.min.css',
+    '~/assets/styles/main.scss'
+  ],
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "~/assets/styles/_variables.scss";`
+        }
+      }
+    }
+  },
   modules: ['@nuxt/image', '@nuxtjs/i18n'],
 });
