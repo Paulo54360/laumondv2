@@ -1,5 +1,4 @@
-// Import des variables
-@import './_variables';
+@use 'variables' as *;
 
 // Mixins pour le responsive design
 @mixin sm {
@@ -26,17 +25,57 @@
   }
 }
 
-// Styles globaux
+// CSS Variables
 :root {
-  font-family: var(--font-family-base);
-  color: var(--color-text);
-  background: var(--color-background);
+  // Colors
+  --color-primary: #{$color-primary};
+  --color-primary-dark: #{$color-primary-dark};
+  --color-text: #{$color-text};
+  --color-text-light: #{$color-text-light};
+  --color-background: #{$color-background};
+  --color-background-alt: #{$color-background-alt};
+  --color-border: #{$color-border};
+
+  // Typography
+  --font-family-base: #{$font-family-base};
+  --font-family-heading: #{$font-family-heading};
+
+  // Spacing
+  --spacing-xs: #{$spacing-xs};
+  --spacing-sm: #{$spacing-sm};
+  --spacing-md: #{$spacing-md};
+  --spacing-lg: #{$spacing-lg};
+  --spacing-xl: #{$spacing-xl};
+
+  // Layout
+  --max-width-content: #{$max-width-content};
+  --header-height: #{$header-height};
+  --border-radius: #{$border-radius};
+
+  // Transitions
+  --transition-fast: #{$transition-fast};
+  --transition-medium: #{$transition-medium};
+  --transition-slow: #{$transition-slow};
+
+  // Z-index
+  --z-index-header: #{$z-index-header};
+  --z-index-modal: #{$z-index-modal};
+  --z-index-tooltip: #{$z-index-tooltip};
+
+  // Shadows
+  --shadow-sm: #{$shadow-sm};
+  --shadow-md: #{$shadow-md};
+  --shadow-lg: #{$shadow-lg};
 }
 
+// Styles globaux
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background: var(--color-background);
 }
 
 * {

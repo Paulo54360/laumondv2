@@ -13,7 +13,7 @@ export default defineNuxtConfig({
           name: 'description',
           content: `Découvrez l'univers artistique unique de Patrick Laumond`,
         },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'viewport', content: 'width-device-width, initial-scale=1' },
       ],
     },
   },
@@ -32,6 +32,9 @@ export default defineNuxtConfig({
     defaultLocale: 'fr',
     langDir: 'locales/',
     lazy: true,
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
   },
 
   devtools: { enabled: true },
@@ -43,7 +46,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "~/assets/styles/_variables.scss";`
+          additionalData: '@use "~/assets/styles/_variables.scss" as *;'
         }
       }
     }
