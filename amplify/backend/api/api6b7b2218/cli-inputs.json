@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/api/search": {
+      "name": "/api/search",
+      "lambdaFunction": "laumondnuxt5a2fe9a1",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/items": {
+      "name": "/items",
+      "lambdaFunction": "laumondnuxt5a2fe9a1",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
