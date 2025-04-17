@@ -15,11 +15,11 @@
         <p v-else>Veuillez saisir un terme de recherche</p>
       </div>
       <div v-else class="artworks-grid">
-        <NuxtLink
+        <div
           v-for="artwork in artworks"
           :key="artwork.id"
-          :to="`/${artwork.category.name}/${artwork.subcategory}`"
           class="artwork-card"
+          @click="openModal(artwork)"
         >
           <div class="artwork-image">
             <img 
@@ -37,7 +37,42 @@
             <h2>{{ artwork.title }}</h2>
             <p class="category">{{ artwork.category.name }}</p>
           </div>
-        </NuxtLink>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div v-if="selectedArtwork" class="modal" @click="closeModal">
+      <div class="modal-content" @click.stop>
+        <button class="close-button" @click="closeModal">&times;</button>
+        
+        <div class="modal-gallery">
+          <img 
+            :src="getCurrentImageUrl" 
+            :alt="selectedArtwork.title"
+            class="modal-image"
+          />
+          
+          <button 
+            v-if="currentImageIndex > 0" 
+            class="nav-button prev" 
+            @click.stop="previousImage"
+          >&lt;</button>
+          
+          <button 
+            v-if="currentImageIndex < getImageUrls(selectedArtwork).length - 1" 
+            class="nav-button next" 
+            @click.stop="nextImage"
+          >&gt;</button>
+        </div>
+
+        <div class="modal-info">
+          <h2>{{ selectedArtwork.title }}</h2>
+          <p class="category">{{ selectedArtwork.category.name }}</p>
+          <p v-if="selectedArtwork.description" class="description">
+            {{ selectedArtwork.description }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -68,13 +103,51 @@ const artworks = ref<IArtwork[]>([]);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 
-function getFirstImageUrl(artwork: IArtwork): string | null {
+// État de la modal
+const selectedArtwork = ref<IArtwork | null>(null);
+const currentImageIndex = ref(0);
+
+function getImageUrls(artwork: IArtwork): string[] {
   try {
-    const urls = JSON.parse(artwork.imageUrls);
-    return urls[0] || null;
+    return JSON.parse(artwork.imageUrls);
   } catch (e) {
     console.error('Erreur lors du parsing des URLs:', e);
-    return null;
+    return [];
+  }
+}
+
+function getFirstImageUrl(artwork: IArtwork): string | undefined {
+  const urls = getImageUrls(artwork);
+  return urls[0] || undefined;
+}
+
+const getCurrentImageUrl = computed((): string | undefined => {
+  if (!selectedArtwork.value) return undefined;
+  const urls = getImageUrls(selectedArtwork.value);
+  return urls[currentImageIndex.value] || undefined;
+});
+
+function openModal(artwork: IArtwork) {
+  selectedArtwork.value = artwork;
+  currentImageIndex.value = 0;
+}
+
+function closeModal() {
+  selectedArtwork.value = null;
+  currentImageIndex.value = 0;
+}
+
+function previousImage() {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--;
+  }
+}
+
+function nextImage() {
+  if (!selectedArtwork.value) return;
+  const urls = getImageUrls(selectedArtwork.value);
+  if (currentImageIndex.value < urls.length - 1) {
+    currentImageIndex.value++;
   }
 }
 
@@ -155,7 +228,7 @@ function handleImageError(event: Event) {
 }
 
 .artwork-card {
-  text-decoration: none;
+  cursor: pointer;
   color: inherit;
   background: var(--color-background);
   border-radius: var(--border-radius);
@@ -208,26 +281,137 @@ function handleImageError(event: Event) {
   }
 }
 
+// Modal styles
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: var(--color-background);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.modal-gallery {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  background: var(--color-background-alt);
+
+  .modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  &.prev {
+    left: 1rem;
+  }
+
+  &.next {
+    right: 1rem;
+  }
+}
+
+.modal-info {
+  padding: 2rem;
+  
+  h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    color: var(--color-text);
+  }
+
+  .category {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+}
+
 @media (max-width: 768px) {
   .artworks-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
   }
 
-  .artwork-info {
-    padding: 1rem;
-
-    h2 {
-      font-size: 1rem;
-    }
+  .modal-content {
+    width: 95%;
   }
-}
 
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  .modal-gallery {
+    height: 50vh;
+  }
+
+  .nav-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.2rem;
+  }
 }
 
 .loading-spinner {
