@@ -13,8 +13,14 @@ export default defineNuxtConfig({
           name: 'description',
           content: `Découvrez l'univers artistique unique de Patrick Laumond`,
         },
-        { name: 'viewport', content: 'width-device-width, initial-scale=1' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css'
+        }
+      ]
     },
   },
 
@@ -38,10 +44,7 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: true },
-  css: [
-    '@fortawesome/fontawesome-free/css/all.min.css',
-    '~/assets/styles/main.scss'
-  ],
+  css: ['~/assets/styles/main.scss'],
   vite: {
     css: {
       preprocessorOptions: {

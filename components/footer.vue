@@ -33,7 +33,7 @@
     </div>
   </footer>
 </template>
-<style scoped>
+<style lang="scss" scoped>
   .footer {
     background-color: #f5f5f5;
     padding: 20px 0;
@@ -69,9 +69,6 @@
     width: 20px;
     height: 20px;
   }
-
-  /* Utilisez la bibliothèque Font Awesome pour les icônes */
-  @import '~@fortawesome/fontawesome-free/css/all.min.css';
 
   @media screen and (max-width: 1024px) {
     .footer-text {
