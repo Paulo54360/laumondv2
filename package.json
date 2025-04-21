@@ -18,6 +18,8 @@
     "import:artworks": "tsx scripts/import-artworks-from-files.ts",
     "test:connection": "tsx scripts/test-connection.ts",
     "db:import-data": "tsx scripts/import-data.ts",
+    "db:clean-titles": "tsx scripts/clean-titles.ts",
+    "db:clean-titles-unique": "tsx scripts/clean-titles-unique.ts",
     "test:search": "tsx scripts/test-search.ts"
   },
   "dependencies": {

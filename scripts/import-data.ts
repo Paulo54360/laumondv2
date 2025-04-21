@@ -53,7 +53,7 @@ async function importData() {
       for (const [folderId, artwork] of Object.entries(artworks)) {
         for (const [imageId, description] of Object.entries(artwork.images)) {
           const imageUrl = `${S3_BASE_URL}/${categoryMapping[category.key].path}/${folderId}/${imageId}.jpg`
-          const imageTitle = `${artwork.title} - ${description}`
+          const imageTitle = artwork.title
 
           const { error } = await supabase
             .from('artworks')
@@ -67,7 +67,7 @@ async function importData() {
             })
 
           if (error) throw error
-          console.log(`- Image importée: ${imageTitle}`)
+          console.log(`- Image importée: ${imageTitle} (${description})`)
           totalImages++
         }
       }

@@ -1,39 +1,58 @@
 <template>
   <nav :class="{ hidden: isHidden, opaque: isOpaque }">
     <div class="navbar-container">
-      <div class="logo">
-        <NuxtLink to="/">Home</NuxtLink>
+      <!-- Première ligne: logo et boutons -->
+      <div class="header-top-row">
+        <div class="logo">
+          <NuxtLink to="/">Home</NuxtLink>
+        </div>
+
+        <!-- Éléments à droite -->
+        <div class="right-items">
+          <!-- Bouton de traduction -->
+          <button class="lang-switch" @click="switchLanguage">
+            <img 
+              :src="currentLocale === 'fr' ? '/images/flags/uk.svg' : '/images/flags/fr.svg'"
+              :alt="currentLocale === 'fr' ? 'Switch to English' : 'Passer en français'"
+              class="flag-icon"
+            />
+          </button>
+          
+          <!-- Menu burger déplacé ici -->
+          <div class="menu-icon" @click="toggleSidebar">
+            &#9776; <!-- Icône de menu -->
+          </div>
+        </div>
       </div>
 
-      <!-- Barre de recherche -->
-      <div class="search-container">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Rechercher une œuvre..."
-          class="search-input"
-          @keyup.enter="performSearch"
-        />
-        <button class="search-button" @click="performSearch">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-      </div>
-
-      <div class="menu-icon" @click="toggleSidebar">
-        &#9776; <!-- Icône de menu -->
+      <!-- Deuxième ligne: barre de recherche -->
+      <div class="header-search-row">
+        <!-- Barre de recherche -->
+        <div class="search-container">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Rechercher une œuvre..."
+            class="search-input"
+            @keyup.enter="performSearch"
+          />
+          <button class="search-button" @click="performSearch">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <ul :class="{ 'active': isSidebarOpen }" class="nav-links">
@@ -42,15 +61,6 @@
         <li><NuxtLink to="/artworks">Artworks</NuxtLink></li>
         <li><NuxtLink to="/analyses">Analyses</NuxtLink></li>
       </ul>
-
-      <!-- Bouton de traduction -->
-      <button class="lang-switch" @click="switchLanguage">
-        <img 
-          :src="currentLocale === 'fr' ? '/images/flags/uk.svg' : '/images/flags/fr.svg'"
-          :alt="currentLocale === 'fr' ? 'Switch to English' : 'Passer en français'"
-          class="flag-icon"
-        />
-      </button>
     </div>
 
     <div class="sidebar" :class="{ 'open': isSidebarOpen }">
@@ -66,7 +76,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
 const router = useRouter();
 
 const isSidebarOpen = ref(false);
@@ -74,20 +87,18 @@ const isHidden = ref(false);
 const isOpaque = ref(false);
 const searchQuery = ref("");
 
-const { locale: currentLocale, setLocale } = useI18n();
-const switchLocalePath = useSwitchLocalePath();
+const { locale: currentLocale } = useI18n();
 
-const navbarHeight = 70;
-let lastScrollY = 0;
+// Fonction pour changer de langue
+const switchLanguage = () => {
+  const newLocale = currentLocale.value === 'fr' ? 'en' : 'fr';
+  // Utilisez useRouter au lieu de navigateTo
+  const path = currentLocale.value === 'fr' ? '/en' : '/';
+  router.push(path);
+};
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
-};
-
-const switchLanguage = () => {
-  const newLocale = currentLocale.value === 'fr' ? 'en' : 'fr';
-  const path = switchLocalePath(newLocale);
-  if (path) navigateTo(path);
 };
 
 const performSearch = () => {
@@ -99,6 +110,9 @@ const performSearch = () => {
     searchQuery.value = '';
   }
 };
+
+const navbarHeight = 70;
+let lastScrollY = 0;
 
 const handleScroll = () => {
   const currentScrollY = window.scrollY;
@@ -142,19 +156,36 @@ nav {
 }
 
 .logo a {
-  color: #000000; /* Même couleur que les autres liens */
+  color: #757B7D; /* Remplacé par la couleur demandée */
   text-decoration: none; /* Supprime la décoration (par exemple, soulignement) */
   transition: color 0.3s ease; /* Ajoute une transition fluide pour le changement de couleur */
+  font-weight: bold;
+  font-size: 1.3rem; /* Augmentation légère de la taille */
 }
 
 .logo a:hover {
   color: #cc0000; /* Applique la même couleur de survol */
 }
 
+/* Conteneur pour les éléments à droite */
+.right-items {
+  display: flex;
+  align-items: center;
+}
+
 .menu-icon {
-  display: none; /* Masquer l'icône de menu par défaut */
-  font-size: 1.5em;
+  display: block; /* Toujours afficher l'icône de menu */
+  font-size: 1.8em; /* Augmentation de la taille */
   cursor: pointer;
+  padding: 5px 12px; /* Augmentation du padding */
+  margin-left: 18px; /* Plus d'espace entre les éléments */
+  border: none; /* Suppression du cadre */
+  color: #757B7D;
+  transition: color 0.3s ease;
+}
+
+.menu-icon:hover {
+  color: #cc0000;
 }
 
 .nav-links {
@@ -170,9 +201,13 @@ nav {
 }
 
 .nav-links a {
-  color: #000000; /* Couleur des liens */
+  color: #757B7D; /* Remplacé par la couleur demandée */
   text-decoration: none;
   transition: color 0.3s ease;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 1.05rem; /* Taille de police légèrement plus grande */
 }
 
 .nav-links a:hover {
@@ -181,19 +216,19 @@ nav {
 
 .navbar-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 0 40px; /* Ajout de padding au conteneur */
+  padding: 0 40px;
 }
 
 /* Bouton de traduction */
 .lang-switch {
   background: none;
-  border: none;
+  border: none; /* Suppression de la bordure */
   cursor: pointer;
-  padding: 8px;
-  transition: opacity 0.3s ease;
-  margin-left: 20px;
+  padding: 8px; /* Padding augmenté */
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
 }
@@ -203,8 +238,8 @@ nav {
 }
 
 .flag-icon {
-  width: 24px;
-  height: 24px;
+  width: 30px; /* Augmentation de la taille */
+  height: 30px; /* Augmentation de la taille */
   object-fit: contain;
 }
 
@@ -215,7 +250,7 @@ nav {
   right: -250px; /* Masquer la sidebar par défaut */
   width: 250px;
   height: 100%;
-  background-color: #333;
+  background-color: #757B7D;
   transition: right 0.3s ease;
   z-index: 1001;
 }
@@ -233,12 +268,23 @@ nav {
   margin: 20px 0;
 }
 
+.sidebar li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
 .close-btn {
   background: none;
-  border: none;
+  border: 1px solid #fff;
   color: #fff;
-  font-size: 2em;
+  font-size: 1.5em;
   cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0 10px;
 }
 
 /* Barre de recherche */
@@ -247,68 +293,159 @@ nav {
   margin: 0 20px; /* Espacement côté gauche et droit */
   display: flex;
   justify-content: center; /* Centrer la barre de recherche */
+  position: relative; /* Pour positionner le bouton correctement */
+  max-width: 400px; /* Limiter la largeur maximale */
 }
 
 .search-input {
   width: 100%;
-  padding: 8px 40px 8px 16px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
+  padding: 10px 45px 10px 16px; /* Augmentation légère du padding */
+  font-size: 15px; /* Police plus grande */
+  border: 1px solid #757B7D;
+  border-radius: 0; /* Suppression des coins arrondis */
   background: #fff;
-  color: #333;
+  color: #757B7D;
   transition: all 0.3s ease;
+}
 
-  &:focus {
-    outline: none;
-    border-color: #cc0000;
-    box-shadow: 0 0 5px rgba(204, 0, 0, 0.5);
-  }
+.search-input:focus {
+  outline: none;
+  border-color: #cc0000;
+  box-shadow: none;
 }
 
 .search-button {
   position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 0;
+  top: 0;
+  height: 100%;
   background: none;
   border: none;
-  padding: 8px;
-  color: #333;
+  border-left: 1px solid #757B7D; /* Ajout d'une bordure gauche */
+  padding: 0 15px; /* Padding augmenté */
+  color: #757B7D;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
 
-  &:hover {
-    color: #cc0000;
-  }
+.search-button:hover {
+  color: #cc0000;
+  background-color: #f0f0f0; /* Léger fond au survol */
 }
 
 /* Styles responsives */
-@media (max-width: 768px) {
-  .menu-icon {
-    display: block; /* Afficher l'icône de menu sur mobile */
+@media (max-width: 1024px) {
+  .navbar-container {
+    padding: 0 20px;
   }
+  
+  .search-container {
+    max-width: 300px;
+  }
+}
 
+@media (max-width: 768px) {
   .nav-links {
     display: none; /* Masquer les liens de la navbar sur mobile */
+  }
+  
+  .navbar-container {
+    flex-wrap: wrap;
+    padding: 10px;
   }
 
   .search-container {
     flex: 100%; /* Faire prendre tout l'espace disponible en mode mobile */
+    max-width: none;
     margin: 10px 0; /* Ajouter un espace vertical au-dessus et en dessous */
     order: 3; /* Positionner la barre en bas après le menu */
+    padding: 0 10px; /* Ajouter un padding égal des deux côtés */
+    box-sizing: border-box; /* S'assurer que le padding est inclus dans la largeur */
   }
-
+  
   .search-input {
-    max-width: none; /* Laisser la barre prendre tout l'espace disponible sur mobile */
+    padding: 10px 45px 10px 15px; /* Équilibrer le padding gauche et droit */
   }
+  
+  .search-button {
+    right: 0; /* S'assurer que le bouton est bien aligné à droite */
+    padding: 0 15px;
+  }
+}
 
+@media (max-width: 480px) {
+  nav {
+    padding: 15px 0;
+  }
+  
+  .navbar-container {
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px;
+  }
+  
+  .header-search-row {
+    width: 100%;
+    margin-top: 5px;
+  }
+  
+  .logo a {
+    font-size: 1.2rem;
+  }
+  
+  .right-items {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  
+  .search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 40px 0 15px;
+    font-size: 14px;
+    line-height: 40px;
+    box-sizing: border-box;
+  }
+  
+  .search-button {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+  
+  .lang-switch {
+    padding: 5px;
+    margin-right: 12px;
+  }
+  
+  .flag-icon {
+    width: 26px;
+    height: 26px;
+  }
+  
   .menu-icon {
-    display: block; /* Afficher le menu burger */
-  }
-
-  .nav-links {
-    display: none; /* Masquer les liens de navigation en mode mobile */
+    padding: 5px;
+    font-size: 1.6em;
+    margin-left: 0;
   }
 }
 </style>
