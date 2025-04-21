@@ -1,58 +1,35 @@
 <template>
   <nav :class="{ hidden: isHidden, opaque: isOpaque }">
     <div class="navbar-container">
-      <!-- Première ligne: logo et boutons -->
-      <div class="header-top-row">
-        <div class="logo">
-          <NuxtLink to="/">Home</NuxtLink>
-        </div>
-
-        <!-- Éléments à droite -->
-        <div class="right-items">
-          <!-- Bouton de traduction -->
-          <button class="lang-switch" @click="switchLanguage">
-            <img 
-              :src="currentLocale === 'fr' ? '/images/flags/uk.svg' : '/images/flags/fr.svg'"
-              :alt="currentLocale === 'fr' ? 'Switch to English' : 'Passer en français'"
-              class="flag-icon"
-            />
-          </button>
-          
-          <!-- Menu burger déplacé ici -->
-          <div class="menu-icon" @click="toggleSidebar">
-            &#9776; <!-- Icône de menu -->
-          </div>
-        </div>
+      <div class="logo">
+        <NuxtLink to="/">Home</NuxtLink>
       </div>
 
-      <!-- Deuxième ligne: barre de recherche -->
-      <div class="header-search-row">
-        <!-- Barre de recherche -->
-        <div class="search-container">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Rechercher une œuvre..."
-            class="search-input"
-            @keyup.enter="performSearch"
-          />
-          <button class="search-button" @click="performSearch">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </button>
-        </div>
+      <!-- Barre de recherche -->
+      <div class="search-container">
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Rechercher une œuvre..."
+          class="search-input"
+          @keyup.enter="performSearch"
+        />
+        <button class="search-button" @click="performSearch">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
       </div>
 
       <ul :class="{ 'active': isSidebarOpen }" class="nav-links">
@@ -61,6 +38,23 @@
         <li><NuxtLink to="/artworks">Artworks</NuxtLink></li>
         <li><NuxtLink to="/analyses">Analyses</NuxtLink></li>
       </ul>
+
+      <!-- Éléments à droite -->
+      <div class="right-items">
+        <!-- Bouton de traduction -->
+        <button class="lang-switch" @click="switchLanguage">
+          <img 
+            :src="currentLocale === 'fr' ? '/images/flags/uk.svg' : '/images/flags/fr.svg'"
+            :alt="currentLocale === 'fr' ? 'Switch to English' : 'Passer en français'"
+            class="flag-icon"
+          />
+        </button>
+        
+        <!-- Menu burger déplacé ici -->
+        <div class="menu-icon" @click="toggleSidebar">
+          &#9776; <!-- Icône de menu -->
+        </div>
+      </div>
     </div>
 
     <div class="sidebar" :class="{ 'open': isSidebarOpen }">
@@ -216,10 +210,9 @@ nav {
 
 .navbar-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 0 40px;
+  padding: 0 40px; /* Ajout de padding au conteneur */
 }
 
 /* Bouton de traduction */
@@ -375,66 +368,38 @@ nav {
 
 @media (max-width: 480px) {
   nav {
-    padding: 15px 0;
-  }
-  
-  .navbar-container {
-    padding: 0 15px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .header-top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding-bottom: 10px;
-  }
-  
-  .header-search-row {
-    width: 100%;
-    margin-top: 5px;
+    padding: 10px;
   }
   
   .logo a {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   
-  .right-items {
-    display: flex;
-    align-items: center;
+  .navbar-container {
+    padding: 0 5px; /* Réduire le padding pour éviter les débordements */
   }
   
   .search-container {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    position: relative;
+    padding: 0 5px; /* Réduire le padding sur très petits écrans */
+    margin: 8px 0; /* Réduire légèrement la marge verticale */
   }
   
   .search-input {
-    width: 100%;
-    height: 40px;
-    padding: 0 40px 0 15px;
-    font-size: 14px;
-    line-height: 40px;
-    box-sizing: border-box;
+    font-size: 13px;
+    padding: 8px 40px 8px 12px; /* Équilibrer en garantissant assez d'espace pour le bouton */
+    width: 100%; /* S'assurer que la largeur est respectée */
   }
   
   .search-button {
-    height: 40px;
-    width: 40px;
+    padding: 0 12px;
+    width: 40px; /* Définir une largeur fixe pour le bouton */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0;
   }
   
   .lang-switch {
     padding: 5px;
-    margin-right: 12px;
   }
   
   .flag-icon {
@@ -445,7 +410,7 @@ nav {
   .menu-icon {
     padding: 5px;
     font-size: 1.6em;
-    margin-left: 0;
+    margin-left: 12px;
   }
 }
 </style>
