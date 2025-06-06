@@ -12,22 +12,42 @@
         </button>
       </div>
 
-      <div class="content" v-if="currentTab">
-        <div class="image-gallery">
-          <div 
-            v-for="(image, index) in currentTab.images" 
-            :key="index"
-            class="image-container"
-            @click="openModal(index)"
-          >
-            <img :src="image" :alt="currentTab.title" />
-          </div>
+      <div v-if="currentTab">
+        <div class="main-image-container">
+          <img 
+            v-if="currentTab.images && currentTab.images.length > 0"
+            :src="currentTab.images[0]" 
+            :alt="currentTab.title"
+            @click="openModal(0)"
+            class="main-image" 
+          />
         </div>
 
-        <h2>{{ currentTab.title }}</h2>
+        <h2 class="article-title">{{ currentTab.title }}</h2>
+        
+        <div class="author-section">
+          <div class="author-info">
+            <div class="author-avatar">
+              <img :src="getAuthorAvatar(currentTab)" :alt="getAuthor(currentTab)" />
+            </div>
+            <div class="author-details">
+              <span class="author-name">{{ getAuthor(currentTab) }}</span>
+              <span class="author-title">Critique d'art</span>
+            </div>
+          </div>
+        </div>
         
         <div class="translations">
-          <div class="translation fr" v-html="currentTab.translations.fr"></div>
+          <div class="translation fr">
+            <div class="text-content" :class="{ 'collapsed': !showFullText }">
+              <div v-html="currentTab.translations.fr"></div>
+            </div>
+            <div v-if="!showFullText" class="text-fade"></div>
+            <button class="show-more-btn" @click="toggleShowMore">
+              {{ showFullText ? 'Voir moins' : 'Voir plus' }}
+              <span class="arrow" :class="{ 'up': showFullText }">&#9662;</span>
+            </button>
+          </div>
           <div class="translation en" v-if="currentTab.translations.en">
             {{ currentTab.translations.en }}
           </div>
@@ -64,17 +84,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRuntimeConfig } from '#app';
+import { useRuntimeConfig } from 'nuxt/app';
+const runtimeConfig = useRuntimeConfig();
+
+const S3_BASE_URL = runtimeConfig.public.apiUrl;
 
 const { t } = useI18n();
-const config = useRuntimeConfig();
-const apiUrl = config.public.apiUrl;
+
 
 const tabs = [
   {
     id: 'portant',
     title: "Le Portant",
-    images: [`${apiUrl}/Deployments/00/10.jpg`, `${apiUrl}/Deployments/00/11.jpg`],
+    images: [`${S3_BASE_URL}/Deployments/00/10.jpg`, `${S3_BASE_URL}/Deployments/00/11.jpg`],
     translations: {
       fr: [
         t('Analyses.TitreCDA'),
@@ -82,27 +104,29 @@ const tabs = [
         t('Analyses.Texte2CDA'),
         t('Analyses.Texte3CDA'),
         t('Analyses.AuteurCDA')
-      ].join('&lt;br&gt;'),
+      ].join('<br>'),
       en: ''
-    }
+    },
+    author: 'Cécile Jouanneau'
   },
   {
     id: 'concordance',
-    title: 'Concordance Universelle - ECC Italie - Biennale de Venise 2021',
-    images: [`${apiUrl}/Deployments/00/02.jpg`, `${apiUrl}/Deployments/00/04.jpg`,],
+    title: 'Concordance Universelle',
+    images: [`${S3_BASE_URL}/Deployments/00/02.jpg`, `${S3_BASE_URL}/Deployments/00/04.jpg`,],
     translations: {
       fr: [
         t('Analyses.TitreCU'),
         t('Analyses.TexteCU'),
         t('Analyses.AuteurCU')
-      ].join('&lt;br&gt;'),
+      ].join('<br>'),
       en: ''
-    }
+    },
+    author: 'Marie Laumond'
   },
   {
     id: 'aimants',
     title: "Comme deux aimants",
-    images: [`${apiUrl}/Deployments/00/06.jpg`],
+    images: [`${S3_BASE_URL}/Deployments/00/06.jpg`],
     translations: {
       fr: [
         t('Analyses.TitreCDA'),
@@ -110,14 +134,15 @@ const tabs = [
         t('Analyses.Texte2CDA'),
         t('Analyses.Texte3CDA'),
         t('Analyses.AuteurCDA')
-      ].join('&lt;br&gt;'),
+      ].join('<br>'),
       en: ''
-    }
+    },
+    author: 'Cécile Jouanneau'
   },
   {
     id: 'advienne',
-    title: "Afin qu'un jour advienne - Le grand Mikado de la pensée humaine",
-    images: [`${apiUrl}/Deployments/00/06.jpg`, `${apiUrl}/Deployments/00/08.jpg`],
+    title: "Afin qu'un jour advienne ",
+    images: [`${S3_BASE_URL}/Deployments/00/06.jpg`, `${S3_BASE_URL}/Deployments/00/08.jpg`],
     translations: {
       fr: [
         t('Analyses.TitreAQJA'),
@@ -157,17 +182,35 @@ const tabs = [
         t('Analyses.Texte34AQJA'),
         '¹' + t('Analyses.Legende1AQJA'),
         '²' + t('Analyses.Legende2AQJA')
-      ].join('&lt;br&gt;'),
+      ].join('<br>'),
       en: ''
-    }
+    },
+    author: 'Marie Laumond'
   }
 ];
 
 const activeTab = ref(tabs[0].id);
 const showModal = ref(false);
 const currentImageIndex = ref(0);
+const showFullText = ref(false);
+
+// Ajout des URLs des avatars pour simplifier
+const authorAvatars = {
+  'Cécile Jouanneau': `${S3_BASE_URL}/authors/cecile-jouanneau.jpg`,
+  'Marie Laumond': `${S3_BASE_URL}/authors/marie-laumond.jpg`,
+  'default': '/images/default-avatar.jpg'
+};
 
 const currentTab = computed(() => tabs.find(tab => tab.id === activeTab.value));
+
+const getAuthor = (tab) => {
+  return tab.author || 'Auteur non spécifié';
+};
+
+const getAuthorAvatar = (tab) => {
+  if (!tab || !tab.author) return authorAvatars.default;
+  return authorAvatars[tab.author] || authorAvatars.default;
+};
 
 const openModal = (index: number) => {
   currentImageIndex.value = index;
@@ -176,6 +219,10 @@ const openModal = (index: number) => {
 
 const closeModal = () => {
   showModal.value = false;
+};
+
+const toggleShowMore = () => {
+  showFullText.value = !showFullText.value;
 };
 </script>
 
@@ -190,6 +237,7 @@ const closeModal = () => {
   margin-bottom: 2rem;
   border-bottom: 2px solid var(--color-border);
   padding-bottom: 1rem;
+  overflow-x: auto;
   
   button {
     background: none;
@@ -199,6 +247,7 @@ const closeModal = () => {
     color: var(--color-text);
     cursor: pointer;
     position: relative;
+    white-space: nowrap;
     
     &::after {
       content: '';
@@ -207,13 +256,13 @@ const closeModal = () => {
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: red;
+      background-color: #757B7D;
       transform: scaleX(0);
       transition: transform 0.3s ease;
     }
     
     &.active {
-      color: red;
+      color: #757B7D;
       
       &::after {
         transform: scaleX(1);
@@ -221,32 +270,26 @@ const closeModal = () => {
     }
     
     &:hover {
-      color: red;
+      color: #757B7D;
     }
   }
 }
 
-.image-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+.main-image-container {
   width: 100%;
-}
-
-.image-container {
-  aspect-ratio: 16/9;
-  cursor: pointer;
   overflow: hidden;
-  border-radius: 0;
-  background-color: #f5f5f5;
+  margin-bottom: 30px;
+  text-align: center;
+  background-color: transparent;
+  padding: 20px 0;
   
-  img {
-    width: 100%;
-    height: 100%;
+  .main-image {
+    max-width: 100%;
+    max-height: 500px;
     object-fit: contain;
+    cursor: pointer;
     transition: transform 0.3s ease;
-    background-color: white;
+    box-shadow: none;
     
     &:hover {
       transform: scale(1.02);
@@ -254,15 +297,67 @@ const closeModal = () => {
   }
 }
 
+.article-title {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.author-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+  
+  .author-info {
+    display: flex;
+    align-items: center;
+    
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 10px;
+      border: 1px solid #eee;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    .author-details {
+      display: flex;
+      flex-direction: column;
+      
+      .author-name {
+        font-weight: bold;
+        margin-right: 5px;
+        font-size: 0.95rem;
+      }
+      
+      .author-title {
+        color: #757B7D;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
 .translations {
-  margin-top: 2rem;
+  margin-bottom: 30px;
+  position: relative;
   
   .translation {
-    margin-bottom: 2rem;
+    line-height: 1.6;
     
     &.fr {
-      font-size: 1.1rem;
-      line-height: 1.6;
+      font-size: 1.05rem;
+      position: relative;
     }
   }
 }
@@ -273,7 +368,7 @@ const closeModal = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -282,12 +377,12 @@ const closeModal = () => {
 
 .modal-content {
   position: relative;
-  max-width: 95%;
-  max-height: 95vh;
+  max-width: 90%;
+  max-height: 90vh;
   
   img {
     max-width: 100%;
-    max-height: 95vh;
+    max-height: 90vh;
     object-fit: contain;
   }
 }
@@ -307,13 +402,17 @@ const closeModal = () => {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
-  padding: 1rem;
-  cursor: pointer;
   font-size: 1.5rem;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &.prev {
     left: -60px;
@@ -322,9 +421,78 @@ const closeModal = () => {
   &.next {
     right: -60px;
   }
+}
+
+.text-content {
+  position: relative;
+  
+  &.collapsed {
+    max-height: 150px;
+    overflow: hidden;
+  }
+}
+
+.text-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  pointer-events: none;
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  color: #757B7D;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 5px 15px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background-color: #f5f5f5;
+  }
+  
+  .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    
+    &.up {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-wrap: wrap;
+  }
+  
+  .author-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .nav-button {
+    width: 40px;
+    height: 40px;
+    
+    &.prev {
+      left: -45px;
+    }
+    
+    &.next {
+      right: -45px;
+    }
   }
 }
 </style>

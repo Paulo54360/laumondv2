@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config';
 
+
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   ssr: false,
@@ -26,7 +28,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
+      apiUrl: process.env.S3_BASE_URL,
     },
   },
 
