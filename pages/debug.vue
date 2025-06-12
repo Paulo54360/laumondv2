@@ -54,7 +54,8 @@ const connectionResults = ref(null);
 const testImages = ref([
   'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/01/01.jpg',
   'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/01.jpg',
-  'https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=1000&auto=format&fit=crop'
+  'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/03/01.jpg',
+  'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/01.jpg'
 ]);
 
 const searchQuery = ref('etude');

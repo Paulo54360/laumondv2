@@ -28,7 +28,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiUrl: process.env.S3_BASE_URL,
+      apiUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
     },
   },
 
@@ -57,4 +57,11 @@ export default defineNuxtConfig({
     }
   },
   modules: ['@nuxt/image', '@nuxtjs/i18n'],
+  
+  image: {
+    domains: ['plaumondpicture.s3.eu-west-3.amazonaws.com'],
+    alias: {
+      s3: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com'
+    }
+  },
 });
