@@ -1,75 +1,58 @@
-# Nuxt Minimal Starter
+# Laumond Art - Site Web
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Site web de l'artiste Patrick Laumond, développé avec Nuxt 3.
 
-## Setup
+## 🚀 Technologies
 
-Make sure to install dependencies:
+- **Frontend :** Nuxt 3, Vue 3, TypeScript
+- **Base de données :** Supabase (PostgreSQL)
+- **Stockage :** AWS S3
+- **Hébergement :** OVH
+
+## 📁 Structure du projet
+
+```
+laumond-nuxt/
+├── assets/           # Styles et assets
+├── components/       # Composants Vue
+├── composables/      # Composables Nuxt
+├── db/              # Configuration base de données
+├── i18n/            # Internationalisation
+├── layouts/         # Layouts Nuxt
+├── pages/           # Pages de l'application
+├── plugins/         # Plugins Nuxt
+├── public/          # Fichiers statiques
+├── server/          # API routes
+└── scripts/         # Scripts utilitaires
+```
+
+## 🔧 Installation
 
 ```bash
-# npm
+# Installer les dépendances
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# Lancer en développement
 npm run dev
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
+# Build pour production
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+## 🌐 Déploiement
 
-```bash
-# npm
-npm run preview
+Le site est déployé sur OVH avec les variables d'environnement suivantes :
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
 
-# pnpm
-pnpm preview
+## 📊 Base de données
 
-# yarn
-yarn preview
+La base de données Supabase est maintenue active 24h/24 via un service de ping automatique (cron-job.org).
 
-# bun
-bun run preview
-```
+## 🎨 Fonctionnalités
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Galerie d'œuvres d'art
+- Recherche en temps réel
+- Analyses critiques
+- Support multilingue (FR/EN)
+- Interface responsive

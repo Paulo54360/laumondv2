@@ -39,17 +39,34 @@
         
         <div class="translations">
           <div class="translation fr">
-            <div class="text-content" :class="{ 'collapsed': !showFullText }">
-              <div v-html="currentTab.translations.fr"></div>
+            <div class="text-content-wrapper">
+              <div class="text-content" :class="{ 'collapsed': !showFullText }">
+                <div v-html="currentTab.translations.fr"></div>
+              </div>
+              <div
+                class="show-more-arrow"
+                @click="toggleShowMore"
+                role="button"
+                tabindex="0"
+              >
+                <img
+                  v-if="!showFullText"
+                  src="~/assets/images/common/Down Arrow Icon.png"
+                  alt="Voir plus"
+                  class="arrow-img"
+                />
+                <img
+                  v-else
+                  src="~/assets/images/common/Fleche Vers Le Haut.png"
+                  alt="Voir moins"
+                  class="arrow-img up"
+                />
+              </div>
+              <div v-if="!showFullText" class="text-fade"></div>
             </div>
-            <div v-if="!showFullText" class="text-fade"></div>
-            <button class="show-more-btn" @click="toggleShowMore">
-              {{ showFullText ? 'Voir moins' : 'Voir plus' }}
-              <span class="arrow" :class="{ 'up': showFullText }">&#9662;</span>
-            </button>
-          </div>
-          <div class="translation en" v-if="currentTab.translations.en">
-            {{ currentTab.translations.en }}
+            <div class="translation en" v-if="currentTab.translations.en">
+              {{ currentTab.translations.en }}
+            </div>
           </div>
         </div>
 
@@ -423,52 +440,48 @@ const toggleShowMore = () => {
   }
 }
 
-.text-content {
+.text-content-wrapper {
   position: relative;
-  
-  &.collapsed {
-    max-height: 150px;
-    overflow: hidden;
-  }
+  width: 100%;
+}
+
+.text-content.collapsed {
+  max-height: 150px;
+  overflow: hidden;
+}
+
+.show-more-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 2.2rem;
+  color: #757B7D;
+  z-index: 2;
+  position: relative;
 }
 
 .text-fade {
   position: absolute;
-  bottom: 0;
   left: 0;
+  bottom: 0;
   width: 100%;
-  height: 80px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
   pointer-events: none;
+  z-index: 3;
 }
 
-.show-more-btn {
-  background: none;
-  border: none;
-  color: #757B7D;
-  font-size: 0.95rem;
-  cursor: pointer;
-  padding: 5px 15px;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-  
-  &:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .arrow {
-    display: inline-block;
-    transition: transform 0.3s ease;
-    
-    &.up {
-      transform: rotate(180deg);
-    }
-  }
+.arrow-img {
+  width: 32px;
+  height: 32px;
+  display: block;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
