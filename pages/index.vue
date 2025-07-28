@@ -170,13 +170,8 @@
       </div>
     </section>
 
-    <!-- Footer minimaliste -->
-    <footer class="artistic-footer">
-      <div class="footer-content">
-        <div class="footer-line"></div>
-        <p>&copy; 2024 Patrick Laumond</p>
-      </div>
-    </footer>
+    <!-- Footer -->
+    <TheFooter />
   </div>
 </template>
 
@@ -644,31 +639,7 @@ const featuredArtworks = ref([
   }
 }
 
-// Footer artistique
-.artistic-footer {
-  background: var(--color-primary);
-  color: white;
-  padding: 3rem 2rem;
-  text-align: center;
-  
-  .footer-content {
-    max-width: var(--max-width-content);
-    margin: 0 auto;
-    
-    .footer-line {
-      width: 100px;
-      height: 1px;
-      background: white;
-      margin: 0 auto 2rem;
-    }
-    
-    p {
-      font-size: 0.9rem;
-      font-weight: 300;
-      letter-spacing: 0.1em;
-    }
-  }
-}
+
 
 // Animations
 @keyframes slideInLeft {

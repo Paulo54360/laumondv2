@@ -1,6 +1,7 @@
 <template>
   <footer class="footer">
     <div class="container">
+      <div class="footer-line"></div>
       <p class="footer-text">
         &copy; Patrick Laumond • Tous droits réservés - patrick@laumond.com - Paris.
         <br />Photos: &copy;Philippe Tapissier &nbsp;&nbsp; - &nbsp;&nbsp; Développement: Paul
@@ -46,6 +47,13 @@
 .container {
   max-width: 960px;
   margin: 0 auto;
+}
+
+.footer-line {
+  width: 100px;
+  height: 1px;
+  background: #333;
+  margin: 0 auto 2rem;
 }
 
 .footer-text {

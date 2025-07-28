@@ -227,8 +227,7 @@ const showFullText = ref(false);
 const authorAvatars = {
   'Marion Zilio': `${S3_BASE_URL}/authors/marion-zilio.jpg`,
   'Isabelle de Maison Rouge': `${S3_BASE_URL}/authors/isabelle-de-maison-rouge.png`,
-  'Edith Herlemont-Lassiat': `${S3_BASE_URL}/authors/edith-herlemont-lassiat.jpg`,
-  'default': `${S3_BASE_URL}/authors/default-avatar.png`
+  'default': `${S3_BASE_URL}/authors/default-avatar.jpg`
 };
 
 const currentTab = computed(() => tabs.find(tab => tab.id === activeTab.value));
@@ -239,6 +238,10 @@ const getAuthor = (tab) => {
 
 const getAuthorAvatar = (tab) => {
   if (!tab || !tab.author) return authorAvatars.default;
+  // Utiliser l'image par défaut pour Edith Herlemont-Lassiat
+  if (tab.author === 'Edith Herlemont-Lassiat') {
+    return authorAvatars.default;
+  }
   return authorAvatars[tab.author] || authorAvatars.default;
 };
 
