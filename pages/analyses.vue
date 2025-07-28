@@ -116,15 +116,27 @@ const tabs = [
     images: [`${S3_BASE_URL}/Deployments/00/10.jpg`, `${S3_BASE_URL}/Deployments/00/11.jpg`],
     translations: {
       fr: [
-        t('Analyses.TitreCDA'),
-        t('Analyses.Texte1CDA'),
-        t('Analyses.Texte2CDA'),
-        t('Analyses.Texte3CDA'),
-        t('Analyses.AuteurCDA')
+        t('Analyses.TitreLAEC'),
+        t('Analyses.Texte1LAEC'),
+        t('Analyses.Texte2LAEC'),
+        t('Analyses.Texte3LAEC'),
+        t('Analyses.Texte4LAEC'),
+        t('Analyses.Texte5LAEC'),
+        t('Analyses.Texte6LAEC'),
+        t('Analyses.Texte10LAEC'),
+        t('Analyses.Texte12LAEC'),
+        t('Analyses.Texte13LAEC'),
+        t('Analyses.Texte14LAEC'),
+        t('Analyses.Texte15LAEC'),
+        t('Analyses.Texte16LAEC'),
+        t('Analyses.Texte17LAEC'),
+        t('Analyses.Texte18LAEC'),
+        t('Analyses.Texte19LAEC'),
+        t('Analyses.AuteurLAEC')
       ].join('<br>'),
       en: ''
     },
-    author: 'Cécile Jouanneau'
+    author: 'Edith Herlemont-Lassiat'
   },
   {
     id: 'concordance',
@@ -138,7 +150,7 @@ const tabs = [
       ].join('<br>'),
       en: ''
     },
-    author: 'Marie Laumond'
+    author: 'Marion Zilio'
   },
   {
     id: 'aimants',
@@ -154,7 +166,7 @@ const tabs = [
       ].join('<br>'),
       en: ''
     },
-    author: 'Cécile Jouanneau'
+    author: 'Marion Zilio'
   },
   {
     id: 'advienne',
@@ -202,7 +214,7 @@ const tabs = [
       ].join('<br>'),
       en: ''
     },
-    author: 'Marie Laumond'
+    author: 'Isabelle de Maison Rouge'
   }
 ];
 
@@ -213,9 +225,10 @@ const showFullText = ref(false);
 
 // Ajout des URLs des avatars pour simplifier
 const authorAvatars = {
-  'Cécile Jouanneau': `${S3_BASE_URL}/authors/cecile-jouanneau.jpg`,
-  'Marie Laumond': `${S3_BASE_URL}/authors/marie-laumond.jpg`,
-  'default': '/images/default-avatar.jpg'
+  'Marion Zilio': `${S3_BASE_URL}/authors/marion-zilio.jpg`,
+  'Isabelle de Maison Rouge': `${S3_BASE_URL}/authors/isabelle-de-maison-rouge.png`,
+  'Edith Herlemont-Lassiat': `${S3_BASE_URL}/authors/edith-herlemont-lassiat.jpg`,
+  'default': `${S3_BASE_URL}/authors/default-avatar.png`
 };
 
 const currentTab = computed(() => tabs.find(tab => tab.id === activeTab.value));
@@ -375,6 +388,7 @@ const toggleShowMore = () => {
     &.fr {
       font-size: 1.05rem;
       position: relative;
+      text-align: justify;
     }
   }
 }

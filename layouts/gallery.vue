@@ -38,10 +38,14 @@
 import { ref, computed, provide } from 'vue';
 import TheHeader from '~/components/layout/TheHeader.vue';
 
+const runtimeConfig = useRuntimeConfig();
+const S3_BASE_URL = runtimeConfig.public.apiUrl;
+
 const imageUrls = ref<string[]>([
-  '/images/gallery/image1.jpg',
-  '/images/gallery/image2.jpg',
-  '/images/gallery/image3.jpg',
+  // Images de galerie - à remplacer par tes vraies images S3
+  `${S3_BASE_URL}/gallery/image1.jpg`,
+  `${S3_BASE_URL}/gallery/image2.jpg`,
+  `${S3_BASE_URL}/gallery/image3.jpg`,
   // Add more images here
 ]);
 
