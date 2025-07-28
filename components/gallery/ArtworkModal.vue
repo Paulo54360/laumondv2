@@ -168,4 +168,87 @@ watch(() => props.artwork, () => {
     line-height: 1.6;
   }
 }
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .close-button {
+    font-size: 1.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  
+  .nav-button {
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    
+    &.prev {
+      left: 0.5rem;
+    }
+    
+    &.next {
+      right: 0.5rem;
+    }
+  }
+  
+  .artwork-details {
+    padding: 1rem;
+    
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .description {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 98%;
+    max-height: 98vh;
+  }
+  
+  .close-button {
+    font-size: 1.3rem;
+    top: 0.3rem;
+    right: 0.3rem;
+  }
+  
+  .nav-button {
+    font-size: 1rem;
+    padding: 0.6rem;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &.prev {
+      left: 0.3rem;
+    }
+    
+    &.next {
+      right: 0.3rem;
+    }
+  }
+  
+  .artwork-details {
+    padding: 0.8rem;
+    
+    h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+    }
+    
+    .description {
+      font-size: 0.8rem;
+    }
+  }
+}
 </style> 

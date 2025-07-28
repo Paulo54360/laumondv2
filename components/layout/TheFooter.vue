@@ -84,4 +84,36 @@
     font-size: 0.7em;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 15px 0;
+  }
+  
+  .footer-text {
+    font-size: 0.6em;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .social-link {
+    margin-right: 15px;
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer {
+    padding: 10px 0;
+  }
+  
+  .footer-text {
+    font-size: 0.5em;
+  }
+  
+  .social-link {
+    margin-right: 12px;
+    font-size: 16px;
+  }
+}
 </style> 

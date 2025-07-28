@@ -126,4 +126,50 @@ onMounted(async () => {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .artwork-grid {
+    padding: 1rem;
+    
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .artwork-card .artwork-info {
+      padding: 1rem;
+      
+      h3 {
+        font-size: 1.1rem;
+      }
+      
+      .description {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .artwork-grid {
+    padding: 0.5rem;
+    
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+    
+    .artwork-card .artwork-info {
+      padding: 0.8rem;
+      
+      h3 {
+        font-size: 1rem;
+      }
+      
+      .description {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
 </style> 

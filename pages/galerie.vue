@@ -101,4 +101,34 @@ const closeModal = (): void => {
     }
   }
 }
+
+@media (max-width: 768px) {
+  .gallery-page {
+    padding-top: calc(var(--header-height) + 20px);
+  }
+  
+  .category-tabs {
+    padding: 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    
+    button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .category-tabs {
+    padding: 0.8rem;
+    gap: 0.3rem;
+    
+    button {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+}
 </style> 

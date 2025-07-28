@@ -502,8 +502,30 @@ const toggleShowMore = () => {
 }
 
 @media (max-width: 768px) {
+  .analyses-page {
+    padding: 1rem;
+  }
+  
   .tabs {
     flex-wrap: wrap;
+    gap: 0.5rem;
+    
+    button {
+      font-size: 1rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+  
+  .main-image-container {
+    margin-bottom: 20px;
+    
+    .main-image {
+      max-height: 300px;
+    }
+  }
+  
+  .article-title {
+    font-size: 1.5rem;
   }
   
   .author-section {
@@ -522,6 +544,63 @@ const toggleShowMore = () => {
     
     &.next {
       right: -45px;
+    }
+  }
+  
+  .modal-content {
+    max-width: 95%;
+    
+    img {
+      max-height: 80vh;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .analyses-page {
+    padding: 0.5rem;
+  }
+  
+  .tabs {
+    button {
+      font-size: 0.9rem;
+      padding: 0.3rem 0.6rem;
+    }
+  }
+  
+  .main-image-container .main-image {
+    max-height: 250px;
+  }
+  
+  .article-title {
+    font-size: 1.3rem;
+  }
+  
+  .author-section .author-info .author-details {
+    .author-name {
+      font-size: 0.9rem;
+    }
+    
+    .author-title {
+      font-size: 0.7rem;
+    }
+  }
+  
+  .translations .translation.fr {
+    font-size: 1rem;
+  }
+  
+  .nav-button {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+    
+    &.prev {
+      left: -40px;
+    }
+    
+    &.next {
+      right: -40px;
     }
   }
 }

@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/artworks" class="artistic-link">Explorer la collection</NuxtLink>
+          <NuxtLink to="/galerie" class="artistic-link">Explorer la collection</NuxtLink>
         </div>
       </div>
     </section>
@@ -119,7 +119,7 @@
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/metahism" class="artistic-link">Découvrir le Métahisme</NuxtLink>
+          <NuxtLink to="/metahisme" class="artistic-link">Découvrir le Métahisme</NuxtLink>
         </div>
       </div>
     </section>
@@ -206,6 +206,7 @@ const featuredArtworks = ref([
   min-height: 100vh;
   background: var(--color-background);
   color: var(--color-text);
+  padding-top: var(--header-height);
 }
 
 
@@ -350,11 +351,17 @@ const featuredArtworks = ref([
         padding: 1rem;
         border: 1px solid var(--color-border);
         margin-bottom: 1rem;
+        overflow: hidden;
         
         img {
           width: 100%;
           height: 300px;
           object-fit: cover;
+          transition: transform var(--transition-medium);
+          
+          &:hover {
+            transform: scale(1.05);
+          }
         }
       }
       
@@ -664,33 +671,341 @@ const featuredArtworks = ref([
   }
 }
 
-// Responsive
+// Responsive - Repensé complètement pour mobile
 @media (max-width: 768px) {
-  .hero-section .hero-content {
-    grid-template-columns: 1fr;
-    text-align: center;
+  .homepage {
+    padding-top: calc(var(--header-height) + 20px);
   }
   
-  .analyses-content,
-  .metahisme-content,
-  .biography-content {
-    grid-template-columns: 1fr;
-  }
-  
-  .artworks-showcase {
-    grid-template-columns: 1fr;
-  }
-  
-  .nav-links {
-    display: none;
+  .hero-section {
+    padding: 3rem 1rem 2rem;
+    min-height: auto;
+    
+    .hero-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    .hero-title {
+      font-size: 2.2rem;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-subtitle {
+      margin-bottom: 2rem;
+      
+      .subtitle-line {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+      }
+    }
+    
+    .hero-description p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 0.8rem;
+    }
+    
+    .hero-visual {
+      height: 200px;
+      position: relative;
+      
+      .geometric-shape {
+        &.shape-1 {
+          width: 60px;
+          height: 60px;
+          top: 20px;
+          left: 20px;
+        }
+        
+        &.shape-2 {
+          width: 40px;
+          height: 40px;
+          top: 100px;
+          right: 20px;
+        }
+        
+        &.shape-3 {
+          width: 30px;
+          height: 30px;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+    }
   }
   
   .section {
-    padding: 6rem 1rem;
+    padding: 3rem 1rem;
+    min-height: auto;
   }
   
-  .section-title {
-    font-size: 2rem;
+  .section-header {
+    margin-bottom: 2rem;
+    
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .section-divider {
+      width: 40px;
+    }
+  }
+  
+  .section-link {
+    margin-top: 2rem;
+  }
+  
+  // Grille d'œuvres mobile
+  .oeuvres-section {
+    .artworks-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      
+      .artwork-item {
+        width: 100%;
+        
+        .artwork-frame {
+          padding: 0.8rem;
+          margin-bottom: 0.8rem;
+          
+          img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        
+        .artwork-info {
+          .artwork-title {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+          }
+          
+          .artwork-category {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+  
+  // Sections avec grille 2 colonnes
+  .analyses-content,
+  .metahisme-content,
+  .biography-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .analysis-text {
+    .analysis-quote {
+      margin-bottom: 2rem;
+      
+      p {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 0.8rem;
+      }
+      
+      .quote-author {
+        font-size: 0.8rem;
+      }
+    }
+    
+    .analysis-excerpt p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+  }
+  
+  .analysis-visual {
+    .text-block {
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      
+      h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+      }
+      
+      p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+      }
+    }
+  }
+  
+  .metahisme-text {
+    .metahisme-definition {
+      margin-bottom: 2rem;
+      
+      p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+    }
+    
+    .metahisme-analysis p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+  }
+  
+  .metahisme-visual {
+    .artwork-showcase {
+      .metahisme-artwork {
+        height: 250px;
+      }
+      
+      .artwork-overlay {
+        padding: 1.5rem;
+        
+        h4 {
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  
+  .biography-text {
+    .biography-intro {
+      margin-bottom: 2rem;
+      
+      p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+    }
+    
+    .biography-timeline {
+      .timeline-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        
+        .year {
+          font-size: 1.1rem;
+          margin-right: 0;
+          margin-bottom: 0.3rem;
+          min-width: auto;
+        }
+        
+        .event {
+          font-size: 0.85rem;
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+  
+  .biography-visual {
+    .portrait-showcase {
+      .portrait-artwork {
+        height: 250px;
+      }
+      
+      .portrait-overlay {
+        padding: 1.5rem;
+        
+        h4 {
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+  
+  .artistic-link {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage {
+    padding-top: calc(var(--header-height) + 10px);
+  }
+  
+  .hero-section {
+    padding: 2rem 0.8rem 1.5rem;
+    
+    .hero-title {
+      font-size: 1.8rem;
+    }
+    
+    .hero-subtitle .subtitle-line {
+      font-size: 0.9rem;
+    }
+    
+    .hero-description p {
+      font-size: 0.85rem;
+    }
+    
+    .hero-visual {
+      height: 150px;
+      
+      .geometric-shape {
+        &.shape-1 {
+          width: 50px;
+          height: 50px;
+          top: 15px;
+          left: 15px;
+        }
+        
+        &.shape-2 {
+          width: 35px;
+          height: 35px;
+          top: 70px;
+          right: 15px;
+        }
+        
+        &.shape-3 {
+          width: 25px;
+          height: 25px;
+          bottom: 15px;
+        }
+      }
+    }
+  }
+  
+  .section {
+    padding: 2rem 0.8rem;
+  }
+  
+  .section-header .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .oeuvres-section .artworks-showcase .artwork-item .artwork-frame img {
+    height: 180px;
+  }
+  
+  .metahisme-visual .artwork-showcase .metahisme-artwork,
+  .biography-visual .portrait-showcase .portrait-artwork {
+    height: 200px;
+  }
+  
+  .artistic-link {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
   }
 }
 </style>
