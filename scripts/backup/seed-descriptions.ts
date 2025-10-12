@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+
 import { categoryTitles } from './update-descriptions';
 
 const prisma = new PrismaClient();
@@ -6,10 +7,10 @@ const S3_BASE_URL = 'https://plaumondpicture.s3.eu-west-3.amazonaws.com';
 
 const getCategoryS3Path = (categoryName: string): string => {
   const categoryMap: Record<string, string> = {
-    'deploiement': 'Deployments',
-    'transcriptions': 'Transcriptions',
-    'archetype': 'Archetypes',
-    'drawing': 'Drawings'
+    deploiement: 'Deployments',
+    transcriptions: 'Transcriptions',
+    archetype: 'Archetypes',
+    drawing: 'Drawings',
   };
   return categoryMap[categoryName] || categoryName;
 };
@@ -23,7 +24,7 @@ async function clearDatabase() {
 
 async function seedDescriptions() {
   try {
-    console.log('Début de l\'importation des œuvres...\n');
+    console.log("Début de l'importation des œuvres...\n");
 
     // Nettoyer la base de données d'abord
     await clearDatabase();
@@ -39,12 +40,12 @@ async function seedDescriptions() {
       const category = await prisma.category.upsert({
         where: { name: categoryName },
         update: {
-          path: `images/${categoryName}`
+          path: `images/${categoryName}`,
         },
         create: {
           name: categoryName,
-          path: `images/${categoryName}`
-        }
+          path: `images/${categoryName}`,
+        },
       });
 
       console.log(`Catégorie créée: ${category.name} (ID: ${category.id})`);
@@ -52,10 +53,10 @@ async function seedDescriptions() {
       // Pour chaque œuvre dans la catégorie
       for (const [folderId, artwork] of Object.entries(artworks)) {
         const s3CategoryPath = getCategoryS3Path(categoryName);
-        
+
         // Construire les URLs S3 pour les images
-        const imageUrls = Object.keys(artwork.images).map(imageId => 
-          `${S3_BASE_URL}/${s3CategoryPath}/${folderId}/${imageId}.jpg`
+        const imageUrls = Object.keys(artwork.images).map(
+          (imageId) => `${S3_BASE_URL}/${s3CategoryPath}/${folderId}/${imageId}.jpg`
         );
 
         try {
@@ -64,21 +65,21 @@ async function seedDescriptions() {
             where: {
               title_categoryId: {
                 title: artwork.title,
-                categoryId: category.id
-              }
+                categoryId: category.id,
+              },
             },
             update: {
               folderPath: `${s3CategoryPath}/${folderId}`,
               subcategory: folderId,
-              imageUrls: JSON.stringify(imageUrls)
+              imageUrls: JSON.stringify(imageUrls),
             },
             create: {
               title: artwork.title,
               categoryId: category.id,
               folderPath: `${s3CategoryPath}/${folderId}`,
               subcategory: folderId,
-              imageUrls: JSON.stringify(imageUrls)
-            }
+              imageUrls: JSON.stringify(imageUrls),
+            },
           });
 
           totalArtworks++;
@@ -95,7 +96,7 @@ async function seedDescriptions() {
       }
     }
 
-    console.log('\nRésumé de l\'importation:');
+    console.log("\nRésumé de l'importation:");
     console.log(`- Total des œuvres importées: ${totalArtworks}`);
     console.log(`- Total des images: ${totalImages}`);
 
@@ -105,13 +106,12 @@ async function seedDescriptions() {
     console.log('\nVérification de la base de données:');
     console.log(`- Nombre de catégories: ${categoryCount}`);
     console.log(`- Nombre d'œuvres: ${artworkCount}`);
-
   } catch (error) {
-    console.error('Erreur lors de l\'importation:', error);
+    console.error("Erreur lors de l'importation:", error);
   } finally {
     await prisma.$disconnect();
   }
 }
 
 // Lancer l'importation
-seedDescriptions().catch(console.error); 
+seedDescriptions().catch(console.error);

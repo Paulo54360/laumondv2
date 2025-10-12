@@ -1,8 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config';
 
-
-
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   ssr: false,
@@ -20,9 +18,9 @@ export default defineNuxtConfig({
       link: [
         {
           rel: 'stylesheet',
-          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css'
-        }
-      ]
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css',
+        },
+      ],
     },
   },
 
@@ -51,17 +49,17 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "~/assets/styles/_variables.scss" as *;'
-        }
-      }
-    }
+          additionalData: '@use "~/assets/styles/_variables.scss" as *;',
+        },
+      },
+    },
   },
   modules: ['@nuxt/image', '@nuxtjs/i18n'],
-  
+
   image: {
     domains: ['plaumondpicture.s3.eu-west-3.amazonaws.com'],
     alias: {
-      s3: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com'
-    }
+      s3: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
+    },
   },
 });
