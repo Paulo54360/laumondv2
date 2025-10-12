@@ -4,9 +4,7 @@
         "Oeuvres": "Œuvres",
         "Biographie": "Biographie",
         "Actualités": "Actualités",
-        "Analyses": "Analyses",
-        "home": "Accueil",
-        "metahism": "Métahisme"
+        "Analyses": "Analyses"
     },
     "MétaHisme": {
         "Texte": "Aujourd'hui dans notre société matérialiste, d'hyper individualisme l'homme est déshumanisé et paradoxalement le culte de l'ego ne cesse de prendre le pas sur notre développement personnel et donc sur notre évolution vers une recherche de sens universel. La genèse du MétaHisme trouve son origine dans cette réflexion. Pour Patrick Laumond, Il a toujours été nécessaire de se définir comme faisant de l'art plutôt que comme étant artiste. Bien que cela soit souvent entendu comme étant un corollaire à l'acte de création, il semble pour lui, que ce ne soit pas l'artiste qui détermine l'art, mais l'art qui au contraire détermine l'artiste.",
@@ -132,30 +130,22 @@
         "hero_description_2": "où chaque forme révèle une pensée,",
         "hero_description_3": "où l'angle droit rencontre l'émotion.",
         "video_hint": "Cliquez pour explorer en 360°",
-        "biography_title": "Biographie",
+        "biography_title": "Biography",
         "biography_intro": "Patrick Laumond développe depuis plus de vingt ans une approche unique de l'expression artistique, créant un langage visuel qui transcende les catégories traditionnelles.",
-        "timeline_2000": "Début des recherches artistiques",
+        "timeline_2000": "Début de la recherche artistique",
         "timeline_2010": "Création du concept Métahisme",
         "timeline_2020": "Maturation du mouvement",
         "portrait_caption": "Artiste et créateur du Métahisme",
         "read_biography": "Lire la biographie",
         "metahisme_title": "Métahisme",
         "metahisme_definition": "Le Métahisme est un mouvement artistique créé par Patrick Laumond qui explore les relations entre géométrie pure et expression émotionnelle. Chaque œuvre devient une méditation sur notre époque et ses contradictions.",
-        "metahisme_analysis": "À travers ses installations, Patrick Laumond interroge notre rapport au temps, à l'espace et à la conscience dans un monde de plus en plus virtualisé.",
-        "metahisme_artwork_caption": "L'œuvre emblématique du Métahisme",
+        "metahisme_analysis": "À travers ses installations, Patrick Laumond questionne notre rapport au temps, à l'espace et à la conscience dans un monde de plus en plus virtualisé.",
         "discover_metahisme": "Découvrir le Métahisme",
         "artworks_title": "Œuvres",
         "browse_artworks": "Parcourir les œuvres",
         "analyses_title": "Analyses",
         "analysis_quote": "L'œuvre de Laumond constitue une méditation profonde sur les paradoxes de notre époque contemporaine.",
-        "analysis_author": "Cécile Jouanneau, Critique d'art",
         "analysis_excerpt": "Les critiques d'art reconnaissent dans son travail une approche unique qui transcende les catégories traditionnelles de l'art contemporain.",
-        "read_analyses": "Lire les analyses",
-        "artwork_le_portant_title": "Le Portant",
-        "artwork_le_portant_description": "Une exploration des tensions entre ordre et chaos...",
-        "artwork_concordance_title": "Concordance Universelle",
-        "artwork_concordance_description": "L'harmonie dans la géométrie pure...",
-        "artwork_comme_deux_aimants_title": "Comme deux aimants",
-        "category_deployment": "Déploiement"
+        "read_analyses": "Lire les analyses"
     }
 }

@@ -62,31 +62,12 @@
       modélisation aboutit à ce qu'on pourrait appeler une représentation du Grand TOUT.
       <br />
       <br />
-      <h3 id="Théorisation_et_le_métahisme">Théorisation et le MétaHisme:</h3>
-      Pendant 11 ans, suivront des carnets de milliers de transcriptions préalables à la
-      conceptualisation d'œuvres et à l'élaboration du manifeste du MétaHisme. Un nouveau langage
-      est né et une première tentative de théorisation. En 2009, il fonde le MétaHisme, courant
-      artistique qui a pour but d'exprimer et de matérialiser la pensée humaine sous forme d'un
-      méta-paradigme. Selon l'artiste, le MétaHisme relie une vision globale des événements visibles
-      et invisibles simultanément. Le préfixe " MÉTA " évoque le Tout, " ISME " son propre courant
-      artistique et "H", huitième lettre de l'alphabet, lettre séparatrice et unificatrice, un
-      mouvement infini symbolisé par la lemniscate ∞.
+      <h3 id="Théorisation_et_le_métahisme">{{ $t('biography.theorisation_title') }}</h3>
+      {{ $t('biography.theorisation_text') }}
       <br />
       <br />
-      <h3 id="Un paradigme_de_l'universalité">Un paradigme de l'universalité:</h3>
-      L'œuvre de Laumond est un paradigme qui nous parle des cycles de la vie, une méditation sur
-      les paradoxes de l'existence et nos infinis possibles. Processus de création essentiel,
-      innombrables carnets de croquis fouillés et précis, choix de matériaux des Compagnons de
-      France, rien n'est laissé au hasard, tout est recherche de maîtrise. Laumond a construit un
-      langage tout à fait singulier au service d'une œuvre globale que l'on peut qualifier de
-      paradigme. Globale car cyclique, ouverte et fermée, unifiée et multiple. Une Œuvre où le
-      symbole est omniprésent. " Paradigme* " : du mot grec ancien παράδειγμα / paradeïgma qui
-      signifie « modèle » ou « exemple ». Un paradigme est une représentation du monde, une manière
-      de voir les choses, un modèle cohérent (…) qui repose sur une base définie (matrice
-      disciplinaire, modèle théorique ou courant de pensée). C'est une forme de rail de la pensée
-      dont les lois ne doivent pas être confondues avec celles d'un autre paradigme et qui, le cas
-      échéant, peuvent aussi faire obstacle à l'introduction de nouvelles solutions mieux adaptées.
-      (Source : wikipédia)
+      <h3 id="Un paradigme_de_l'universalité">{{ $t('biography.paradigme_title') }}</h3>
+      {{ $t('biography.paradigme_text') }}
       <br />
       <br />
       <h3 id="Vision_globale_et_pensée_complexe">Vision globale et pensée complexe:</h3>
@@ -172,15 +153,15 @@
       des univers parallèles " dans un espace consacré bâtiment de France.
     </div>
     <div class="nav-menu">
-      <a href="biography#Expérimentation">Expérimentation</a>
-      <a href="biography#Language">Language</a>
-      <a href="biography#Méta">Méta</a>
-      <a href="biography#Théorisation_et_le_métahisme">Théorisation et le métahisme</a>
-      <a href="biography#Un paradigme_de_l'universalité">Un paradigme de l'universalité</a>
-      <a href="biography#Vision_globale_et_pensée_complexe">Vision globale et pensée complexe </a>
-      <a href="biography#Création_d'un_langage,_un_pari">Création d'un langage, un pari</a>
-      <a href="biography#Une_œuvre_née_du_cerveau_droit">Une œuvre née du cerveau droit</a>
-      <a href="biography#Une_œuvre_holographique">Une œuvre holographique</a>
+      <a href="biography#Expérimentation">{{ $t('biography.nav_experimentation') }}</a>
+      <a href="biography#Language">{{ $t('biography.nav_language') }}</a>
+      <a href="biography#Méta">{{ $t('biography.nav_meta') }}</a>
+      <a href="biography#Théorisation_et_le_métahisme">{{ $t('biography.nav_theorisation') }}</a>
+      <a href="biography#Un paradigme_de_l'universalité">{{ $t('biography.nav_paradigme') }}</a>
+      <a href="biography#Vision_globale_et_pensée_complexe">{{ $t('biography.nav_vision') }}</a>
+      <a href="biography#Création_d'un_langage,_un_pari">{{ $t('biography.nav_creation') }}</a>
+      <a href="biography#Une_œuvre_née_du_cerveau_droit">{{ $t('biography.nav_cerveau') }}</a>
+      <a href="biography#Une_œuvre_holographique">{{ $t('biography.nav_holographique') }}</a>
     </div>
   </div>
 </template>

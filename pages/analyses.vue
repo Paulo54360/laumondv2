@@ -106,25 +106,26 @@
       title: 'Le Portant',
       images: [`${S3_BASE_URL}/Deployments/00/10.jpg`, `${S3_BASE_URL}/Deployments/00/11.jpg`],
       translations: {
-        fr: [
-          t('Analyses.TitreLAEC'),
-          t('Analyses.Texte1LAEC'),
-          t('Analyses.Texte2LAEC'),
-          t('Analyses.Texte3LAEC'),
-          t('Analyses.Texte4LAEC'),
-          t('Analyses.Texte5LAEC'),
-          t('Analyses.Texte6LAEC'),
-          t('Analyses.Texte10LAEC'),
-          t('Analyses.Texte12LAEC'),
-          t('Analyses.Texte13LAEC'),
-          t('Analyses.Texte14LAEC'),
-          t('Analyses.Texte15LAEC'),
-          t('Analyses.Texte16LAEC'),
-          t('Analyses.Texte17LAEC'),
-          t('Analyses.Texte18LAEC'),
-          t('Analyses.Texte19LAEC'),
-          t('Analyses.AuteurLAEC'),
-        ].join('<br>'),
+        fr: `
+          <div class="analysis-content">
+            <p>${t('LAEC.Texte1LAEC')}</p>
+            <p>${t('LAEC.Texte2LAEC')}</p>
+            <p>${t('LAEC.Texte3LAEC')}</p>
+            <p>${t('LAEC.Texte4LAEC')}</p>
+            <p>${t('LAEC.Texte5LAEC')}</p>
+            <p>${t('LAEC.Texte6LAEC')}</p>
+            <p>${t('LAEC.Texte10LAEC')}</p>
+            <p>${t('LAEC.Texte12LAEC')}</p>
+            <p>${t('LAEC.Texte13LAEC')}</p>
+            <p>${t('LAEC.Texte14LAEC')}</p>
+            <p>${t('LAEC.Texte15LAEC')}</p>
+            <p>${t('LAEC.Texte16LAEC')}</p>
+            <p>${t('LAEC.Texte17LAEC')}</p>
+            <p>${t('LAEC.Texte18LAEC')}</p>
+            <p>${t('LAEC.Texte19LAEC')}</p>
+          </div>
+          <p class="analysis-author">${t('LAEC.AuteurLAEC')}</p>
+        `,
         en: '',
       },
       author: 'Edith Herlemont-Lassiat',
@@ -134,7 +135,12 @@
       title: 'Concordance Universelle',
       images: [`${S3_BASE_URL}/Deployments/00/02.jpg`, `${S3_BASE_URL}/Deployments/00/04.jpg`],
       translations: {
-        fr: [t('Analyses.TitreCU'), t('Analyses.TexteCU'), t('Analyses.AuteurCU')].join('<br>'),
+        fr: `
+          <div class="analysis-content">
+            <p>${t('CU.TexteCU')}</p>
+          </div>
+          <p class="analysis-author">${t('CU.AuteurCU')}</p>
+        `,
         en: '',
       },
       author: 'Marion Zilio',
@@ -144,13 +150,14 @@
       title: 'Comme deux aimants',
       images: [`${S3_BASE_URL}/Deployments/00/06.jpg`],
       translations: {
-        fr: [
-          t('Analyses.TitreCDA'),
-          t('Analyses.Texte1CDA'),
-          t('Analyses.Texte2CDA'),
-          t('Analyses.Texte3CDA'),
-          t('Analyses.AuteurCDA'),
-        ].join('<br>'),
+        fr: `
+          <div class="analysis-content">
+            <p>${t('CDA.Texte1CDA')}</p>
+            <p>${t('CDA.Texte2CDA')}</p>
+            <p>${t('CDA.Texte3CDA')}</p>
+          </div>
+          <p class="analysis-author">${t('CDA.AuteurCDA')}</p>
+        `,
         en: '',
       },
       author: 'Marion Zilio',
@@ -160,45 +167,67 @@
       title: "Afin qu'un jour advienne ",
       images: [`${S3_BASE_URL}/Deployments/00/06.jpg`, `${S3_BASE_URL}/Deployments/00/08.jpg`],
       translations: {
-        fr: [
-          t('Analyses.TitreAQJA'),
-          t('Analyses.Texte1AQJA'),
-          t('Analyses.Texte2AQJA'),
-          t('Analyses.Texte3AQJA'),
-          t('Analyses.Texte4AQJA'),
-          t('Analyses.Texte5AQJA'),
-          t('Analyses.Texte6AQJA'),
-          t('Analyses.Texte7AQJA'),
-          t('Analyses.Texte8AQJA'),
-          t('Analyses.Texte9AQJA'),
-          t('Analyses.Texte10AQJA'),
-          t('Analyses.Texte11AQJA'),
-          t('Analyses.Texte12AQJA'),
-          t('Analyses.Texte13AQJA'),
-          t('Analyses.Texte14AQJA'),
-          t('Analyses.Texte15AQJA'),
-          t('Analyses.Texte16AQJA'),
-          t('Analyses.Texte17AQJA'),
-          t('Analyses.Texte18AQJA'),
-          t('Analyses.Texte19AQJA'),
-          t('Analyses.Texte20AQJA'),
-          t('Analyses.Texte21AQJA'),
-          t('Analyses.Texte22AQJA'),
-          t('Analyses.Texte23AQJA'),
-          t('Analyses.Texte24AQJA'),
-          t('Analyses.Texte25AQJA'),
-          t('Analyses.Texte26AQJA'),
-          t('Analyses.Texte27AQJA'),
-          t('Analyses.Texte28AQJA'),
-          t('Analyses.Texte29AQJA'),
-          t('Analyses.Texte30AQJA'),
-          t('Analyses.Texte31AQJA'),
-          t('Analyses.Texte32AQJA'),
-          t('Analyses.Texte33AQJA'),
-          t('Analyses.Texte34AQJA'),
-          '¹' + t('Analyses.Legende1AQJA'),
-          '²' + t('Analyses.Legende2AQJA'),
-        ].join('<br>'),
+        fr: `
+          <div class="analysis-content">
+            <p>
+              ${t('AQJA.Texte1AQJA')}
+              ${t('AQJA.Texte2AQJA')}
+              ${t('AQJA.Texte3AQJA')}
+              ${t('AQJA.Texte4AQJA')}
+              ${t('AQJA.Texte5AQJA')}
+              ${t('AQJA.Texte6AQJA')}<br>
+              ${t('AQJA.Texte7AQJA')}
+              ${t('AQJA.Texte8AQJA')}
+              ${t('AQJA.Texte9AQJA')}
+              ${t('AQJA.Texte10AQJA')}
+            </p>
+            <p>
+              ${t('AQJA.Texte11AQJA')}
+              ${t('AQJA.Texte12AQJA')}<br>
+            </p>
+            <p>
+              ${t('AQJA.Texte13AQJA')}
+              ${t('AQJA.Texte14AQJA')}
+              ${t('AQJA.Texte15AQJA')}
+              ${t('AQJA.Texte16AQJA')}
+            </p>
+            <p>
+              ${t('AQJA.Texte17AQJA')}<br>
+            </p>
+            <p>
+              <br>
+              ${t('AQJA.Texte18AQJA')}<br>
+            </p>
+            <p>
+              ${t('AQJA.Texte19AQJA')}<br>
+              ${t('AQJA.Texte20AQJA')}<br>
+              ${t('AQJA.Texte21AQJA')}<br>
+              ${t('AQJA.Texte22AQJA')}<br>
+            </p>
+            <p>
+              ${t('AQJA.Texte23AQJA')}<br>
+              ${t('AQJA.Texte24AQJA')}<br>
+              ${t('AQJA.Texte25AQJA')}<br>
+              ${t('AQJA.Texte26AQJA')}<br>
+            </p>
+            <p>
+              ${t('AQJA.Texte27AQJA')}
+              ${t('AQJA.Texte28AQJA')}
+              ${t('AQJA.Texte29AQJA')}
+              ${t('AQJA.Texte30AQJA')}
+              ${t('AQJA.Texte31AQJA')}<br>
+            </p>
+            <p>
+              ${t('AQJA.Texte32AQJA')}<br>
+              ${t('AQJA.Texte33AQJA')}<br>
+              ${t('AQJA.Texte34AQJA')}
+            </p>
+          </div>
+          <div class="analysis-footnotes">
+            <p><sup>1</sup>${t('AQJA.Legende1AQJA')}<br>
+            <sup>2</sup>${t('AQJA.Legende2AQJA')}</p>
+          </div>
+        `,
         en: '',
       },
       author: 'Isabelle de Maison Rouge',
@@ -373,13 +402,61 @@
     position: relative;
 
     .translation {
-      line-height: 1.6;
+      line-height: 1.3;
 
       &.fr {
         font-size: 1.05rem;
         position: relative;
         text-align: justify;
       }
+    }
+  }
+
+  // Styles pour la structure des analyses
+  :deep(.analysis-title) {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    line-height: 1.3;
+  }
+
+  :deep(.analysis-content) {
+    margin-bottom: 40px;
+
+    p {
+      margin-bottom: 6px;
+      line-height: 1.3;
+      text-align: justify;
+      color: #333;
+    }
+  }
+
+  :deep(.analysis-author) {
+    font-weight: bold;
+    color: #555;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 1rem;
+  }
+
+  :deep(.analysis-footnotes) {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.9rem;
+    color: #666;
+
+    p {
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+
+    sup {
+      font-weight: bold;
+      margin-right: 5px;
     }
   }
 

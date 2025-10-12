@@ -4,15 +4,15 @@
     <section class="hero-section">
       <div class="hero-content">
         <div class="hero-text">
-          <h1 class="hero-title">Patrick Laumond</h1>
+          <h1 class="hero-title">{{ $t('homepage.hero_title') }}</h1>
           <div class="hero-subtitle">
-            <span class="subtitle-line">Artiste contemporain</span>
-            <span class="subtitle-line">Créateur du Métahisme</span>
+            <span class="subtitle-line">{{ $t('homepage.hero_subtitle_1') }}</span>
+            <span class="subtitle-line">{{ $t('homepage.hero_subtitle_2') }}</span>
           </div>
           <div class="hero-description">
-            <p>Un univers où l'art devient métaphore,</p>
-            <p>où chaque forme révèle une pensée,</p>
-            <p>où l'angle droit rencontre l'émotion.</p>
+            <p>{{ $t('homepage.hero_description_1') }}</p>
+            <p>{{ $t('homepage.hero_description_2') }}</p>
+            <p>{{ $t('homepage.hero_description_3') }}</p>
           </div>
         </div>
         <div class="hero-visual">
@@ -27,7 +27,7 @@
               <div class="play-icon">
                 <i class="fas fa-expand"></i>
               </div>
-              <p class="video-hint">Cliquez pour explorer en 360°</p>
+              <p class="video-hint">{{ $t('homepage.video_hint') }}</p>
             </div>
           </div>
         </div>
@@ -38,30 +38,28 @@
     <section id="biography" class="section biography-section">
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Biography</h2>
+          <h2 class="section-title">{{ $t('homepage.biography_title') }}</h2>
           <div class="section-divider"></div>
         </div>
         <div class="biography-content">
           <div class="biography-text">
             <div class="biography-intro">
               <p>
-                Patrick Laumond développe depuis plus de vingt ans une approche unique de
-                l'expression artistique, créant un langage visuel qui transcende les catégories
-                traditionnelles.
+                {{ $t('homepage.biography_intro') }}
               </p>
             </div>
             <div class="biography-timeline">
               <div class="timeline-item">
                 <span class="year">2000</span>
-                <span class="event">Début de la recherche artistique</span>
+                <span class="event">{{ $t('homepage.timeline_2000') }}</span>
               </div>
               <div class="timeline-item">
                 <span class="year">2010</span>
-                <span class="event">Création du concept Métahisme</span>
+                <span class="event">{{ $t('homepage.timeline_2010') }}</span>
               </div>
               <div class="timeline-item">
                 <span class="year">2020</span>
-                <span class="event">Maturation du mouvement</span>
+                <span class="event">{{ $t('homepage.timeline_2020') }}</span>
               </div>
             </div>
           </div>
@@ -73,14 +71,14 @@
                 class="portrait-artwork"
               />
               <div class="portrait-overlay">
-                <h4>Patrick Laumond</h4>
-                <p>Artiste et créateur du Métahisme</p>
+                <h4>{{ $t('homepage.hero_title') }}</h4>
+                <p>{{ $t('homepage.portrait_caption') }}</p>
               </div>
             </div>
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/biography" class="artistic-link">Lire la biographie</NuxtLink>
+          <NuxtLink to="/biography" class="artistic-link">{{ $t('homepage.read_biography') }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -89,23 +87,19 @@
     <section id="metahisme" class="section metahisme-section">
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Métahisme</h2>
+          <h2 class="section-title">{{ $t('homepage.metahisme_title') }}</h2>
           <div class="section-divider"></div>
         </div>
         <div class="metahisme-content">
           <div class="metahisme-text">
             <div class="metahisme-definition">
               <p>
-                "Le Métahisme est un mouvement artistique créé par Patrick Laumond qui explore les
-                relations entre géométrie pure et expression émotionnelle. Chaque œuvre devient une
-                méditation sur notre époque et ses contradictions."
+                {{ $t('homepage.metahisme_definition') }}
               </p>
             </div>
             <div class="metahisme-analysis">
               <p>
-                "Un art qui transcende les frontières conventionnelles, créant un dialogue entre
-                l'ordre géométrique et le chaos émotionnel, où chaque angle droit devient porteur de
-                sens et d'émotion."
+                {{ $t('homepage.metahisme_analysis') }}
               </p>
             </div>
           </div>
@@ -117,14 +111,14 @@
                 class="metahisme-artwork"
               />
               <div class="artwork-overlay">
-                <h4>Concordance Universelle</h4>
-                <p>L'œuvre emblématique du Métahisme</p>
+                <h4>{{ $t('homepage.artwork_concordance_title') }}</h4>
+                <p>{{ $t('homepage.metahisme_artwork_caption') }}</p>
               </div>
             </div>
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/metahism" class="artistic-link">Découvrir le Métahisme</NuxtLink>
+          <NuxtLink to="/metahism" class="artistic-link">{{ $t('homepage.discover_metahisme') }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -133,7 +127,7 @@
     <section id="oeuvres" class="section oeuvres-section">
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Artworks</h2>
+          <h2 class="section-title">{{ $t('homepage.artworks_title') }}</h2>
           <div class="section-divider"></div>
         </div>
         <div class="artworks-showcase">
@@ -144,16 +138,16 @@
             :class="`artwork-${index + 1}`"
           >
             <div class="artwork-frame">
-              <img :src="artwork.imageUrl" :alt="artwork.title" />
+              <img :src="artwork.imageUrl" :alt="$t(artwork.titleKey)" />
             </div>
             <div class="artwork-info">
-              <h3 class="artwork-title">{{ artwork.title }}</h3>
-              <div class="artwork-category">{{ artwork.category }}</div>
+              <h3 class="artwork-title">{{ $t(artwork.titleKey) }}</h3>
+              <div class="artwork-category">{{ $t(artwork.categoryKey) }}</div>
             </div>
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/artworks" class="artistic-link">Parcourir les œuvre</NuxtLink>
+          <NuxtLink to="/artworks" class="artistic-link">{{ $t('homepage.browse_artworks') }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -162,39 +156,36 @@
     <section id="analyses" class="section analyses-section">
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Analyses</h2>
+          <h2 class="section-title">{{ $t('homepage.analyses_title') }}</h2>
           <div class="section-divider"></div>
         </div>
         <div class="analyses-content">
           <div class="analysis-text">
             <div class="analysis-quote">
               <p>
-                "L'art de Patrick Laumond transcende les frontières conventionnelles, créant un
-                dialogue entre la géométrie pure et l'expression émotionnelle."
+                "{{ $t('homepage.analysis_quote') }}"
               </p>
-              <span class="quote-author">— Cécile Jouanneau, Critique d'art</span>
+              <span class="quote-author">— {{ $t('homepage.analysis_author') }}</span>
             </div>
             <div class="analysis-excerpt">
               <p>
-                Les analyses révèlent la profondeur conceptuelle du Métahisme, où chaque œuvre
-                devient un chapitre d'une réflexion philosophique sur notre époque et ses
-                contradictions.
+                {{ $t('homepage.analysis_excerpt') }}
               </p>
             </div>
           </div>
           <div class="analysis-visual">
             <div class="text-block">
-              <h3>Le Portant</h3>
-              <p>Une exploration des tensions entre ordre et chaos...</p>
+              <h3>{{ $t('homepage.artwork_le_portant_title') }}</h3>
+              <p>{{ $t('homepage.artwork_le_portant_description') }}</p>
             </div>
             <div class="text-block">
-              <h3>Concordance Universelle</h3>
-              <p>L'harmonie dans la géométrie pure...</p>
+              <h3>{{ $t('homepage.artwork_concordance_title') }}</h3>
+              <p>{{ $t('homepage.artwork_concordance_description') }}</p>
             </div>
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/analyses" class="artistic-link">Lire les analyses</NuxtLink>
+          <NuxtLink to="/analyses" class="artistic-link">{{ $t('homepage.read_analyses') }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -205,57 +196,54 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+  import { ref } from 'vue';
 
-const videoIframe = ref<HTMLIFrameElement | null>(null)
+  const videoIframe = ref<HTMLIFrameElement | null>(null);
 
-// Interface pour les méthodes fullscreen cross-browser
-interface FullscreenElement extends HTMLIFrameElement {
-  webkitRequestFullscreen?: () => Promise<void>
-  mozRequestFullScreen?: () => Promise<void>
-  msRequestFullscreen?: () => Promise<void>
-}
-
-// Fonction pour ouvrir la vidéo en plein écran
-const openFullscreen = (): void => {
-  if (videoIframe.value) {
-    const element = videoIframe.value as FullscreenElement
-    if (element.requestFullscreen) {
-      element.requestFullscreen()
-    } else if (element.webkitRequestFullscreen) {
-      element.webkitRequestFullscreen()
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen()
-    } else if (element.msRequestFullscreen) {
-      element.msRequestFullscreen()
-    }
+  // Interface pour les méthodes fullscreen cross-browser
+  interface FullscreenElement extends HTMLIFrameElement {
+    webkitRequestFullscreen?: () => Promise<void>;
+    mozRequestFullScreen?: () => Promise<void>;
+    msRequestFullscreen?: () => Promise<void>;
   }
-}
 
-// Données des œuvres en vedette
-const featuredArtworks = ref([
-  {
-    id: 1,
-    title: 'Le Portant',
-    category: 'Déploiement',
-    imageUrl:
-      'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg',
-  },
-  {
-    id: 2,
-    title: 'Concordance Universelle',
-    category: 'Déploiement',
-    imageUrl:
-      'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/02.jpg',
-  },
-  {
-    id: 3,
-    title: 'Comme deux aimants',
-    category: 'Déploiement',
-    imageUrl:
-      'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/06.jpg',
-  },
-])
+  // Fonction pour ouvrir la vidéo en plein écran
+  const openFullscreen = (): void => {
+    if (videoIframe.value) {
+      const element = videoIframe.value as FullscreenElement;
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+      }
+    }
+  };
+
+  // Données des œuvres en vedette
+  const featuredArtworks = ref([
+    {
+      id: 1,
+      titleKey: 'homepage.artwork_le_portant_title',
+      categoryKey: 'homepage.category_deployment',
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg',
+    },
+    {
+      id: 2,
+      titleKey: 'homepage.artwork_concordance_title',
+      categoryKey: 'homepage.category_deployment',
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/02.jpg',
+    },
+    {
+      id: 3,
+      titleKey: 'homepage.artwork_comme_deux_aimants_title',
+      categoryKey: 'homepage.category_deployment',
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/06.jpg',
+    },
+  ]);
 </script>
 
 <style lang="scss" scoped>
@@ -446,7 +434,7 @@ const featuredArtworks = ref([
         }
 
         .biography-timeline {
-          border-left: 2px solid #000000;
+          border-left: 2px solid #757b7d;
           padding-left: 2rem;
           position: relative;
 
@@ -464,7 +452,6 @@ const featuredArtworks = ref([
               width: 10px;
               height: 10px;
               background: #cc0000;
-              transform: translateX(-4px); /* Centrer le point sur la ligne */
             }
 
             .year {
