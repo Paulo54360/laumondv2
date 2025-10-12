@@ -18,6 +18,7 @@
 
 <script setup>
   import { useRuntimeConfig } from '#app';
+
   import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();

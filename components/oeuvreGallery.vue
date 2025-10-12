@@ -12,11 +12,10 @@
 </template>
 
 <script setup>
+  import { useRuntimeConfig } from '#app';
   import { ref } from 'vue';
 
   import CarouselSection from './carousselSection.vue';
-
-  import { useRuntimeConfig } from '#app';
 
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl;

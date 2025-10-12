@@ -41,9 +41,7 @@
     "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "vue/require-default-prop": "error",
     "vue/require-prop-types": "error",
-    "vue/multi-word-component-names": ["error", {
-      "ignores": ["index", "default", "error"]
-    }],
+    "vue/multi-word-component-names": "error",
     "vue/no-unused-components": "error",
     "import/order": [
       "error",
@@ -67,4 +65,4 @@
     "prefer-const": "error",
     "no-multiple-empty-lines": ["error", { "max": 1 }]
   }
-}
+} 

@@ -16,8 +16,8 @@
 <script setup>
   import { useHead } from 'nuxt/app';
 
-  import TheFooter from '~/components/layout/TheFooter.vue';
   import TheHeader from '~/components/layout/TheHeader.vue';
+  import TheFooter from '~/components/layout/TheFooter.vue';
 
   useHead({
     link: [
