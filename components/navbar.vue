@@ -3,7 +3,7 @@
     <div class="navbar-container">
       <!-- Logo / Titre -->
       <div class="navbar-brand">
-        <NuxtLink to="/" class="brand-link">
+  <NuxtLink :to="localePath('/')" class="brand-link">
           <h1 class="brand-title">Patrick Laumond</h1>
           <span class="brand-subtitle">{{ $t('navbar.metahism') }}</span>
         </NuxtLink>
@@ -14,50 +14,50 @@
         <ul class="nav-list">
           <li class="nav-item">
             <NuxtLink
-              to="/"
+              :to="localePath('/')"
               class="nav-link"
-              @click="closeMobileMenu"
               :class="{ active: isCurrentRoute('/') }"
+              @click="closeMobileMenu"
             >
               {{ $t('navbar.home') }}
             </NuxtLink>
           </li>
           <li class="nav-item">
             <NuxtLink
-              to="/metahism"
+              :to="localePath('/metahism')"
               class="nav-link"
-              @click="closeMobileMenu"
               :class="{ active: isCurrentRoute('/metahism') }"
+              @click="closeMobileMenu"
             >
               {{ $t('navbar.MétaHisme') }}
             </NuxtLink>
           </li>
           <li class="nav-item">
             <NuxtLink
-              to="/artworks"
+              :to="localePath('/artworks')"
               class="nav-link"
-              @click="closeMobileMenu"
               :class="{ active: isCurrentRoute('/artworks') }"
+              @click="closeMobileMenu"
             >
               {{ $t('navbar.Oeuvres') }}
             </NuxtLink>
           </li>
           <li class="nav-item">
             <NuxtLink
-              to="/biography"
+              :to="localePath('/biography')"
               class="nav-link"
-              @click="closeMobileMenu"
               :class="{ active: isCurrentRoute('/biography') }"
+              @click="closeMobileMenu"
             >
               {{ $t('navbar.Biographie') }}
             </NuxtLink>
           </li>
           <li class="nav-item">
             <NuxtLink
-              to="/analyses"
+              :to="localePath('/analyses')"
               class="nav-link"
-              @click="closeMobileMenu"
               :class="{ active: isCurrentRoute('/analyses') }"
+              @click="closeMobileMenu"
             >
               {{ $t('navbar.Analyses') }}
             </NuxtLink>
@@ -101,72 +101,76 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
-const router = useRouter()
-const { $i18n } = useNuxtApp()
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useNuxtApp } from '#app';
+import { useLocalePath, useSwitchLocalePath } from '#imports';
 
-const isScrolled = ref(false)
-const isMobileMenuOpen = ref(false)
+const route = useRoute();
+const router = useRouter();
+const { $i18n } = useNuxtApp();
+const localePath = useLocalePath();
+const switchLocalePath = useSwitchLocalePath();
+
+const isScrolled = ref(false);
+const isMobileMenuOpen = ref(false);
 
 // Récupérer la locale actuelle
 const currentLocale = computed(() => {
-  return $i18n.locale.value || 'fr'
-})
+  return $i18n.locale.value || 'fr';
+});
 
 // Fonction pour changer de langue
-const changeLanguage = async (newLocale: string) => {
+const changeLanguage = async (newLocale: string): Promise<void> => {
   try {
     // Changer la locale
-    await $i18n.setLocale(newLocale)
+    await $i18n.setLocale(newLocale);
 
-    // Construire la nouvelle URL avec la langue
-    const currentPath = route.path.replace(/^\/(fr|en)/, '') || '/'
-    const newPath = `/${newLocale}${currentPath === '/' ? '' : currentPath}`
-
-    // Naviguer vers la nouvelle URL
-    await router.push(newPath)
+    // Naviguer vers l’URL localisée équivalente
+    const target = switchLocalePath(newLocale);
+    await router.push(target);
 
     closeMobileMenu()
   } catch (error) {
-    console.error('Erreur lors du changement de langue:', error)
+    console.error('Erreur lors du changement de langue:', error);
     // Fallback: recharger la page avec la nouvelle langue
-    window.location.href = `/${newLocale}${route.path.replace(/^\/(fr|en)/, '')}`
+    window.location.href = `/${newLocale}${route.path.replace(/^\/(fr|en)/, '')}`;
   }
 }
 
 // Vérifier si une route est active
 const isCurrentRoute = (path: string) => {
-  const cleanPath = route.path.replace(/^\/(fr|en)/, '') || '/'
-  return cleanPath === path || (path === '/' && cleanPath === '')
+  const cleanPath = route.path.replace(/^\/(fr|en)/, '') || '/';
+  return cleanPath === path || (path === '/' && cleanPath === '');
 }
 
 // Gestion du scroll
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
+  isScrolled.value = window.scrollY > 50;
 }
 
 // Gestion du menu mobile
 const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
   if (process.client) {
-    document.body.style.overflow = isMobileMenuOpen.value ? 'hidden' : ''
+    document.body.style.overflow = isMobileMenuOpen.value ? 'hidden' : '';
   }
 }
 
 const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false
+  isMobileMenuOpen.value = false;
   if (process.client) {
-    document.body.style.overflow = ''
+    document.body.style.overflow = '';
   }
 }
 
 // Fermer le menu mobile lors du clic extérieur
 const handleClickOutside = (event: Event) => {
   if (process.client) {
-    const target = event.target as HTMLElement
-    const navbar = target.closest('.navbar')
+    const target = event.target as HTMLElement;
+    const navbar = target.closest('.navbar');
     if (!navbar && isMobileMenuOpen.value) {
-      closeMobileMenu()
+      closeMobileMenu();
     }
   }
 }
@@ -174,23 +178,23 @@ const handleClickOutside = (event: Event) => {
 // Lifecycle hooks
 onMounted(() => {
   if (process.client) {
-    window.addEventListener('scroll', handleScroll)
-    document.addEventListener('click', handleClickOutside)
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleClickOutside);
   }
-})
+});
 
 onUnmounted(() => {
   if (process.client) {
-    window.removeEventListener('scroll', handleScroll)
-    document.removeEventListener('click', handleClickOutside)
-    document.body.style.overflow = ''
+    window.removeEventListener('scroll', handleScroll);
+    document.removeEventListener('click', handleClickOutside);
+    document.body.style.overflow = '';
   }
-})
+});
 
 // Watcher pour fermer le menu lors du changement de route
 watch(() => route.path, () => {
-  closeMobileMenu()
-})
+  closeMobileMenu();
+});
 </script>
 
 <style lang="scss" scoped>

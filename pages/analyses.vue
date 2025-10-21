@@ -1,26 +1,15 @@
 <template>
-  <NuxtLayout name="analysis">
-    <div class="analyses-page">
+  <!-- Composant multi-mot : AnalysesPage -->
+  <div class="analyses-page">
       <div class="tabs">
-        <button 
-          v-for="tab in tabs" 
-          :key="tab.id"
-          :class="{ active: activeTab === tab.id }"
-          @click="activeTab = tab.id"
-        >
+        <button v-for="tab in tabs" :key="tab.id" :class="{ active: activeTab === tab.id }" @click="activeTab = tab.id">
           {{ tab.title }}
         </button>
       </div>
 
       <div v-if="currentTab">
         <div class="main-image-container">
-          <img 
-            v-if="currentTab.images && currentTab.images.length > 0"
-            :src="currentTab.images[0]" 
-            :alt="currentTab.title"
-            @click="openModal(0)"
-            class="main-image" 
-          />
+          <img v-if="currentTab.images && currentTab.images.length > 0" class="main-image" :src="currentTab.images[0]" :alt="currentTab.title" @click="openModal(0)" />
         </div>
 
         <h2 class="article-title">{{ currentTab.title }}</h2>
@@ -40,42 +29,25 @@
         <div class="translations">
           <div class="translation fr">
             <div class="text-content-wrapper">
-              <div class="text-content" :class="{ 'collapsed': !showFullText }">
+              <div class="text-content" :class="{ collapsed: !showFullText }">
+                <!-- v-html utilisé ici, assurez-vous que le contenu est sûr -->
                 <div v-html="currentTab.translations.fr"></div>
               </div>
-              <div
-                class="show-more-arrow"
-                @click="toggleShowMore"
-                role="button"
-                tabindex="0"
-              >
-                <img
-                  v-if="!showFullText"
-                  src="~/assets/images/common/Down Arrow Icon.png"
-                  alt="Voir plus"
-                  class="arrow-img"
-                />
-                <img
-                  v-else
-                  src="~/assets/images/common/Fleche Vers Le Haut.png"
-                  alt="Voir moins"
-                  class="arrow-img up"
-                />
+              <div class="show-more-arrow" @click="toggleShowMore" role="button" tabindex="0">
+                <img v-if="!showFullText" src="~/assets/images/common/Down Arrow Icon.png" alt="Voir plus" class="arrow-img" />
+                <img v-else src="~/assets/images/common/Fleche Vers Le Haut.png" alt="Voir moins" class="arrow-img up" />
               </div>
               <div v-if="!showFullText" class="text-fade"></div>
             </div>
-            <div class="translation en" v-if="currentTab.translations.en">
-              {{ currentTab.translations.en }}
+            <div v-if="currentTab.translations.en" class="translation en">
+              <div v-html="currentTab.translations.en"></div>
             </div>
           </div>
         </div>
 
         <div v-if="showModal" class="modal" @click="closeModal">
           <div class="modal-content">
-            <img 
-              :src="currentTab.images[currentImageIndex]" 
-              :alt="currentTab.title"
-            />
+            <img :src="currentTab.images[currentImageIndex]" :alt="currentTab.title" />
             <button class="close-button" @click="closeModal">&times;</button>
             <button 
               v-if="currentImageIndex > 0" 
@@ -95,7 +67,6 @@
         </div>
       </div>
     </div>
-  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
@@ -116,23 +87,23 @@ const tabs = [
     images: [`${S3_BASE_URL}/Deployments/00/10.jpg`, `${S3_BASE_URL}/Deployments/00/11.jpg`],
     translations: {
       fr: [
-        t('Analyses.TitreLAEC'),
-        t('Analyses.Texte1LAEC'),
-        t('Analyses.Texte2LAEC'),
-        t('Analyses.Texte3LAEC'),
-        t('Analyses.Texte4LAEC'),
-        t('Analyses.Texte5LAEC'),
-        t('Analyses.Texte6LAEC'),
-        t('Analyses.Texte10LAEC'),
-        t('Analyses.Texte12LAEC'),
-        t('Analyses.Texte13LAEC'),
-        t('Analyses.Texte14LAEC'),
-        t('Analyses.Texte15LAEC'),
-        t('Analyses.Texte16LAEC'),
-        t('Analyses.Texte17LAEC'),
-        t('Analyses.Texte18LAEC'),
-        t('Analyses.Texte19LAEC'),
-        t('Analyses.AuteurLAEC')
+        t('LAEC.TitreLAEC'),
+        t('LAEC.Texte1LAEC'),
+        t('LAEC.Texte2LAEC'),
+        t('LAEC.Texte3LAEC'),
+        t('LAEC.Texte4LAEC'),
+        t('LAEC.Texte5LAEC'),
+        t('LAEC.Texte6LAEC'),
+        t('LAEC.Texte10LAEC'),
+        t('LAEC.Texte12LAEC'),
+        t('LAEC.Texte13LAEC'),
+        t('LAEC.Texte14LAEC'),
+        t('LAEC.Texte15LAEC'),
+        t('LAEC.Texte16LAEC'),
+        t('LAEC.Texte17LAEC'),
+        t('LAEC.Texte18LAEC'),
+        t('LAEC.Texte19LAEC'),
+        t('LAEC.AuteurLAEC')
       ].join('<br>'),
       en: ''
     },
@@ -144,9 +115,9 @@ const tabs = [
     images: [`${S3_BASE_URL}/Deployments/00/02.jpg`, `${S3_BASE_URL}/Deployments/00/04.jpg`,],
     translations: {
       fr: [
-        t('Analyses.TitreCU'),
-        t('Analyses.TexteCU'),
-        t('Analyses.AuteurCU')
+        t('CU.TitreCU'),
+        t('CU.TexteCU'),
+        t('CU.AuteurCU')
       ].join('<br>'),
       en: ''
     },
@@ -158,11 +129,11 @@ const tabs = [
     images: [`${S3_BASE_URL}/Deployments/00/06.jpg`],
     translations: {
       fr: [
-        t('Analyses.TitreCDA'),
-        t('Analyses.Texte1CDA'),
-        t('Analyses.Texte2CDA'),
-        t('Analyses.Texte3CDA'),
-        t('Analyses.AuteurCDA')
+        t('CDA.TitreCDA'),
+        t('CDA.Texte1CDA'),
+        t('CDA.Texte2CDA'),
+        t('CDA.Texte3CDA'),
+        t('CDA.AuteurCDA')
       ].join('<br>'),
       en: ''
     },
@@ -174,43 +145,43 @@ const tabs = [
     images: [`${S3_BASE_URL}/Deployments/00/06.jpg`, `${S3_BASE_URL}/Deployments/00/08.jpg`],
     translations: {
       fr: [
-        t('Analyses.TitreAQJA'),
-        t('Analyses.Texte1AQJA'),
-        t('Analyses.Texte2AQJA'),
-        t('Analyses.Texte3AQJA'),
-        t('Analyses.Texte4AQJA'),
-        t('Analyses.Texte5AQJA'),
-        t('Analyses.Texte6AQJA'),
-        t('Analyses.Texte7AQJA'),
-        t('Analyses.Texte8AQJA'),
-        t('Analyses.Texte9AQJA'),
-        t('Analyses.Texte10AQJA'),
-        t('Analyses.Texte11AQJA'),
-        t('Analyses.Texte12AQJA'),
-        t('Analyses.Texte13AQJA'),
-        t('Analyses.Texte14AQJA'),
-        t('Analyses.Texte15AQJA'),
-        t('Analyses.Texte16AQJA'),
-        t('Analyses.Texte17AQJA'),
-        t('Analyses.Texte18AQJA'),
-        t('Analyses.Texte19AQJA'),
-        t('Analyses.Texte20AQJA'),
-        t('Analyses.Texte21AQJA'),
-        t('Analyses.Texte22AQJA'),
-        t('Analyses.Texte23AQJA'),
-        t('Analyses.Texte24AQJA'),
-        t('Analyses.Texte25AQJA'),
-        t('Analyses.Texte26AQJA'),
-        t('Analyses.Texte27AQJA'),
-        t('Analyses.Texte28AQJA'),
-        t('Analyses.Texte29AQJA'),
-        t('Analyses.Texte30AQJA'),
-        t('Analyses.Texte31AQJA'),
-        t('Analyses.Texte32AQJA'),
-        t('Analyses.Texte33AQJA'),
-        t('Analyses.Texte34AQJA'),
-        '¹' + t('Analyses.Legende1AQJA'),
-        '²' + t('Analyses.Legende2AQJA')
+        t('AQJA.TitreAQJA'),
+        t('AQJA.Texte1AQJA'),
+        t('AQJA.Texte2AQJA'),
+        t('AQJA.Texte3AQJA'),
+        t('AQJA.Texte4AQJA'),
+        t('AQJA.Texte5AQJA'),
+        t('AQJA.Texte6AQJA'),
+        t('AQJA.Texte7AQJA'),
+        t('AQJA.Texte8AQJA'),
+        t('AQJA.Texte9AQJA'),
+        t('AQJA.Texte10AQJA'),
+        t('AQJA.Texte11AQJA'),
+        t('AQJA.Texte12AQJA'),
+        t('AQJA.Texte13AQJA'),
+        t('AQJA.Texte14AQJA'),
+        t('AQJA.Texte15AQJA'),
+        t('AQJA.Texte16AQJA'),
+        t('AQJA.Texte17AQJA'),
+        t('AQJA.Texte18AQJA'),
+        t('AQJA.Texte19AQJA'),
+        t('AQJA.Texte20AQJA'),
+        t('AQJA.Texte21AQJA'),
+        t('AQJA.Texte22AQJA'),
+        t('AQJA.Texte23AQJA'),
+        t('AQJA.Texte24AQJA'),
+        t('AQJA.Texte25AQJA'),
+        t('AQJA.Texte26AQJA'),
+        t('AQJA.Texte27AQJA'),
+        t('AQJA.Texte28AQJA'),
+        t('AQJA.Texte29AQJA'),
+        t('AQJA.Texte30AQJA'),
+        t('AQJA.Texte31AQJA'),
+        t('AQJA.Texte32AQJA'),
+        t('AQJA.Texte33AQJA'),
+        t('AQJA.Texte34AQJA'),
+        '¹' + t('AQJA.Legende1AQJA'),
+        '²' + t('AQJA.Legende2AQJA')
       ].join('<br>'),
       en: ''
     },
@@ -224,25 +195,33 @@ const currentImageIndex = ref(0);
 const showFullText = ref(false);
 
 // Ajout des URLs des avatars pour simplifier
-const authorAvatars = {
+const authorAvatars: Record<string, string> = {
   'Marion Zilio': `${S3_BASE_URL}/authors/marion-zilio.jpg`,
   'Isabelle de Maison Rouge': `${S3_BASE_URL}/authors/isabelle-de-maison-rouge.png`,
+  'Edith Herlemont-Lassiat': `${S3_BASE_URL}/authors/default-avatar.jpg`,
   'default': `${S3_BASE_URL}/authors/default-avatar.jpg`
 };
 
 const currentTab = computed(() => tabs.find(tab => tab.id === activeTab.value));
 
-const getAuthor = (tab) => {
+interface Tab {
+  id: string;
+  title: string;
+  images: string[];
+  translations: { fr: string; en: string };
+  author: string;
+}
+
+const getAuthor = (tab: Tab): string => {
   return tab.author || 'Auteur non spécifié';
 };
 
-const getAuthorAvatar = (tab) => {
+const getAuthorAvatar = (tab: Tab): string => {
   if (!tab || !tab.author) return authorAvatars.default;
-  // Utiliser l'image par défaut pour Edith Herlemont-Lassiat
   if (tab.author === 'Edith Herlemont-Lassiat') {
     return authorAvatars.default;
   }
-  return authorAvatars[tab.author] || authorAvatars.default;
+  return authorAvatars[tab.author as string] || authorAvatars['default'];
 };
 
 const openModal = (index: number) => {

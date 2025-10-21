@@ -1,14 +1,17 @@
 <template>
   <div class="app-layout">
-    <navbar />
+    <Navbar />
     <main class="main-content">
       <slot />
     </main>
+    <TheFooter />
   </div>
 </template>
 
 <script setup lang="ts">
-// Le layout par défaut qui inclut la navbar
+  import TheFooter from '~/components/layout/TheFooter.vue';
+  import Navbar from '~/components/navbar.vue';
+  // Layout par défaut avec Navbar + Footer
 </script>
 
 <style lang="scss">

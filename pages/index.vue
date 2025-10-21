@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/galerie" class="artistic-link">Explorer la collection</NuxtLink>
+          <NuxtLink :to="localePath('/galerie')" class="artistic-link">Explorer la collection</NuxtLink>
         </div>
       </div>
     </section>
@@ -82,7 +82,7 @@
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/analyses" class="artistic-link">Lire les analyses</NuxtLink>
+          <NuxtLink :to="localePath('/analyses')" class="artistic-link">Lire les analyses</NuxtLink>
         </div>
       </div>
     </section>
@@ -119,7 +119,7 @@
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/metahisme" class="artistic-link">Découvrir le Métahisme</NuxtLink>
+          <NuxtLink :to="localePath('/metahism')" class="artistic-link">Découvrir le Métahisme</NuxtLink>
         </div>
       </div>
     </section>
@@ -165,18 +165,19 @@
           </div>
         </div>
         <div class="section-link">
-          <NuxtLink to="/biography" class="artistic-link">Lire la biographie</NuxtLink>
+          <NuxtLink :to="localePath('/biography')" class="artistic-link">Lire la biographie</NuxtLink>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
-    <TheFooter />
+    
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useLocalePath } from '#imports';
+const localePath = useLocalePath();
 
 // Données des œuvres en vedette
 const featuredArtworks = ref([

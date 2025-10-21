@@ -1,42 +1,47 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config';
 
-
-
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  nitro: {
+    // Aligne Nitro avec les Web APIs et comportements de cette date (évite l'avertissement)
+    compatibilityDate: '2025-10-21',
+  },
+
+  // Configuration des variables d'environnement accessibles côté client
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
+    },
+  },
   
   // Configuration des modules
   modules: [
-    '@nuxtjs/i18n'
-  ],
-  
-  // Configuration i18n
-  i18n: {
-    locales: [
+    [
+      '@nuxtjs/i18n',
       {
-        code: 'fr',
-        name: 'Français',
-        file: 'fr.json'
+        locales: [
+          { code: 'fr', name: 'Français', file: 'fr.json' },
+          { code: 'en', name: 'English', file: 'en.json' },
+        ],
+        lazy: true,
+        // Chemin des fichiers de langue (dans le dossier i18n du module)
+        langDir: 'locales/',
+        defaultLocale: 'fr',
+        strategy: 'prefix',
+        bundle: { optimizeTranslationDirective: false },
+        // Options passées au moteur vue-i18n (via fichier dédié)
+        vueI18n: '~/i18n/i18n.config.ts',
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected',
+          redirectOn: 'root',
+          alwaysRedirect: true,
+          fallbackLocale: 'fr',
+        },
       },
-      {
-        code: 'en', 
-        name: 'English',
-        file: 'en.json'
-      }
     ],
-    lazy: true,
-    langDir: 'i18n/locales',
-    defaultLocale: 'fr',
-    strategy: 'prefix',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-      alwaysRedirect: true,
-      fallbackLocale: 'fr'
-    }
-  },
+  ],
 
   // Configuration CSS
   css: ['~/assets/styles/main.scss'],
@@ -46,9 +51,11 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "~/assets/styles/_variables.scss";'
-        }
-      }
-    }
-  }
-})
+          // On évite d'injecter @import pour ne pas entrer en conflit avec @use
+          // Les variables seront importées explicitement dans chaque SCSS au besoin
+          additionalData: '',
+        },
+      },
+    },
+  },
+});

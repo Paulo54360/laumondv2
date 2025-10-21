@@ -1,14 +1,24 @@
 <template>
   <div class="carousels-container">
     <div class="carousel-wrapper">
-      <NuxtLink :to="link">
+      <template v-if="link && !link.startsWith('http') && !link.endsWith('.jpg') && !link.endsWith('.png') && !link.endsWith('.jpeg') && !link.endsWith('.webp')">
+        <NuxtLink :to="link">
+          <h2>{{ title }}</h2>
+          <div ref="carousel" class="carousel" @scroll="handleScroll">
+            <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
+              <img :src="image" class="carousel-image" alt="Oeuvre" />
+            </div>
+          </div>
+        </NuxtLink>
+      </template>
+      <template v-else>
         <h2>{{ title }}</h2>
         <div ref="carousel" class="carousel" @scroll="handleScroll">
           <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
             <img :src="image" class="carousel-image" alt="Oeuvre" />
           </div>
         </div>
-      </NuxtLink>
+      </template>
     </div>
   </div>
 </template>
