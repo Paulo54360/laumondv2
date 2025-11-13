@@ -54,19 +54,21 @@
 
 <style lang="scss" scoped>
   .gallery-page {
-    padding-top: var(--header-height);
+    padding-top: 0;
+    min-height: 100vh;
   }
 
   .category-tabs {
     position: sticky;
-    top: var(--header-height);
+    top: 0;
     background: var(--color-background);
-    padding: var(--spacing-md);
+    padding: 1rem 2rem;
     display: flex;
-    gap: var(--spacing-md);
+    gap: 1rem;
     justify-content: center;
     border-bottom: 1px solid var(--color-border);
-    z-index: 1;
+    z-index: 100;
+    flex-wrap: wrap;
 
     button {
       background: none;
@@ -105,30 +107,40 @@
 
   @media (max-width: 768px) {
     .gallery-page {
-      padding-top: calc(var(--header-height) + 20px);
+      padding-top: 0;
     }
 
     .category-tabs {
-      padding: 1rem;
+      top: 0;
+      padding: 0.8rem 1rem;
       gap: 0.5rem;
-      flex-wrap: wrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       button {
-        font-size: 1rem;
-        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
         white-space: nowrap;
+        flex-shrink: 0;
       }
     }
   }
 
   @media (max-width: 480px) {
     .category-tabs {
-      padding: 0.8rem;
-      gap: 0.3rem;
+      padding: 0.6rem 0.8rem;
+      gap: 0.4rem;
+      justify-content: flex-start;
 
       button {
-        font-size: 0.9rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.7rem;
       }
     }
   }

@@ -385,79 +385,127 @@
   }
 
   @media (max-width: 768px) {
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 0;
+    }
+
     .nav-links {
-      display: none; /* Masquer les liens de la navbar sur mobile */
+      display: none;
     }
 
     .navbar-container {
       flex-wrap: wrap;
-      padding: 10px;
+      padding: 12px 15px;
+      gap: 10px;
+    }
+
+    .logo a {
+      font-size: 1.15rem;
     }
 
     .search-container {
-      flex: 100%; /* Faire prendre tout l'espace disponible en mode mobile */
+      flex: 100%;
       max-width: none;
-      margin: 10px 0; /* Ajouter un espace vertical au-dessus et en dessous */
-      order: 3; /* Positionner la barre en bas après le menu */
-      padding: 0 10px; /* Ajouter un padding égal des deux côtés */
-      box-sizing: border-box; /* S'assurer que le padding est inclus dans la largeur */
+      margin: 8px 0 0;
+      order: 3;
+      padding: 0;
+      width: 100%;
     }
 
     .search-input {
-      padding: 10px 45px 10px 15px; /* Équilibrer le padding gauche et droit */
+      padding: 10px 45px 10px 15px;
+      font-size: 14px;
+      width: 100%;
     }
 
     .search-button {
-      right: 0; /* S'assurer que le bouton est bien aligné à droite */
-      padding: 0 15px;
+      right: 0;
+      padding: 0 12px;
+    }
+
+    .right-items {
+      gap: 8px;
+    }
+
+    .menu-icon {
+      font-size: 1.6em;
+      padding: 4px 10px;
+      margin-left: 10px;
+    }
+
+    .lang-switch {
+      padding: 6px;
+    }
+
+    .flag-icon {
+      width: 28px;
+      height: 28px;
     }
   }
 
   @media (max-width: 480px) {
     nav {
-      padding: 10px;
-    }
-
-    .logo a {
-      font-size: 1.1rem;
+      padding: 0;
     }
 
     .navbar-container {
-      padding: 0 5px; /* Réduire le padding pour éviter les débordements */
+      padding: 10px 12px;
+      gap: 8px;
+    }
+
+    .logo a {
+      font-size: 1rem;
     }
 
     .search-container {
-      padding: 0 5px; /* Réduire le padding sur très petits écrans */
-      margin: 8px 0; /* Réduire légèrement la marge verticale */
+      margin: 6px 0 0;
+      padding: 0;
     }
 
     .search-input {
-      font-size: 13px;
-      padding: 8px 40px 8px 12px; /* Équilibrer en garantissant assez d'espace pour le bouton */
-      width: 100%; /* S'assurer que la largeur est respectée */
+      font-size: 14px;
+      padding: 9px 38px 9px 12px;
+      border-radius: 4px;
     }
 
     .search-button {
-      padding: 0 12px;
-      width: 40px; /* Définir une largeur fixe pour le bouton */
+      padding: 0 10px;
+      width: 38px;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
     }
 
     .lang-switch {
-      padding: 5px;
+      padding: 4px;
     }
 
     .flag-icon {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
     }
 
     .menu-icon {
-      padding: 5px;
-      font-size: 1.6em;
-      margin-left: 12px;
+      padding: 4px 8px;
+      font-size: 1.5em;
+      margin-left: 8px;
+    }
+
+    .sidebar {
+      width: 85vw;
+      max-width: 300px;
     }
   }
 </style>

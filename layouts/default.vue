@@ -50,13 +50,18 @@
   // Responsive breakpoints
   @media (max-width: 768px) {
     :root {
-      --header-height: 70px;
+      --header-height: auto;
+      --max-width-content: 100%;
+    }
+
+    .app-layout .main-content {
+      padding-top: 0;
     }
   }
 
   @media (max-width: 480px) {
     :root {
-      --header-height: 60px;
+      --header-height: auto;
     }
   }
 </style>

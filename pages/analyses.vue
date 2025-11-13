@@ -755,104 +755,194 @@
 
   @media (max-width: 768px) {
     .analyses-page {
-      padding: 1rem;
+      padding: 1rem 1rem 2rem;
     }
 
     .tabs {
       flex-wrap: wrap;
       gap: 0.5rem;
+      padding: 0.8rem 0.5rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       button {
-        font-size: 1rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
     }
 
     .main-image-container {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
+      padding: 1rem 0;
 
       .main-image {
         max-height: 300px;
       }
+
+      .image-info {
+        margin-top: 1rem;
+        padding: 0 0.5rem;
+
+        .image-title {
+          font-size: 1.1rem;
+          margin-bottom: 0.4rem;
+        }
+
+        .image-location {
+          font-size: 0.85rem;
+          margin-bottom: 0.2rem;
+        }
+
+        .image-copyright {
+          font-size: 0.8rem;
+        }
+      }
     }
 
     .article-title {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
     }
 
     .author-section {
       flex-direction: column;
       align-items: flex-start;
-      gap: 10px;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .text-content-wrapper {
+      padding: 1rem;
     }
 
     .nav-button {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
+      font-size: 1.2rem;
 
       &.prev {
-        left: -45px;
+        left: 5px;
       }
 
       &.next {
-        right: -45px;
+        right: 5px;
       }
     }
 
     .modal-content {
       max-width: 95%;
+      padding: 1rem;
 
       img {
-        max-height: 80vh;
+        max-height: 75vh;
       }
     }
   }
 
   @media (max-width: 480px) {
     .analyses-page {
-      padding: 0.5rem;
+      padding: 0.8rem 0.8rem 1.5rem;
     }
 
     .tabs {
+      padding: 0.6rem 0.4rem;
+      gap: 0.4rem;
+      justify-content: flex-start;
+
       button {
-        font-size: 0.9rem;
-        padding: 0.3rem 0.6rem;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.6rem;
       }
     }
 
-    .main-image-container .main-image {
-      max-height: 250px;
+    .main-image-container {
+      padding: 0.8rem 0;
+      margin-bottom: 1rem;
+
+      .main-image {
+        max-height: 250px;
+      }
+
+      .image-info {
+        padding: 0 0.3rem;
+
+        .image-title {
+          font-size: 1rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .image-location {
+          font-size: 0.8rem;
+        }
+
+        .image-copyright {
+          font-size: 0.75rem;
+        }
+      }
     }
 
     .article-title {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
     }
 
-    .author-section .author-info .author-details {
-      .author-name {
-        font-size: 0.9rem;
-      }
+    .author-section {
+      gap: 0.6rem;
+      margin-bottom: 1rem;
 
-      .author-title {
-        font-size: 0.7rem;
+      .author-info .author-details {
+        .author-name {
+          font-size: 0.85rem;
+        }
+
+        .author-title {
+          font-size: 0.7rem;
+        }
       }
+    }
+
+    .text-content-wrapper {
+      padding: 0.8rem;
     }
 
     .translations .translation.fr {
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     .nav-button {
-      width: 35px;
-      height: 35px;
-      font-size: 1.2rem;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
 
       &.prev {
-        left: -40px;
+        left: 5px;
       }
 
       &.next {
-        right: -40px;
+        right: 5px;
+      }
+    }
+
+    .modal-content {
+      max-width: 98%;
+      padding: 0.5rem;
+
+      img {
+        max-height: 70vh;
+      }
+
+      .close-button {
+        font-size: 1.5rem;
+        top: 0.5rem;
+        right: 0.5rem;
       }
     }
   }

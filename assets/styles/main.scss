@@ -69,6 +69,14 @@
 }
 
 // Styles globaux
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -76,8 +84,42 @@ body {
   font-family: var(--font-family-base);
   color: var(--color-text);
   background: var(--color-background);
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Amélioration du responsive mobile
+img,
+iframe,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+// Amélioration de la lisibilité sur mobile
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
 } 

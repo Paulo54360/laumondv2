@@ -38,25 +38,6 @@
           <div class="section-divider"></div>
         </div>
         <div class="biography-content">
-          <div class="biography-text">
-            <div class="biography-intro">
-              <p>{{ biographyText }}</p>
-            </div>
-            <div class="biography-timeline">
-              <div class="timeline-item">
-                <span class="year">2000</span>
-                <span class="event">{{ $t('homepage.timeline_2000') }}</span>
-              </div>
-              <div class="timeline-item">
-                <span class="year">2010</span>
-                <span class="event">{{ $t('homepage.timeline_2010') }}</span>
-              </div>
-              <div class="timeline-item">
-                <span class="year">2020</span>
-                <span class="event">{{ $t('homepage.timeline_2020') }}</span>
-              </div>
-            </div>
-          </div>
           <div class="biography-visual">
             <div class="portrait-showcase">
               <img
@@ -68,6 +49,41 @@
                 <h4>{{ $t('homepage.portrait_name') }}</h4>
                 <p>{{ $t('homepage.portrait_caption') }}</p>
               </div>
+            </div>
+          </div>
+          <div class="biography-text">
+            <div class="biography-intro">
+              <div class="text-content" :class="{ collapsed: !showFullBiography }">
+                <p>{{ biographyText }}</p>
+                <div class="biography-timeline">
+                  <div class="timeline-item">
+                    <span class="year">2000</span>
+                    <span class="event">{{ $t('homepage.timeline_2000') }}</span>
+                  </div>
+                  <div class="timeline-item">
+                    <span class="year">2010</span>
+                    <span class="event">{{ $t('homepage.timeline_2010') }}</span>
+                  </div>
+                  <div class="timeline-item">
+                    <span class="year">2020</span>
+                    <span class="event">{{ $t('homepage.timeline_2020') }}</span>
+                  </div>
+                </div>
+              </div>
+              <button class="show-more-button" @click="showFullBiography = !showFullBiography">
+                <img
+                  v-if="!showFullBiography"
+                  src="~/assets/images/common/Down Arrow Icon.png"
+                  :alt="$t('analyses.show_more')"
+                  class="arrow-img"
+                />
+                <img
+                  v-else
+                  src="~/assets/images/common/Fleche Vers Le Haut.png"
+                  :alt="$t('analyses.show_less')"
+                  class="arrow-img"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -87,11 +103,6 @@
           <div class="section-divider"></div>
         </div>
         <div class="metahisme-content">
-          <div class="metahisme-text">
-            <div class="metahisme-definition">
-              <p>{{ metahismeText }}</p>
-            </div>
-          </div>
           <div class="metahisme-visual">
             <div class="artwork-showcase">
               <img
@@ -103,6 +114,27 @@
                 <h4>{{ $t('homepage.mobile_ouverture_title') }}</h4>
                 <p>{{ $t('homepage.metahisme_artwork_caption') }}</p>
               </div>
+            </div>
+          </div>
+          <div class="metahisme-text">
+            <div class="metahisme-definition">
+              <div class="text-content" :class="{ collapsed: !showFullMetahisme }">
+                <p>{{ metahismeText }}</p>
+              </div>
+              <button class="show-more-button" @click="showFullMetahisme = !showFullMetahisme">
+                <img
+                  v-if="!showFullMetahisme"
+                  src="~/assets/images/common/Down Arrow Icon.png"
+                  :alt="$t('analyses.show_more')"
+                  class="arrow-img"
+                />
+                <img
+                  v-else
+                  src="~/assets/images/common/Fleche Vers Le Haut.png"
+                  :alt="$t('analyses.show_less')"
+                  class="arrow-img"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -190,6 +222,8 @@
   const route = useRoute();
   const { locale, t } = useI18n();
   const iframe360 = ref<HTMLIFrameElement | null>(null);
+  const showFullBiography = ref(false);
+  const showFullMetahisme = ref(false);
 
   // Fonction pour ouvrir en plein écran
   const openFullscreen = async (): Promise<void> => {
@@ -279,7 +313,7 @@
 
   // Sections générales
   .section {
-    padding: 2rem 2rem 3rem;
+    padding: 5rem 2rem;
     min-height: auto;
     display: flex;
     align-items: flex-start;
@@ -288,8 +322,8 @@
       max-width: var(--max-width-content);
       margin: 0 auto;
       width: 100%;
-      padding-top: 1rem;
-      padding-bottom: 2rem;
+      padding-top: 0;
+      padding-bottom: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -298,21 +332,22 @@
 
     .section-header {
       text-align: left;
-      margin-bottom: 2rem;
+      margin-bottom: 4rem;
       margin-top: 0;
 
       .section-title {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         font-weight: 300;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         color: var(--color-text);
         letter-spacing: 0.05em;
         display: flex;
         align-items: center;
+        line-height: 1.2;
       }
 
       .section-divider {
-        width: 60px;
+        width: 80px;
         height: 2px;
         background: var(--color-text);
         margin: 0;
@@ -321,8 +356,8 @@
 
     .section-link {
       text-align: left;
-      margin-top: 3rem;
-      margin-bottom: 1rem;
+      margin-top: 4rem;
+      margin-bottom: 0;
     }
   }
 
@@ -333,16 +368,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem 2rem;
+    padding: 4rem 2rem;
     position: relative;
-    min-height: auto;
+    min-height: 60vh;
 
     .hero-content {
       max-width: var(--max-width-content);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
       align-items: center;
       width: 100%;
 
@@ -350,19 +385,20 @@
         text-align: left;
 
         .hero-title {
-          font-size: 4rem;
+          font-size: 4.5rem;
           font-weight: 200;
-          margin-bottom: 1.5rem;
+          margin-bottom: 2rem;
           color: var(--color-text);
           letter-spacing: 0.02em;
-          line-height: 1.2;
+          line-height: 1.1;
         }
 
         .hero-metahisme {
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           font-weight: 300;
           color: var(--color-text-light);
           letter-spacing: 0.1em;
+          line-height: 1.6;
         }
       }
 
@@ -486,19 +522,64 @@
 
     .biography-content {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: center;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+      align-items: flex-start;
 
       .biography-text {
-        .biography-intro {
-          margin-bottom: 2rem;
+        max-width: 100%;
 
-          p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--color-text-light);
-            white-space: pre-line;
+        .biography-intro {
+          margin-bottom: 3rem;
+
+          .text-content {
+            p {
+              font-size: 1.05rem;
+              line-height: 1.9;
+              color: var(--color-text-light);
+              white-space: pre-line;
+              max-width: 100%;
+            }
+          }
+
+          .text-content.collapsed {
+            @media (max-width: 768px) {
+              max-height: 150px;
+              overflow: hidden;
+              position: relative;
+
+              &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: linear-gradient(transparent, white);
+              }
+            }
+          }
+
+          .show-more-button {
+            display: none; /* Caché par défaut sur desktop */
+            @media (max-width: 768px) {
+              display: flex; /* Affiché sur mobile */
+            }
+            justify-content: center;
+            align-items: center;
+            background: none;
+            border: none;
+            width: 100%;
+            margin: 1rem auto 0;
+            cursor: pointer;
+            padding: 0.5rem;
+
+            .arrow-img {
+              width: 32px;
+              height: 32px;
+              display: block;
+              margin: 0 auto;
+            }
           }
         }
 
@@ -525,19 +606,23 @@
       }
 
       .biography-visual {
+        position: sticky;
+        top: calc(var(--header-height) + 2rem);
+
         .portrait-showcase {
           position: relative;
           overflow: hidden;
           background: white;
           border: 1px solid var(--color-border);
-          border-radius: 4px;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
           .portrait-artwork {
             width: 100%;
-            height: 400px;
+            height: 500px;
             object-fit: cover;
             transition: transform var(--transition-medium);
-            border-radius: 4px;
+            border-radius: 8px;
           }
 
           .portrait-overlay {
@@ -583,35 +668,81 @@
 
     .metahisme-content {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: center;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+      align-items: flex-start;
 
       .metahisme-text {
         .metahisme-definition {
-          p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--color-text-light);
-            white-space: pre-line;
+          .text-content {
+            p {
+              font-size: 1.05rem;
+              line-height: 1.9;
+              color: var(--color-text-light);
+              white-space: pre-line;
+            }
+          }
+
+          .text-content.collapsed {
+            @media (max-width: 768px) {
+              max-height: 150px;
+              overflow: hidden;
+              position: relative;
+
+              &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: linear-gradient(transparent, var(--color-background-alt));
+              }
+            }
+          }
+
+          .show-more-button {
+            display: none; /* Caché par défaut sur desktop */
+            @media (max-width: 768px) {
+              display: flex; /* Affiché sur mobile */
+            }
+            justify-content: center;
+            align-items: center;
+            background: none;
+            border: none;
+            width: 100%;
+            margin: 1rem auto 0;
+            cursor: pointer;
+            padding: 0.5rem;
+
+            .arrow-img {
+              width: 32px;
+              height: 32px;
+              display: block;
+              margin: 0 auto;
+            }
           }
         }
       }
 
       .metahisme-visual {
+        position: sticky;
+        top: calc(var(--header-height) + 2rem);
+
         .artwork-showcase {
           position: relative;
           overflow: hidden;
           background: white;
           border: 1px solid var(--color-border);
-          border-radius: 4px;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
           .metahisme-artwork {
             width: 100%;
-            height: 400px;
+            height: 500px;
             object-fit: cover;
             transition: transform var(--transition-medium);
-            border-radius: 4px;
+            border-radius: 8px;
           }
 
           .artwork-overlay {
@@ -658,7 +789,7 @@
     .artworks-showcase {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      gap: 3rem;
       align-items: start;
 
       .artwork-item {
@@ -671,7 +802,13 @@
 
           &:hover {
             .artwork-frame img {
-              transform: scale(1.03);
+              transform: scale(1.05);
+            }
+
+            .artwork-info {
+              .artwork-title {
+                color: var(--color-primary);
+              }
             }
           }
         }
@@ -680,14 +817,19 @@
           background: white;
           padding: 0;
           border: none;
-          border-radius: 8px;
+          border-radius: 12px;
           margin-bottom: 1.5rem;
           overflow: hidden;
-          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          transition: box-shadow var(--transition-medium);
+
+          &:hover {
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+          }
 
           img {
             width: 100%;
-            height: 450px;
+            height: 500px;
             object-fit: cover;
             transition: transform var(--transition-medium);
           }
@@ -695,14 +837,15 @@
 
         .artwork-info {
           .artwork-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
             color: var(--color-text);
+            transition: color var(--transition-medium);
           }
 
           .artwork-author {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--color-text-light);
             font-style: italic;
           }
@@ -718,12 +861,12 @@
     .analyses-content {
       display: flex;
       flex-direction: column;
-      gap: 3rem;
+      gap: 4rem;
 
       .analysis-item {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 3rem;
         align-items: center;
 
         &.analysis-reverse {
@@ -737,27 +880,33 @@
         .analysis-image {
           img {
             width: 100%;
-            height: 400px;
+            height: 450px;
             object-fit: cover;
-            border-radius: 4px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-medium);
+
+            &:hover {
+              transform: scale(1.02);
+            }
           }
         }
 
         .analysis-text-content {
           .analysis-title {
-            font-size: 1.8rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
             color: var(--color-text);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            line-height: 1.3;
           }
 
           .analysis-excerpt {
             p {
-              font-size: 1rem;
-              line-height: 1.8;
+              font-size: 1.05rem;
+              line-height: 1.9;
               color: var(--color-text-light);
               white-space: pre-line;
             }
@@ -791,14 +940,58 @@
     }
   }
 
-  // Responsive
+  // Responsive - Tablette
+  @media (max-width: 1024px) {
+    .hero-section {
+      .hero-content {
+        gap: 2.5rem;
+      }
+
+      .hero-text .hero-title {
+        font-size: 3.5rem;
+      }
+    }
+
+    .section {
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .biography-content,
+    .metahisme-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      .biography-visual,
+      .metahisme-visual {
+        order: 1;
+        position: static;
+      }
+
+      .biography-text,
+      .metahisme-text {
+        order: 2;
+      }
+    }
+
+    .analyses-content .analysis-item {
+      gap: 3rem;
+    }
+
+    .oeuvres-section .artworks-showcase {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+  }
+
+  // Responsive - Mobile
   @media (max-width: 768px) {
     .homepage {
-      padding-top: calc(var(--header-height) + 20px);
+      padding-top: calc(var(--header-height) + 1rem);
     }
 
     .hero-section {
-      padding: 3rem 1rem 2rem;
+      padding: 2rem 1rem;
       min-height: auto;
 
       .hero-content {
@@ -810,132 +1003,329 @@
         text-align: left;
 
         .hero-title {
-          font-size: 2.5rem;
+          font-size: 2.2rem;
           line-height: 1.2;
-          margin-bottom: 1rem;
+          margin-bottom: 0.8rem;
         }
 
         .hero-metahisme {
-          font-size: 1rem;
+          font-size: 0.95rem;
         }
       }
 
       .hero-visual {
         .viewer-360 {
           aspect-ratio: 16/9;
-        }
-      }
-    }
 
-    .section {
-      padding: 3rem 1rem;
-      min-height: auto;
-    }
+          .fullscreen-button {
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem;
 
-    .section-header {
-      margin-bottom: 2rem;
-
-      .section-title {
-        font-size: 1.8rem;
-        margin-bottom: 0.8rem;
-      }
-
-      .section-divider {
-        width: 40px;
-      }
-    }
-
-    .section-link {
-      margin-top: 2rem;
-    }
-
-    .oeuvres-section {
-      .artworks-showcase {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-
-        .artwork-item {
-          width: 100%;
-
-          .artwork-frame {
-            img {
-              height: 250px;
+            svg {
+              width: 18px;
+              height: 18px;
             }
           }
         }
       }
     }
 
-    .biography-content,
-    .metahisme-content {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
+    .section {
+      padding: 2rem 1rem;
+      min-height: auto;
+
+      .section-container {
+        padding-top: 0.5rem;
+        padding-bottom: 1.5rem;
+      }
     }
 
-    .analyses-content {
-      gap: 4rem;
+    .section-header {
+      margin-bottom: 1.5rem;
 
-      .analysis-item {
+      .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .section-divider {
+        width: 40px;
+        height: 2px;
+      }
+    }
+
+    .section-link {
+      margin-top: 1.5rem;
+    }
+
+    .biography-content,
+    .metahisme-content {
+      display: flex !important;
+      flex-direction: column !important;
+      grid-template-columns: none !important;
+      gap: 1.5rem;
+
+      /* Ordre : image en premier, puis texte */
+      .biography-visual,
+      .metahisme-visual {
+        order: 1;
+        position: static;
+        width: 100%;
+
+        .portrait-showcase .portrait-artwork,
+        .artwork-showcase .metahisme-artwork {
+          height: 300px;
+        }
+      }
+
+      .biography-text,
+      .metahisme-text {
+        order: 2;
+        width: 100%;
+
+        .biography-intro .text-content p,
+        .metahisme-definition .text-content p {
+          font-size: 0.95rem;
+          line-height: 1.7;
+        }
+
+        .biography-intro .show-more-button,
+        .metahisme-definition .show-more-button {
+          display: flex; /* Affiché sur mobile */
+        }
+
+        .biography-intro .text-content.collapsed,
+        .metahisme-definition .text-content.collapsed {
+          max-height: 150px;
+
+          &::after {
+            background: linear-gradient(transparent, var(--color-background));
+          }
+        }
+      }
+    }
+
+    .oeuvres-section {
+      .artworks-showcase {
         display: flex;
         flex-direction: column;
         gap: 2rem;
 
+        .artwork-item {
+          width: 100%;
+
+          .artwork-frame {
+            img {
+              height: 280px;
+            }
+          }
+
+          .artwork-info {
+            .artwork-title {
+              font-size: 1rem;
+              margin-bottom: 0.4rem;
+            }
+
+            .artwork-author {
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+    }
+
+    .analyses-content {
+      gap: 3rem;
+
+      .analysis-item {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
         &.analysis-reverse {
           direction: ltr;
+        }
+
+        .analysis-image img {
+          height: 280px;
+        }
+
+        .analysis-text-content {
+          .analysis-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+          }
+
+          .analysis-excerpt p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+          }
         }
       }
     }
 
     .artistic-link {
-      padding: 0.8rem 1.5rem;
-      font-size: 0.85rem;
+      padding: 0.7rem 1.3rem;
+      font-size: 0.8rem;
+      width: 100%;
+      text-align: center;
     }
   }
 
+  // Responsive - Petit mobile
   @media (max-width: 480px) {
     .homepage {
-      padding-top: calc(var(--header-height) + 10px);
+      padding-top: calc(var(--header-height) + 0.5rem);
     }
 
     .hero-section {
-      padding: 2rem 1rem 1.5rem;
+      padding: 1.5rem 0.8rem;
 
       .hero-content {
-        grid-template-columns: 1fr;
         gap: 1.5rem;
       }
 
       .hero-text {
         .hero-title {
-          font-size: 2rem;
-          margin-bottom: 0.8rem;
+          font-size: 1.8rem;
+          margin-bottom: 0.6rem;
+          line-height: 1.15;
         }
 
         .hero-metahisme {
-          font-size: 0.9rem;
+          font-size: 0.85rem;
         }
       }
 
       .hero-visual {
         .viewer-360 {
           aspect-ratio: 16/9;
+          border-radius: 4px;
+
+          .fullscreen-button {
+            top: 0.4rem;
+            right: 0.4rem;
+            padding: 0.4rem;
+
+            svg {
+              width: 16px;
+              height: 16px;
+            }
+          }
         }
       }
     }
 
     .section {
-      padding: 2rem 0.8rem;
+      padding: 1.5rem 0.8rem;
+
+      .section-container {
+        padding-top: 0;
+        padding-bottom: 1rem;
+      }
     }
 
-    .section-header .section-title {
-      font-size: 1.6rem;
+    .section-header {
+      margin-bottom: 1.2rem;
+
+      .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-divider {
+        width: 35px;
+        height: 2px;
+      }
+    }
+
+    .biography-content,
+    .metahisme-content {
+      gap: 1.2rem;
+
+      .biography-text .biography-intro p,
+      .metahisme-text .metahisme-definition p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .biography-visual .portrait-showcase .portrait-artwork,
+      .metahisme-visual .artwork-showcase .metahisme-artwork {
+        height: 250px;
+      }
+
+      .biography-timeline .timeline-item {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+
+        .year {
+          margin-right: 0;
+          margin-bottom: 0.3rem;
+          font-size: 1rem;
+        }
+
+        .event {
+          font-size: 0.85rem;
+        }
+      }
+    }
+
+    .oeuvres-section {
+      .artworks-showcase {
+        gap: 1.5rem;
+
+        .artwork-item {
+          .artwork-frame {
+            margin-bottom: 1rem;
+
+            img {
+              height: 240px;
+            }
+          }
+
+          .artwork-info {
+            .artwork-title {
+              font-size: 0.95rem;
+            }
+
+            .artwork-author {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+
+    .analyses-content {
+      gap: 2.5rem;
+
+      .analysis-item {
+        gap: 1.2rem;
+
+        .analysis-image img {
+          height: 240px;
+        }
+
+        .analysis-text-content {
+          .analysis-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.03em;
+          }
+
+          .analysis-excerpt p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+          }
+        }
+      }
     }
 
     .artistic-link {
-      padding: 0.7rem 1.2rem;
-      font-size: 0.8rem;
+      padding: 0.65rem 1rem;
+      font-size: 0.75rem;
     }
   }
 </style>
