@@ -150,17 +150,110 @@
         "metahisme_artwork_caption": "The emblematic work of Metahism",
         "discover_metahisme": "Discover Metahism",
         "artworks_title": "Artworks",
-        "browse_artworks": "Browse artworks",
+        "explore_collection": "Explore the collection",
+        "browse_artworks": "Artworks",
         "analyses_title": "Analyses",
         "analysis_quote": "Laumond's work constitutes a deep meditation on the paradoxes of our contemporary era.",
+        "analysis_quote_author": "— Cécile Jouanneau, Art critic",
         "analysis_author": "Cécile Jouanneau, Art critic",
         "analysis_excerpt": "Art critics recognize in his work a unique approach that transcends traditional categories of contemporary art.",
+        "analysis_block_1_description": "An exploration of tensions between order and chaos...",
+        "analysis_block_2_description": "Harmony within pure geometry...",
         "read_analyses": "Read analyses",
         "artwork_le_portant_title": "Le Portant",
         "artwork_le_portant_description": "An exploration of tensions between order and chaos...",
         "artwork_concordance_title": "Concordance Universelle",
         "artwork_concordance_description": "Harmony in pure geometry...",
         "artwork_comme_deux_aimants_title": "Comme deux aimants",
+        "metahisme_artwork_title": "Concordance Universelle",
+        "hero_metahisme": "MétaHisme",
+        "fullscreen_button": "Open in fullscreen",
+        "mobile_ouverture_title": "The mobile of opening of parallel universes",
+        "portrait_name": "Patrick Laumond",
+        "biography_text": "Patrick Laumond was born to a father from Cantal, a hydromechanics engineer, and a mother born in Brive la Gaillarde, trained as an aesthetician. He grew up in several regions of France. At 10 years old, he returned to Corrèze where he spent his adolescence. Constrained by his father who enrolled him at the Pierre Caraminot National Professional School in Egletons, he was a boarder there until obtaining his baccalaureate in mechanical engineering. At the time of choices, he joined the Henri Brisson National Higher Professional School in 1994, where he learned applied science in technical and industrial ceramics, in Vierzon. He was noticed by Jacky Trotereau, professor and head of the ceramics art and decoration laboratory, who allowed him direct entry into the 2nd year at the National Higher School of Arts and Applied Arts in Paris at Olivier de Serres (ENSAAMA). He graduated top of his class with jury congratulations for the presentation of his personal portfolio in 1996.",
+        "metahisme_text": "Undeclared* declaration of MétaHisme\n\nToday in our materialistic society of hyper-individualism, man is dehumanized and paradoxically the cult of the ego continues to take precedence over our personal development and therefore over our evolution towards a search for universal meaning. The genesis of MétaHisme finds its origin in this reflection. For Patrick Laumond, it has always been necessary to define oneself as doing art rather than being an artist. Although this is often understood as a corollary to the act of creation, it seems to him that it is not the artist who determines art, but art that on the contrary determines the artist...",
+        "analysis_portant_title": "LE PORTANT (524C)",
+        "analysis_portant_excerpt": "Laumond at Espace Commines, Paris.\n\nHe runs, he runs Laumond, and takes us into a kaleidoscopic vision of the world. Complex vision, humanistic and humorous vision, global and fragmented vision, paradoxical vision. His universe where white dominates is an invitation to interiority. At each event, he confirms a powerful advance, specifies his immaculate universe and announces the next steps in service of his inner abundance...",
+        "analysis_concordance_title": "CONCORDANCE UNIVERSELLE",
+        "analysis_concordance_excerpt": "MétaHisme. An attempt to expand the possible\n\nPatrick Laumond's work seems inherited from the plastic qualities and minimalist and conceptual language, born in reaction to the pictorial lyricism of expressionism. In the face of the debauchery of colors and figurative and narrative tendencies, Laumond's installations are embodied a priori in abstraction, but also the rigor and coldness of an immaculate white. Forms are geometric, lines straight, regular and homogeneous. Tensions and obliques underline an operative dynamic, at once mathematical, structural, even universal...",
+        "artwork_portant": "Le Portant (524C)",
+        "artwork_concordance": "Concordance Universelle",
+        "artwork_mobile_ouverture": "The mobile of opening of parallel universes",
+        "artwork_portant_author": "Edith Herlemont Lassiat",
+        "artwork_concordance_author": "Marion Zilio (AICA France)",
+        "artwork_mobile_author": "Isabelle de Maison-Rouge (AICA France)",
         "category_deployment": "Deployment"
+    },
+    "artworks": {
+        "categories": {
+            "deployment": "Deployment"
+        }
+    },
+    "header": {
+        "search_placeholder": "Search for an artwork...",
+        "switch_to_en": "Switch to English",
+        "switch_to_fr": "Switch to French",
+        "menu_open": "Open menu",
+        "menu_close": "Close menu"
+    },
+    "footer": {
+        "legal": "© Patrick Laumond • All rights reserved - patrick{'@'}laumond.com - Paris.",
+        "credits": "Photos: ©Philippe Tapissier  –  Development: Paul Convert"
+    },
+    "common": {
+        "previous": "Previous",
+        "next": "Next",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "retry": "Retry"
+    },
+    "gallery": {
+        "default_title": "Gallery",
+        "loading": "Loading artworks...",
+        "error": "Error while loading artworks.",
+        "image_alt": "Image {index}",
+        "items_per_page": "Items per page:",
+        "range": "{start} - {end} of {total}",
+        "pagination": {
+            "page_status": "Page {current} of {total}"
+        },
+        "categories": {
+            "transcriptions": "Transcriptions",
+            "archetype": "Archetypes",
+            "deploiement": "Deployments",
+            "drawing": "Drawings"
+        }
+    },
+    "analyses": {
+        "author_title": "Art critic",
+        "show_more": "Show more",
+        "show_less": "Show less",
+        "unknown_author": "Author not specified",
+        "languages": {
+            "fr": "French",
+            "en": "English"
+        }
+    },
+    "search": {
+        "title": "Search for an artwork",
+        "loading": "Loading results...",
+        "empty_with_query": "No results found for \"{query}\"",
+        "empty_without_query": "Please enter a search term",
+        "image_placeholder": "Image unavailable",
+        "category_label": "Category: {category}"
+    },
+    "debug": {
+        "title": "Debug page",
+        "section_connection": "Connection API test",
+        "action_test_connection": "Test connection to Supabase",
+        "section_images": "Image test",
+        "section_search": "Manual search test",
+        "search_placeholder": "Search term",
+        "action_search": "Search",
+        "loading": "Loading...",
+        "error": "Error",
+        "no_details": "No details available",
+        "results": "Results ({count})",
+        "no_image": "No image"
     }
 }

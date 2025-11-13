@@ -11,7 +11,7 @@
       navigation
     >
       <SwiperSlide v-for="(image, index) in images" :key="index">
-        <NuxtImg :src="image" alt="Oeuvre" />
+        <NuxtImg :src="image" :alt="t('gallery.image_alt', { index: index + 1 })" />
       </SwiperSlide>
     </Swiper>
   </div>
@@ -19,10 +19,13 @@
 
 <script setup>
   import { Swiper, SwiperSlide } from 'swiper/vue';
+  import { useI18n } from 'vue-i18n';
 
   defineProps({
     images: Array,
   });
+
+  const { t } = useI18n();
 </script>
 
 <style>

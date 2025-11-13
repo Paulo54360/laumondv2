@@ -4,7 +4,80 @@
         "Oeuvres": "Œuvres",
         "Biographie": "Biographie",
         "Actualités": "Actualités",
-        "Analyses": "Analyses"
+        "Analyses": "Analyses",
+        "home": "Accueil"
+    },
+    "header": {
+        "search_placeholder": "Rechercher une œuvre...",
+        "switch_to_en": "Passer en anglais",
+        "switch_to_fr": "Passer en français",
+        "menu_open": "Ouvrir le menu",
+        "menu_close": "Fermer le menu"
+    },
+    "footer": {
+        "legal": "© Patrick Laumond • Tous droits réservés - patrick@laumond.com - Paris.",
+        "credits": "Photos: ©Philippe Tapissier  –  Développement: Paul Convert"
+    },
+    "common": {
+        "previous": "Précédent",
+        "next": "Suivant",
+        "loading": "Chargement...",
+        "error": "Une erreur est survenue",
+        "retry": "Réessayer"
+    },
+    "artworks": {
+        "categories": {
+            "deployment": "Déploiement"
+        }
+    },
+    "gallery": {
+        "default_title": "Galerie",
+        "loading": "Chargement des œuvres...",
+        "error": "Erreur lors du chargement des œuvres.",
+        "image_alt": "Image {{index}}",
+        "items_per_page": "Éléments par page :",
+        "range": "{{start}} - {{end}} sur {{total}}",
+        "pagination": {
+            "page_status": "Page {{current}} sur {{total}}"
+        },
+        "categories": {
+            "transcriptions": "Transcriptions",
+            "archetype": "Archétypes",
+            "deploiement": "Déploiements",
+            "drawing": "Dessins+"
+        }
+    },
+    "analyses": {
+        "author_title": "Critique d'art",
+        "show_more": "Voir plus",
+        "show_less": "Voir moins",
+        "unknown_author": "Auteur non spécifié",
+        "languages": {
+            "fr": "Français",
+            "en": "Anglais"
+        }
+    },
+    "search": {
+        "title": "Rechercher une œuvre",
+        "loading": "Chargement des résultats...",
+        "empty_with_query": "Aucun résultat trouvé pour « {{query}} »",
+        "empty_without_query": "Veuillez saisir un terme de recherche",
+        "image_placeholder": "Image non disponible",
+        "category_label": "Catégorie : {{category}}"
+    },
+    "debug": {
+        "title": "Page de débogage",
+        "section_connection": "Test API de connexion",
+        "action_test_connection": "Tester la connexion à Supabase",
+        "section_images": "Test d'images",
+        "section_search": "Test de recherche manuel",
+        "search_placeholder": "Terme de recherche",
+        "action_search": "Rechercher",
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "no_details": "Pas de détails disponibles",
+        "results": "Résultats ({{count}})",
+        "no_image": "Pas d'image"
     },
     "MétaHisme": {
         "Texte": "Aujourd'hui dans notre société matérialiste, d'hyper individualisme l'homme est déshumanisé et paradoxalement le culte de l'ego ne cesse de prendre le pas sur notre développement personnel et donc sur notre évolution vers une recherche de sens universel. La genèse du MétaHisme trouve son origine dans cette réflexion. Pour Patrick Laumond, Il a toujours été nécessaire de se définir comme faisant de l'art plutôt que comme étant artiste. Bien que cela soit souvent entendu comme étant un corollaire à l'acte de création, il semble pour lui, que ce ne soit pas l'artiste qui détermine l'art, mais l'art qui au contraire détermine l'artiste.",
@@ -130,7 +203,7 @@
         "hero_description_2": "où chaque forme révèle une pensée,",
         "hero_description_3": "où l'angle droit rencontre l'émotion.",
         "video_hint": "Cliquez pour explorer en 360°",
-        "biography_title": "Biography",
+        "biography_title": "Biographie",
         "biography_intro": "Patrick Laumond développe depuis plus de vingt ans une approche unique de l'expression artistique, créant un langage visuel qui transcende les catégories traditionnelles.",
         "timeline_2000": "Début de la recherche artistique",
         "timeline_2010": "Création du concept Métahisme",
@@ -142,10 +215,16 @@
         "metahisme_analysis": "À travers ses installations, Patrick Laumond questionne notre rapport au temps, à l'espace et à la conscience dans un monde de plus en plus virtualisé.",
         "discover_metahisme": "Découvrir le Métahisme",
         "artworks_title": "Œuvres",
+        "explore_collection": "Explorer la collection",
         "browse_artworks": "Parcourir les œuvres",
         "analyses_title": "Analyses",
-        "analysis_quote": "L'œuvre de Laumond constitue une méditation profonde sur les paradoxes de notre époque contemporaine.",
-        "analysis_excerpt": "Les critiques d'art reconnaissent dans son travail une approche unique qui transcende les catégories traditionnelles de l'art contemporain.",
-        "read_analyses": "Lire les analyses"
+        "analysis_quote": "L'art de Patrick Laumond transcende les frontières conventionnelles, créant un dialogue entre la géométrie pure et l'expression émotionnelle.",
+        "analysis_quote_author": "— Cécile Jouanneau, Critique d'art",
+        "analysis_excerpt": "Les analyses révèlent la profondeur conceptuelle du Métahisme, où chaque œuvre devient un chapitre d'une réflexion philosophique sur notre époque et ses contradictions.",
+        "analysis_block_1_description": "Une exploration des tensions entre ordre et chaos...",
+        "analysis_block_2_description": "L'harmonie dans la géométrie pure...",
+        "read_analyses": "Lire les analyses",
+        "metahisme_artwork_caption": "Dialogue entre l'ordre géométrique et l'émotion",
+        "metahisme_artwork_title": "Concordance Universelle"
     }
 }

@@ -21,6 +21,11 @@
           :alt="currentTab.title"
           @click="openModal(0)"
         />
+        <div class="image-info">
+          <h2 class="image-title">{{ currentTab.title }}</h2>
+          <div v-if="currentTab.location" class="image-location">{{ currentTab.location }}</div>
+          <div class="image-copyright">{{ currentTab.copyright }}</div>
+        </div>
       </div>
 
       <h2 class="article-title">{{ currentTab.title }}</h2>
@@ -32,7 +37,7 @@
           </div>
           <div class="author-details">
             <span class="author-name">{{ getAuthor(currentTab) }}</span>
-            <span class="author-title">Critique d'art</span>
+            <span class="author-title">{{ t('analyses.author_title') }}</span>
           </div>
         </div>
       </div>
@@ -82,17 +87,17 @@
                 </p>
               </div>
             </div>
-            <div class="show-more-arrow" @click="toggleShowMore" role="button" tabindex="0">
+            <div class="show-more-arrow" role="button" tabindex="0" @click="toggleShowMore">
               <img
                 v-if="!showFullText"
                 src="~/assets/images/common/Down Arrow Icon.png"
-                alt="Voir plus"
+                :alt="t('analyses.show_more')"
                 class="arrow-img"
               />
               <img
                 v-else
                 src="~/assets/images/common/Fleche Vers Le Haut.png"
-                alt="Voir moins"
+                :alt="t('analyses.show_less')"
                 class="arrow-img up"
               />
             </div>
@@ -126,9 +131,9 @@
 </template>
 
 <script setup lang="ts">
+  import { useRuntimeConfig } from 'nuxt/app';
   import { ref, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
-  import { useRuntimeConfig } from 'nuxt/app';
   const runtimeConfig = useRuntimeConfig();
 
   const S3_BASE_URL = runtimeConfig.public.apiUrl;
@@ -146,6 +151,8 @@
       },
       author: 'Edith Herlemont-Lassiat',
       analysisTitle: t('LAEC.TitreLAEC'),
+      location: 'Espace Commines, Paris',
+      copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('LAEC.Texte1LAEC'), type: 'normal' },
         { text: t('LAEC.Texte2LAEC'), type: 'normal' },
@@ -180,6 +187,8 @@
       },
       author: 'Marion Zilio',
       analysisTitle: t('CU.TitreCU'),
+      location: '',
+      copyright: '© Matteo Losurdo',
       paragraphs: [{ text: t('CU.TexteCU'), type: 'normal' }],
       authorSignature: {
         name: t('CU.AuteurCU'),
@@ -198,6 +207,8 @@
       },
       author: 'Marion Zilio',
       analysisTitle: t('CDA.TitreCDA'),
+      location: '',
+      copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('CDA.Texte1CDA'), type: 'normal' },
         { text: t('CDA.Texte2CDA'), type: 'normal' },
@@ -220,6 +231,8 @@
       },
       author: 'Isabelle de Maison Rouge',
       analysisTitle: t('AQJA.TitreAQJA'),
+      location: '',
+      copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('AQJA.Texte1AQJA'), type: 'normal' },
         { text: t('AQJA.Texte2AQJA'), type: 'normal' },
@@ -307,10 +320,12 @@
     paragraphs: Paragraph[];
     authorSignature: AuthorSignature;
     footnotes?: Footnote[];
+    location?: string;
+    copyright: string;
   }
 
   const getAuthor = (tab: Tab): string => {
-    return tab.author || 'Auteur non spécifié';
+    return tab.author || t('analyses.unknown_author');
   };
 
   const getAuthorAvatar = (tab: Tab): string => {
@@ -318,7 +333,7 @@
     if (tab.author === 'Edith Herlemont-Lassiat') {
       return authorAvatars.default;
     }
-    return authorAvatars[tab.author as string] || authorAvatars['default'];
+    return authorAvatars[tab.author as string] || authorAvatars.default;
   };
 
   const openModal = (index: number) => {
@@ -402,6 +417,32 @@
 
       &:hover {
         transform: scale(1.02);
+      }
+    }
+
+    .image-info {
+      margin-top: 1rem;
+      text-align: left;
+
+      .image-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .image-location {
+        font-size: 0.9rem;
+        color: var(--color-text-light);
+        margin-bottom: 0.3rem;
+        font-style: italic;
+      }
+
+      .image-copyright {
+        font-size: 0.85rem;
+        color: var(--color-text-light);
       }
     }
   }

@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+
 import { useRuntimeConfig } from '#app';
 
 interface IArtwork {
@@ -45,13 +46,31 @@ export default function useS3() {
 
   const getArtworks = async (category: string): Promise<IArtwork[]> => {
     const artworks: IArtwork[] = [];
-    
+
     // Liste des dossiers par catégorie
     const folders = {
-      transcriptions: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'],
+      transcriptions: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+      ],
       archetype: ['02', '03', '04', '05', '06', '07', '08', '09'],
       deploiement: ['00', '01', '02', '03', '04', '05'],
-      drawing: ['01', '02', '03', '04', '05']
+      drawing: ['01', '02', '03', '04', '05'],
     };
 
     const categoryFolders = folders[category as keyof typeof folders] || [];
@@ -60,16 +79,16 @@ export default function useS3() {
       try {
         const [description, images] = await Promise.all([
           getArtworkDescription(category, folder),
-          getArtworkImages(category, folder)
+          getArtworkImages(category, folder),
         ]);
-        
+
         // Extraire le titre de la première ligne de la description
-        const [title, ...descriptionLines] = description.split('\n').filter(line => line.trim());
-        
+        const [title, ...descriptionLines] = description.split('\n').filter((line) => line.trim());
+
         artworks.push({
           title: title || folder,
           description: descriptionLines.join('\n').trim(),
-          images
+          images,
         });
       } catch (error) {
         console.error(`Error processing artwork ${folder} in category ${category}:`, error);
@@ -82,6 +101,6 @@ export default function useS3() {
   return {
     getArtworks,
     getArtworkImages,
-    getArtworkDescription
+    getArtworkDescription,
   };
-} 
+}

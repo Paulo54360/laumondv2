@@ -1,6 +1,6 @@
 <template>
   <GalleryComponent
-    title="Drawings"
+    :title="$t('gallery.categories.drawing')"
     :api-url="`${bucketUrl}/Drawings+`"
     :subfolders="['05', '04', '03', '02', '01']"
     :file-ranges="[
@@ -15,7 +15,6 @@
 
 <script setup>
   import { useRuntimeConfig } from '#app';
-
   import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();

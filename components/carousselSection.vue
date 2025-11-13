@@ -1,12 +1,21 @@
 <template>
   <div class="carousels-container">
     <div class="carousel-wrapper">
-      <template v-if="link && !link.startsWith('http') && !link.endsWith('.jpg') && !link.endsWith('.png') && !link.endsWith('.jpeg') && !link.endsWith('.webp')">
+      <template
+        v-if="
+          link &&
+          !link.startsWith('http') &&
+          !link.endsWith('.jpg') &&
+          !link.endsWith('.png') &&
+          !link.endsWith('.jpeg') &&
+          !link.endsWith('.webp')
+        "
+      >
         <NuxtLink :to="link">
           <h2>{{ title }}</h2>
           <div ref="carousel" class="carousel" @scroll="handleScroll">
             <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
-              <img :src="image" class="carousel-image" alt="Oeuvre" />
+              <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
             </div>
           </div>
         </NuxtLink>
@@ -15,7 +24,7 @@
         <h2>{{ title }}</h2>
         <div ref="carousel" class="carousel" @scroll="handleScroll">
           <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
-            <img :src="image" class="carousel-image" alt="Oeuvre" />
+            <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
           </div>
         </div>
       </template>
@@ -30,7 +39,7 @@
   const props = defineProps({
     title: {
       type: String,
-      default: 'Galerie',
+      required: true,
     },
     images: {
       type: Array,

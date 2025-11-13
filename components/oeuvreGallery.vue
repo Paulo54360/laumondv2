@@ -1,24 +1,58 @@
 <template>
   <div class="carousels-container">
-    <CarouselSection title="Archetypes" :images="imageUrlsArchetypes" link="/archetypes" />
-    <CarouselSection title="Deployments" :images="imageUrlsDeployments" link="/deployments" />
-    <CarouselSection title="Drawings" :images="imageUrlsDrawings" link="/drawings" />
     <CarouselSection
-      title="Transcriptions"
+      :title="$t('gallery.categories.archetype')"
+      :images="imageUrlsArchetypes"
+      :link="archetypesLink"
+    />
+    <CarouselSection
+      :title="$t('gallery.categories.deploiement')"
+      :images="imageUrlsDeployments"
+      :link="deploymentsLink"
+    />
+    <CarouselSection
+      :title="$t('gallery.categories.drawing')"
+      :images="imageUrlsDrawings"
+      :link="drawingsLink"
+    />
+    <CarouselSection
+      :title="$t('gallery.categories.transcriptions')"
       :images="imageUrlsTranscriptions"
-      link="/transcriptions"
+      :link="transcriptionsLink"
     />
   </div>
 </template>
 
 <script setup>
-  import { useRuntimeConfig } from '#app';
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
+  import { useRoute } from 'vue-router';
 
   import CarouselSection from './carousselSection.vue';
 
+  import { useRuntimeConfig } from '#app';
+  import { useI18n } from '#i18n';
+
   const config = useRuntimeConfig();
+  const route = useRoute();
+  const { locale } = useI18n();
   const bucketUrl = config.public.apiUrl;
+
+  // Obtenir la locale actuelle depuis la route (priorité) ou i18n
+  // La computed property se met à jour automatiquement quand route.path change
+  const currentLocale = computed(() => {
+    // Extraire la locale de l'URL (ex: /fr/artworks -> fr)
+    const localeFromPath = route.path?.match(/^\/(fr|en)/)?.[1];
+    // Utiliser la locale de l'URL si disponible, sinon celle de i18n, sinon 'fr' par défaut
+    return localeFromPath || locale.value || 'fr';
+  });
+
+  // Générer les liens de manière réactive avec la locale actuelle
+  // Ces computed properties dépendent de currentLocale qui dépend de route.path
+  // donc elles se mettront à jour automatiquement quand la route change
+  const archetypesLink = computed(() => `/${currentLocale.value}/archetypes`);
+  const deploymentsLink = computed(() => `/${currentLocale.value}/deployments`);
+  const drawingsLink = computed(() => `/${currentLocale.value}/drawings`);
+  const transcriptionsLink = computed(() => `/${currentLocale.value}/transcriptions`);
 
   const imageUrlsArchetypes = ref([]);
   const imageUrlsDeployments = ref([]);

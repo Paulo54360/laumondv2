@@ -1,17 +1,23 @@
 <template>
   <div class="gallery-container">
-    <h1>{{ title }}</h1>
+    <h1>{{ title || $t('gallery.default_title') }}</h1>
 
     <div class="pagination-controls">
-      <label for="itemsPerPage">Items per page:</label>
+      <label for="itemsPerPage">{{ $t('gallery.items_per_page') }}</label>
       <select id="itemsPerPage" v-model="itemsPerPage" @change="currentPage = 0">
         <option v-for="option in [5, 10, 15, 20, 25]" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
-      <span>{{ startIndex + 1 }} - {{ endIndex }} of {{ totalItems }}</span>
-      <button :disabled="currentPage === 0" @click="prevPage">&#8592; Précédent</button>
-      <button :disabled="endIndex >= totalItems" @click="nextPage">Suivant &#8594;</button>
+      <span>{{
+        $t('gallery.range', { start: startIndex + 1, end: endIndex, total: totalItems })
+      }}</span>
+      <button :disabled="currentPage === 0" @click="prevPage">
+        &#8592; {{ $t('common.previous') }}
+      </button>
+      <button :disabled="endIndex >= totalItems" @click="nextPage">
+        {{ $t('common.next') }} &#8594;
+      </button>
     </div>
 
     <div class="image-gallery">

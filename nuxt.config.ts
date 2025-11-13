@@ -11,10 +11,11 @@ export default defineNuxtConfig({
   // Configuration des variables d'environnement accessibles côté client
   runtimeConfig: {
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
+      apiUrl:
+        process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
     },
   },
-  
+
   // Configuration des modules
   modules: [
     [
@@ -45,7 +46,7 @@ export default defineNuxtConfig({
 
   // Configuration CSS
   css: ['~/assets/styles/main.scss'],
-  
+
   // Configuration Vite
   vite: {
     css: {

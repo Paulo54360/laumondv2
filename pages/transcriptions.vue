@@ -1,6 +1,6 @@
 <template>
   <GalleryComponent
-    title="Transcriptions"
+    :title="$t('gallery.categories.transcriptions')"
     :api-url="`${bucketUrl}/Transcriptions`"
     :subfolders="[
       ...[
@@ -46,7 +46,6 @@
 
 <script setup>
   import { useRuntimeConfig } from '#app';
-
   import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();

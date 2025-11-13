@@ -41,7 +41,7 @@
         "Texte16": "Patrick Laumond"
     },
     "AQJA": {
-        "TitreAQJA": "Afin qu'un jour  advienne,",
+        "TitreAQJA": "Afin qu'un jour advienne,",
         "Texte1AQJA": "Mot issu du germanique « blank » qui signifie lumineux, sans tâche, brillant, clair comme la craie, le blanc est riche.",
         "Texte2AQJA": "S'il n'apparaît pas dans la gamme chromatique c'est parce qu'il réfléchit la lumière et la disperse par réfraction.",
         "Texte3AQJA": "Symbole de propreté, la blancheur suggère la pureté, elle est assimilée à l'immaculée, à l'innocence, à la simplicité.",
@@ -150,17 +150,110 @@
         "metahisme_artwork_caption": "L'œuvre emblématique du Métahisme",
         "discover_metahisme": "Découvrir le Métahisme",
         "artworks_title": "Œuvres",
-        "browse_artworks": "Parcourir les œuvres",
+        "explore_collection": "Explorer la collection",
+        "browse_artworks": "Œuvres",
         "analyses_title": "Analyses",
         "analysis_quote": "L'œuvre de Laumond constitue une méditation profonde sur les paradoxes de notre époque contemporaine.",
+        "analysis_quote_author": "— Cécile Jouanneau, Critique d'art",
         "analysis_author": "Cécile Jouanneau, Critique d'art",
         "analysis_excerpt": "Les critiques d'art reconnaissent dans son travail une approche unique qui transcende les catégories traditionnelles de l'art contemporain.",
+        "analysis_block_1_description": "Une exploration des tensions entre ordre et chaos...",
+        "analysis_block_2_description": "L'harmonie dans la géométrie pure...",
         "read_analyses": "Lire les analyses",
         "artwork_le_portant_title": "Le Portant",
         "artwork_le_portant_description": "Une exploration des tensions entre ordre et chaos...",
         "artwork_concordance_title": "Concordance Universelle",
         "artwork_concordance_description": "L'harmonie dans la géométrie pure...",
         "artwork_comme_deux_aimants_title": "Comme deux aimants",
+        "metahisme_artwork_title": "Concordance Universelle",
+        "hero_metahisme": "MétaHisme",
+        "fullscreen_button": "Ouvrir en plein écran",
+        "mobile_ouverture_title": "Le mobile d'ouverture des univers parallèles",
+        "portrait_name": "Patrick Laumond",
+        "biography_text": "Patrick Laumond naît d'un père originaire du Cantal, ingénieur en hydromécanique et d'une mère née à Brive la Gaillarde, esthéticienne de formation. Il grandit dans plusieurs régions de France. A 10 ans, il revient en Corrèze où il passe son adolescence. Contraint par son père qui l'inscrit à l'École Nationale Professionnelle Pierre Caraminot à Egletons, il y sera pensionnaire jusqu'à l'obtention de son baccalauréat en génie mécanique. A l'heure des choix, il intègre l'École Nationale Supérieure Professionnelle Henri Brisson en 1994, où il apprend la science appliquée en céramique technique et industrielle, à Vierzon. Il est remarqué par Jacky Trotereau, professeur et responsable du laboratoire céramique art et décoration, qui lui permet une entrée directe en 2ème année à l'École Nationale Supérieure des Métiers d'Art et des Arts Appliqués de Paris à Olivier de Serres (ENSAAMA). Il sort major de sa promotion et félicitation du Jury pour la présentation de son dossier personnel en 1996.",
+        "metahisme_text": "Déclaration non manifestée* du MétaHisme\n\nAujourd'hui dans notre société matérialiste, d'hyper individualisme l'homme est déshumanisé et paradoxalement le culte de l'ego ne cesse de prendre le pas sur notre développement personnel et donc sur notre évolution vers une recherche de sens universel. La genèse du MétaHisme trouve son origine dans cette réflexion. Pour Patrick Laumond, Il a toujours été nécessaire de se définir comme faisant de l'art plutôt que comme étant artiste. Bien que cela soit souvent entendu comme étant un corollaire à l'acte de création, il semble pour lui, que ce ne soit pas l'artiste qui détermine l'art, mais l'art qui au contraire détermine l'artiste...",
+        "analysis_portant_title": "LE PORTANT (524C)",
+        "analysis_portant_excerpt": "Laumond à l'Espace Commines, Paris.\n\nIl court, il court le Laumond, et nous emmène dans une vision kaléidoscopique du monde. Vision complexe, vision humaniste et humoriste, vision globale et morcelée, vision paradoxale. Son univers où domine le blanc est une incitation à l'intériorité. À chaque événement, il confirme une avancée puissante, précise son univers immaculé et annonce les étapes prochaines au service de son foisonnement intérieur...",
+        "analysis_concordance_title": "CONCORDANCE UNIVERSELLE",
+        "analysis_concordance_excerpt": "MétaHisme. Une tentative d'élargissement des possibles\n\nL'œuvre de Patrick Laumond semble héritée des qualités plastiques et du langage minimaliste et conceptuel, né en réaction au lyrisme pictural de l'expressionnisme. À la débauche de couleurs et aux tendances figuratives et narratives, les installations de Laumond s'incarnent a priori dans l'abstraction, mais aussi la rigueur et la froideur d'un blanc immaculé. Les formes sont géométriques, les lignes droites, régulières et homogènes. Les tensions et les obliques soulignent une dynamique opératoire, tout à la fois mathématique, structurelle, voire universelle...",
+        "artwork_portant": "Le Portant (524C)",
+        "artwork_concordance": "Concordance Universelle",
+        "artwork_mobile_ouverture": "Le mobile d'ouverture des univers parallèles",
+        "artwork_portant_author": "Edith Herlemont Lassiat",
+        "artwork_concordance_author": "Marion Zilio (AICA France)",
+        "artwork_mobile_author": "Isabelle de Maison-Rouge (AICA France)",
         "category_deployment": "Déploiement"
+    },
+    "artworks": {
+        "categories": {
+            "deployment": "Déploiement"
+        }
+    },
+    "header": {
+        "search_placeholder": "Rechercher une œuvre...",
+        "switch_to_en": "Passer en anglais",
+        "switch_to_fr": "Passer en français",
+        "menu_open": "Ouvrir le menu",
+        "menu_close": "Fermer le menu"
+    },
+    "footer": {
+        "legal": "© Patrick Laumond • Tous droits réservés - patrick{'@'}laumond.com - Paris.",
+        "credits": "Photos: ©Philippe Tapissier  –  Développement: Paul Convert"
+    },
+    "common": {
+        "previous": "Précédent",
+        "next": "Suivant",
+        "loading": "Chargement...",
+        "error": "Une erreur est survenue",
+        "retry": "Réessayer"
+    },
+    "gallery": {
+        "default_title": "Galerie",
+        "loading": "Chargement des œuvres...",
+        "error": "Erreur lors du chargement des œuvres.",
+        "image_alt": "Image {index}",
+        "items_per_page": "Éléments par page :",
+        "range": "{start} - {end} sur {total}",
+        "pagination": {
+            "page_status": "Page {current} sur {total}"
+        },
+        "categories": {
+            "transcriptions": "Transcriptions",
+            "archetype": "Archétypes",
+            "deploiement": "Déploiements",
+            "drawing": "Dessins"
+        }
+    },
+    "analyses": {
+        "author_title": "Critique d'art",
+        "show_more": "Voir plus",
+        "show_less": "Voir moins",
+        "unknown_author": "Auteur non spécifié",
+        "languages": {
+            "fr": "Français",
+            "en": "Anglais"
+        }
+    },
+    "search": {
+        "title": "Rechercher une œuvre",
+        "loading": "Chargement des résultats...",
+        "empty_with_query": "Aucun résultat trouvé pour « {query} »",
+        "empty_without_query": "Veuillez saisir un terme de recherche",
+        "image_placeholder": "Image non disponible",
+        "category_label": "Catégorie : {category}"
+    },
+    "debug": {
+        "title": "Page de débogage",
+        "section_connection": "Test API de connexion",
+        "action_test_connection": "Tester la connexion à Supabase",
+        "section_images": "Test d'images",
+        "section_search": "Test de recherche manuel",
+        "search_placeholder": "Terme de recherche",
+        "action_search": "Rechercher",
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "no_details": "Pas de détails disponibles",
+        "results": "Résultats ({count})",
+        "no_image": "Pas d'image"
     }
 }
