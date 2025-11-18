@@ -120,6 +120,7 @@
   .gallery-container {
     padding: 20px;
     text-align: center;
+    font-family: var(--font-family-base, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
   }
 
   .pagination-controls {

@@ -131,6 +131,8 @@
     },
     "homepage": {
         "hero_title": "Patrick Laumond",
+        "hero_title_top": "Patrick",
+        "hero_title_bottom": "Laumond",
         "hero_subtitle_1": "Artiste contemporain",
         "hero_subtitle_2": "Créateur du Métahisme",
         "hero_description_1": "Un univers où l'art devient métaphore,",
@@ -191,6 +193,7 @@
     },
     "header": {
         "search_placeholder": "Rechercher une œuvre...",
+        "search_placeholder_short": "Recherche…",
         "switch_to_en": "Passer en anglais",
         "switch_to_fr": "Passer en français",
         "menu_open": "Ouvrir le menu",
@@ -205,7 +208,8 @@
         "next": "Suivant",
         "loading": "Chargement...",
         "error": "Une erreur est survenue",
-        "retry": "Réessayer"
+        "retry": "Réessayer",
+        "search": "Rechercher"
     },
     "gallery": {
         "default_title": "Galerie",

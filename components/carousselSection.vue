@@ -1,33 +1,33 @@
 <template>
   <div class="carousels-container">
-    <div class="carousel-wrapper">
-      <template
-        v-if="
-          link &&
-          !link.startsWith('http') &&
-          !link.endsWith('.jpg') &&
-          !link.endsWith('.png') &&
-          !link.endsWith('.jpeg') &&
-          !link.endsWith('.webp')
-        "
-      >
-        <NuxtLink :to="link">
-          <h2>{{ title }}</h2>
-          <div ref="carousel" class="carousel" @scroll="handleScroll">
-            <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
-              <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
-            </div>
-          </div>
-        </NuxtLink>
-      </template>
-      <template v-else>
-        <h2>{{ title }}</h2>
-        <div ref="carousel" class="carousel" @scroll="handleScroll">
-          <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
-            <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
-          </div>
+    <div class="carousel-header-wrapper">
+      <div class="carousel-header">
+        <template
+          v-if="
+            link &&
+            !link.startsWith('http') &&
+            !link.endsWith('.jpg') &&
+            !link.endsWith('.png') &&
+            !link.endsWith('.jpeg') &&
+            !link.endsWith('.webp')
+          "
+        >
+          <NuxtLink :to="link" class="carousel-title-link">
+            <h2 class="carousel-title">{{ title }}</h2>
+          </NuxtLink>
+        </template>
+        <template v-else>
+          <h2 class="carousel-title">{{ title }}</h2>
+        </template>
+        <div class="carousel-divider"></div>
+      </div>
+    </div>
+    <div class="carousel-full-width">
+      <div ref="carousel" class="carousel" @scroll="handleScroll">
+        <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
+          <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
         </div>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -76,22 +76,63 @@
   .carousels-container {
     display: flex;
     flex-direction: column;
-  }
-
-  .carousel-wrapper {
-    position: relative;
+    font-family:
+      var(--font-family-base, 'Inter'),
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
     width: 100%;
   }
 
-  .carousel-wrapper a {
+  .carousel-header-wrapper {
+    max-width: var(--max-width-content, 1200px);
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 4vw, 2rem) 1cm;
+    width: 100%;
+  }
+
+  .carousels-container > .carousel-header-wrapper:first-child {
+    padding-top: 1rem;
+  }
+
+  .carousel-header {
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .carousel-full-width {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: 0.25rem;
+  }
+
+  .carousel-title-link {
     text-decoration: none;
   }
 
-  .carousel-wrapper h2 {
-    text-align: center;
-    color: #525252;
-    font-size: 1.8em;
-    font-weight: bold;
+  .carousel-title {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+    color: #757b7d;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: block;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .carousel-divider {
+    width: 110px;
+    height: 3px;
+    background: #a20101;
+    margin: 0;
   }
 
   .carousel {
@@ -99,9 +140,11 @@
     overflow-x: scroll;
     scroll-behavior: smooth;
     gap: 20px;
-    width: 100vw;
+    width: 100%;
+    padding: 0 clamp(1.5rem, 4vw, 2rem);
     white-space: nowrap;
     position: relative;
+    box-sizing: border-box;
   }
 
   .carousel::-webkit-scrollbar {
@@ -127,6 +170,60 @@
   @media (max-width: 1024px) {
     .carousel-item {
       width: 400px;
+    }
+  }
+
+  @media (max-width: 1400px) {
+    .carousel-title {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 1120px) {
+    .carousel-title {
+      font-size: 1.05rem;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .carousel-title {
+      font-size: 1.05rem;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .carousel-title {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .carousel-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.12em;
+    }
+
+    .carousel-divider {
+      width: 40px;
+      height: 2px;
+    }
+
+    .carousel-header {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .carousel-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .carousel-divider {
+      width: 35px;
+      height: 2px;
     }
   }
 </style>

@@ -64,6 +64,7 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    font-family: var(--font-family-base, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
 
     h1 {
       text-align: center;

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <!-- Composant multi-mot : AnalysesPage -->
   <div class="analyses-page">
@@ -36,7 +37,7 @@
           </div>
           <div class="author-details">
             <span class="author-name">{{ getAuthor(currentTab) }}</span>
-            <span class="author-title">{{ t('analyses.author_title') }}</span>
+            <span class="author-title">{{ getAuthorTitle(currentTab) }}</span>
           </div>
         </div>
       </div>
@@ -341,6 +342,17 @@
     return authorAvatars[tab.author as string] || authorAvatars.default;
   };
 
+  const getAuthorTitle = (tab: ITab): string => {
+    if (!tab || !tab.author) return t('analyses.author_title');
+    if (tab.author === 'Edith Herlemont-Lassiat') {
+      return `${t('analyses.author_title')} - Exporevue`;
+    }
+    if (tab.author === 'Marion Zilio') {
+      return `${t('analyses.author_title')} - AICA France`;
+    }
+    return t('analyses.author_title');
+  };
+
   const openModal = (index: number): void => {
     currentImageIndex.value = index;
     showModal.value = true;
@@ -436,9 +448,14 @@
     margin: 1.5rem 0 2rem;
 
     .article-title {
-      font-size: 1.8rem;
-      margin-bottom: 0.4rem;
-      color: #333;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+      color: #757b7d;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      display: block;
+      line-height: 1.2;
       text-align: left;
     }
 
@@ -795,7 +812,7 @@
       align-items: flex-start;
 
       .article-title {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         text-align: left;
       }
     }
@@ -865,7 +882,7 @@
       align-items: flex-start;
 
       .article-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         text-align: left;
       }
     }

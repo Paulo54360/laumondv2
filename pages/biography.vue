@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="Biographie">
     <div class="text-container">
@@ -199,15 +200,19 @@
     flex-direction: row;
     align-items: flex-start;
     position: relative;
-    padding-right: 80px;
   }
 
   .Biographie .nav-menu {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    right: 40px;
-    top: 120px;
+    position: sticky;
+    top: 100px;
+    right: 50px;
+    align-self: flex-start;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    min-width: max-content;
+    flex-shrink: 0;
   }
 
   .Biographie .nav-menu a {
@@ -216,7 +221,11 @@
     transition:
       color 0.2s ease-in-out,
       transform 0.2s ease-in-out;
-    padding: 20px;
+    padding: 4px 20px;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+    overflow: visible;
   }
 
   .Biographie .nav-menu a:hover {

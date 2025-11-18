@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="app-layout">
     <Navbar />
@@ -16,7 +17,7 @@
 
 <style lang="scss">
   :root {
-    --header-height: 80px;
+    --header-height: 40px;
     --max-width-content: 1200px;
     --color-background: #ffffff;
     --color-background-alt: #f8f9fa;
@@ -29,7 +30,7 @@
     min-height: 100vh;
 
     .main-content {
-      padding-top: var(--header-height);
+      padding-top: 0;
     }
   }
 

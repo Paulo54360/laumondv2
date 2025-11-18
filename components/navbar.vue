@@ -1,16 +1,100 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <header class="navbar" :class="{ 'navbar-scrolled': isScrolled }">
     <div class="navbar-container">
       <!-- Logo / Titre -->
       <div class="navbar-brand">
         <NuxtLink :to="localePath('/')" class="brand-link">
-          <h1 class="brand-title">Patrick Laumond</h1>
-          <span class="brand-subtitle">{{ $t('navbar.MétaHisme') }}</span>
+          <div class="brand-title">
+            <span class="brand-name-top">Patrick</span>
+            <span class="brand-name-bottom">Laumond</span>
+          </div>
         </NuxtLink>
       </div>
 
+      <!-- Barre de recherche desktop -->
+      <div v-if="!isCompactSearch" class="navbar-search navbar-search--desktop">
+        <input
+          v-model="searchQuery"
+          type="text"
+          class="search-input"
+          :placeholder="searchPlaceholder"
+          @keyup.enter="performSearch"
+        />
+        <button
+          class="search-button"
+          :aria-label="$t('header.search_placeholder')"
+          @click="performSearch"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </div>
+      <button
+        v-else
+        class="navbar-search-trigger"
+        :aria-label="$t('header.search_placeholder')"
+        @click="openSearchPanel"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      </button>
+
       <!-- Navigation principale -->
       <nav class="navbar-nav" :class="{ 'navbar-nav-open': isMobileMenuOpen }">
+        <div v-if="isMobileMenuOpen" class="navbar-search navbar-search--mobile">
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="search-input"
+            :placeholder="$t('header.search_placeholder')"
+            @keyup.enter="performSearch"
+          />
+          <button
+            class="search-button"
+            :aria-label="$t('header.search_placeholder')"
+            @click="performSearch"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+        </div>
         <ul class="nav-list">
           <li class="nav-item">
             <NuxtLink
@@ -98,14 +182,34 @@
       </button>
     </div>
   </header>
+  <Teleport to="body">
+    <div v-if="isSearchPanelOpen" class="search-panel-overlay" @click.self="closeSearchPanel">
+      <div class="search-panel">
+        <input
+          v-model="searchQuery"
+          type="text"
+          class="search-panel-input"
+          :placeholder="$t('header.search_placeholder')"
+          autofocus
+          @keyup.enter="performSearch"
+        />
+        <button class="search-panel-btn" @click="performSearch">
+          {{ $t('common.search') ?? 'OK' }}
+        </button>
+        <button class="search-panel-close" aria-label="Close search" @click="closeSearchPanel">
+          ✕
+        </button>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
   import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
 
-  import { useNuxtApp } from '#app';
-  import { useLocalePath, useSwitchLocalePath } from '#imports';
+  // @ts-expect-error - Provided by Nuxt auto-imports at build time
+  import { useLocalePath, useNuxtApp, useSwitchLocalePath } from '#imports';
 
   const route = useRoute();
   const router = useRouter();
@@ -115,6 +219,9 @@
 
   const isScrolled = ref(false);
   const isMobileMenuOpen = ref(false);
+  const searchQuery = ref('');
+  const isCompactSearch = ref(false);
+  const isSearchPanelOpen = ref(false);
 
   // Récupérer la locale actuelle
   const currentLocale = computed(() => {
@@ -139,34 +246,74 @@
     }
   };
 
+  const performSearch = (): void => {
+    const value = searchQuery.value.trim();
+    if (!value) return;
+
+    const searchUrl = localePath({ path: '/search', query: { q: value } });
+    router.push(searchUrl);
+    searchQuery.value = '';
+  };
+
+  const openSearchPanel = (): void => {
+    isSearchPanelOpen.value = true;
+  };
+
+  const closeSearchPanel = (): void => {
+    isSearchPanelOpen.value = false;
+  };
+
   // Vérifier si une route est active
-  const isCurrentRoute = (path: string) => {
+  const isCurrentRoute = (path: string): boolean => {
     const cleanPath = route.path.replace(/^\/(fr|en)/, '') || '/';
     return cleanPath === path || (path === '/' && cleanPath === '');
   };
 
   // Gestion du scroll
-  const handleScroll = () => {
+  const handleScroll = (): void => {
     isScrolled.value = window.scrollY > 50;
   };
 
   // Gestion du menu mobile
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = (): void => {
     isMobileMenuOpen.value = !isMobileMenuOpen.value;
     if (process.client) {
       document.body.style.overflow = isMobileMenuOpen.value ? 'hidden' : '';
     }
   };
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = (): void => {
     isMobileMenuOpen.value = false;
     if (process.client) {
       document.body.style.overflow = '';
     }
   };
 
+  const searchPlaceholder = computed(() =>
+    isCompactSearch.value
+      ? $i18n.t('header.search_placeholder_short')
+      : $i18n.t('header.search_placeholder')
+  );
+
+  const updateSearchMode = (): void => {
+    if (!process.client) return;
+    const compact = window.innerWidth < 1100;
+    if (compact !== isCompactSearch.value) {
+      isCompactSearch.value = compact;
+      if (!compact) {
+        closeSearchPanel();
+      }
+    }
+  };
+
+  const handleKeydown = (event: KeyboardEvent): void => {
+    if (event.key === 'Escape' && isSearchPanelOpen.value) {
+      closeSearchPanel();
+    }
+  };
+
   // Fermer le menu mobile lors du clic extérieur
-  const handleClickOutside = (event: Event) => {
+  const handleClickOutside = (event: Event): void => {
     if (process.client) {
       const target = event.target as HTMLElement;
       const navbar = target.closest('.navbar');
@@ -180,13 +327,18 @@
   onMounted(() => {
     if (process.client) {
       window.addEventListener('scroll', handleScroll);
+      window.addEventListener('resize', updateSearchMode);
+      window.addEventListener('keydown', handleKeydown);
       document.addEventListener('click', handleClickOutside);
+      updateSearchMode();
     }
   });
 
   onUnmounted(() => {
     if (process.client) {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateSearchMode);
+      window.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('click', handleClickOutside);
       document.body.style.overflow = '';
     }
@@ -197,16 +349,14 @@
     () => route.path,
     () => {
       closeMobileMenu();
+      closeSearchPanel();
     }
   );
 </script>
 
 <style lang="scss" scoped>
   .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     z-index: 1000;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -222,11 +372,98 @@
     .navbar-container {
       max-width: var(--max-width-content);
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 1rem 2rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: var(--header-height, 80px);
+      gap: clamp(1rem, 3vw, 2rem);
+      min-height: var(--header-height, 80px);
+    }
+
+    .navbar-search {
+      width: auto;
+      max-width: none;
+      display: flex;
+      align-items: stretch;
+      border: 1px solid rgba(117, 123, 125, 0.3);
+      border-radius: 0;
+      overflow: hidden;
+      background: #fff;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+      &:focus-within {
+        border-color: #cc0000;
+        box-shadow: 0 0 0 1px rgba(204, 0, 0, 0.15);
+      }
+
+      .search-input {
+        flex: 1 1 auto;
+        border: none;
+        padding: 0 0.75rem;
+        font-size: 0.9rem;
+        color: #404447;
+        height: 38px;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .search-button {
+        width: 44px;
+        border: none;
+        border-left: 1px solid rgba(117, 123, 125, 0.3);
+        background: transparent;
+        color: #757b7d;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          color 0.2s ease,
+          background-color 0.2s ease;
+
+        &:hover {
+          color: #cc0000;
+          background-color: rgba(204, 0, 0, 0.05);
+        }
+      }
+    }
+
+    .navbar-search--desktop {
+      justify-self: center;
+      width: clamp(240px, 18vw, 320px);
+    }
+
+    .navbar-search-trigger {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(117, 123, 125, 0.3);
+      background: transparent;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #757b7d;
+      cursor: pointer;
+      transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+
+      &:hover {
+        color: #cc0000;
+        border-color: #cc0000;
+        background-color: rgba(204, 0, 0, 0.05);
+      }
+    }
+
+    .navbar-search--mobile {
+      display: none;
+      width: 100%;
+      margin-bottom: 1.5rem;
     }
 
     .navbar-brand {
@@ -237,45 +474,54 @@
       }
 
       .brand-title {
-        font-size: 1.5rem;
-        font-weight: 300;
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        font-weight: 400;
         margin: 0;
         color: #757b7d;
-        letter-spacing: 0.05em;
         text-transform: uppercase;
-        line-height: 1.2;
+        line-height: 1.05;
+
+        .brand-name-top,
+        .brand-name-bottom {
+          display: block;
       }
 
-      .brand-subtitle {
-        font-size: 0.75rem;
-        color: var(--color-text-light, #999);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        display: block;
-        margin-top: 2px;
+        .brand-name-top {
+          letter-spacing: 0.25em;
+        }
+
+        .brand-name-bottom {
+          letter-spacing: 0.2em;
+        }
       }
     }
 
     .navbar-nav {
+      flex: 0 0 auto;
+      min-width: 0;
       display: flex;
       align-items: center;
-      gap: 3rem;
+      justify-content: flex-end;
+      gap: clamp(0.8rem, 1.8vw, 2.2rem);
 
       .nav-list {
         display: flex;
         align-items: center;
-        gap: 2.5rem;
+        gap: clamp(0.6rem, 1.5vw, 1.8rem);
         margin: 0;
         padding: 0;
         list-style: none;
+        flex-wrap: nowrap;
+        min-width: 0;
+        white-space: nowrap;
 
         .nav-item {
           .nav-link {
             text-decoration: none;
             color: #757b7d;
-            font-size: 0.9rem;
+            font-size: clamp(0.7rem, 1.4vw, 0.9rem);
             font-weight: 500;
-            letter-spacing: 0.1em;
+            letter-spacing: clamp(0.02em, 0.18vw, 0.08em);
             text-transform: uppercase;
             padding: 0.5rem 0;
             position: relative;
@@ -307,18 +553,18 @@
       .language-selector {
         display: flex;
         gap: 0.5rem;
-        padding-left: 1rem;
+        padding-left: clamp(0.5rem, 1vw, 1rem);
         border-left: 1px solid rgba(117, 123, 125, 0.2);
 
         .language-btn {
           display: flex;
           align-items: center;
-          gap: 0.3rem;
-          padding: 0.4rem 0.8rem;
+          gap: 0.25rem;
+          padding: 0.25rem 0.6rem;
           border: 1px solid rgba(117, 123, 125, 0.3);
           background: transparent;
           color: #757b7d;
-          font-size: 0.75rem;
+          font-size: clamp(0.6rem, 1vw, 0.72rem);
           font-weight: 500;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -352,6 +598,7 @@
       border: none;
       cursor: pointer;
       padding: 0;
+      margin-left: auto;
 
       .hamburger-line {
         width: 100%;
@@ -379,34 +626,149 @@
     }
 
     // Responsive
-    @media (max-width: 1024px) {
+    @media (max-width: 1400px) {
       .navbar-container {
-        padding: 0 1.5rem;
+        padding: 1rem 1.5rem;
+        gap: 0.5rem;
+      }
+
+      .navbar-brand {
+        .brand-title {
+          font-size: 1.25rem;
+        }
+      }
+
+      .navbar-search--desktop {
+        width: clamp(200px, 16vw, 260px);
       }
 
       .navbar-nav {
-        gap: 2rem;
+        gap: 1.8rem;
 
         .nav-list {
-          gap: 1.5rem;
+          gap: 1.2rem;
+        }
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .navbar-container {
+        padding: 1rem 1.5rem;
+        gap: 0.45rem;
+      }
+
+      .navbar-search--desktop {
+        width: clamp(170px, 14vw, 210px);
+
+        .search-input::placeholder {
+          color: transparent;
+        }
+      }
+
+      .navbar-nav {
+        gap: 1.5rem;
+
+        .nav-list {
+          gap: 1.1rem;
+
+          .nav-link {
+            font-size: 0.82rem;
+            letter-spacing: 0.07em;
+          }
+        }
+
+        .language-selector {
+          padding-left: 0.5rem;
+        }
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .navbar-container {
+        padding: 1rem 1.1rem;
+        gap: 0.3rem;
+      }
+
+      .navbar-brand {
+        .brand-title {
+          font-size: 1.05rem;
+        }
+      }
+
+      .navbar-search--desktop {
+        width: clamp(150px, 13vw, 190px);
+      }
+
+      .navbar-nav {
+        gap: 0.55rem;
+
+        .nav-list {
+          gap: 0.25rem;
+
+          .nav-link {
+            font-size: 0.62rem;
+            letter-spacing: 0.02em;
+          }
+        }
+
+        .language-selector {
+          gap: 0.25rem;
+
+          .language-btn {
+            padding: 0.18rem 0.4rem;
+            font-size: 0.58rem;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 980px) {
+      .navbar-container {
+        padding: 1rem;
+        gap: 0.25rem;
+      }
+
+      .navbar-brand {
+        .brand-title {
+          font-size: 0.95rem;
+        }
+      }
+
+      .navbar-search--desktop {
+        width: 150px;
+      }
+
+      .navbar-nav {
+        gap: 0.45rem;
+
+        .language-selector {
+          gap: 0.2rem;
+          padding-left: 0.15rem;
+
+          .language-btn {
+            padding: 0.16rem 0.35rem;
+            font-size: 0.52rem;
+          }
         }
       }
     }
 
     @media (max-width: 768px) {
       .navbar-container {
-        padding: 0 1rem;
-        height: 70px;
+        padding: 0.75rem 1rem;
+        height: auto;
+        min-height: 70px;
       }
 
       .navbar-brand {
         .brand-title {
           font-size: 1.3rem;
         }
-
-        .brand-subtitle {
-          font-size: 0.7rem;
         }
+
+      .navbar-search--desktop,
+      .navbar-search-trigger {
+        display: none;
       }
 
       .mobile-menu-btn {
@@ -434,6 +796,10 @@
           transform: translateY(0);
           opacity: 1;
           visibility: visible;
+        }
+
+        .navbar-search--mobile {
+          display: flex;
         }
 
         .nav-list {
@@ -475,17 +841,14 @@
 
     @media (max-width: 480px) {
       .navbar-container {
-        padding: 0 0.8rem;
-        height: 60px;
+        padding: 0.75rem 0.8rem;
+        height: auto;
+        min-height: 60px;
       }
 
       .navbar-brand {
         .brand-title {
           font-size: 1.1rem;
-        }
-
-        .brand-subtitle {
-          font-size: 0.65rem;
         }
       }
 
@@ -499,5 +862,58 @@
         padding: 1.5rem;
       }
     }
+  }
+
+  .search-panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1500;
+    padding: 1rem;
+  }
+
+  .search-panel {
+    width: min(480px, 90vw);
+    background: #fff;
+    border-radius: 4px;
+    padding: 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    position: relative;
+  }
+
+  .search-panel-input {
+    flex: 1;
+    border: 1px solid rgba(117, 123, 125, 0.4);
+    padding: 0.65rem 0.9rem;
+    font-size: 1rem;
+  }
+
+  .search-panel-btn {
+    border: none;
+    background: #cc0000;
+    color: #fff;
+    padding: 0.6rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .search-panel-close {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.5rem;
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #757b7d;
   }
 </style>

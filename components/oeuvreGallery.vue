@@ -1,14 +1,14 @@
 <template>
   <div class="carousels-container">
     <CarouselSection
-      :title="$t('gallery.categories.archetype')"
-      :images="imageUrlsArchetypes"
-      :link="archetypesLink"
-    />
-    <CarouselSection
       :title="$t('gallery.categories.deploiement')"
       :images="imageUrlsDeployments"
       :link="deploymentsLink"
+    />
+    <CarouselSection
+      :title="$t('gallery.categories.archetype')"
+      :images="imageUrlsArchetypes"
+      :link="archetypesLink"
     />
     <CarouselSection
       :title="$t('gallery.categories.transcriptions')"
@@ -77,8 +77,9 @@
 <style scoped>
   .carousels-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 0;
+    font-family: var(--font-family-base, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+    width: 100%;
   }
 </style>

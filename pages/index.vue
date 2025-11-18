@@ -1,8 +1,9 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="homepage">
     <!-- Hero Section - Approche contemplative -->
     <section class="hero-section">
-      <div class="hero-content">
+      <div class="hero-wrapper">
         <div class="hero-visual">
           <div class="viewer-360">
             <iframe
@@ -12,32 +13,18 @@
               allowfullscreen
               :title="$t('homepage.video_hint')"
             ></iframe>
+            <div class="viewer-overlay-top"></div>
           </div>
-          <div class="viewer-caption section-header">
-            <h2 class="section-title">
-              Le mobile d’ouverture des univers parallèles, 2022 — Œuvre interactive 360°
-            </h2>
-            <div class="section-divider"></div>
+          <div class="viewer-caption">
+            <h3 class="artwork-title">
+              Le mobile d'ouverture des univers parallèles, 2022 — Œuvre interactive 360°
+            </h3>
           </div>
         </div>
         <div class="hero-text">
-          <p class="hero-label">{{ $t('homepage.hero_metahisme') }}</p>
-          <h1 class="hero-name">{{ $t('homepage.hero_title') }}</h1>
-          <div class="hero-subtitles">
-            <span v-for="(subtitle, index) in heroSubtitles" :key="`subtitle-${index}`">
-              {{ subtitle }}
-            </span>
-          </div>
-          <div class="hero-descriptions">
-            <p v-for="(line, index) in heroDescriptions" :key="`desc-${index}`">
-              {{ line }}
-            </p>
-          </div>
-          <div class="hero-divider"></div>
-          <div class="hero-signature">
-            <span>{{ $t('homepage.portrait_name') }}</span>
-            <span>{{ $t('homepage.hero_metahisme') }}</span>
-          </div>
+          <h1 class="hero-name">
+            {{ $t('homepage.hero_title_top') }}<br />{{ $t('homepage.hero_title_bottom') }}
+          </h1>
         </div>
       </div>
     </section>
@@ -116,6 +103,7 @@
           </div>
           <div class="metahisme-text">
             <div class="metahisme-definition">
+              <h3 class="metahisme-declaration-title">{{ metahismeTitle }}</h3>
               <div class="text-content" :class="{ collapsed: !showFullMetahisme }">
                 <p>{{ metahismeText }}</p>
               </div>
@@ -233,13 +221,20 @@
 
   // Texte biographie et Métahisme - utilisation des traductions
   const biographyText = computed(() => t('homepage.biography_text'));
-  const metahismeText = computed(() => t('homepage.metahisme_text'));
-  const heroSubtitles = computed(() => [t('homepage.hero_subtitle_1'), t('homepage.hero_subtitle_2')]);
-  const heroDescriptions = computed(() => [
-    t('homepage.hero_description_1'),
-    t('homepage.hero_description_2'),
-    t('homepage.hero_description_3'),
-  ]);
+  const metahismeTextFull = computed(() => t('homepage.metahisme_text'));
+
+  // Séparer le titre "Déclaration non manifestée* du MétaHisme" du reste du texte
+  const metahismeTitle = computed(() => {
+    const fullText = metahismeTextFull.value;
+    const firstLineEnd = fullText.indexOf('\n\n');
+    return firstLineEnd !== -1 ? fullText.substring(0, firstLineEnd) : '';
+  });
+
+  const metahismeText = computed(() => {
+    const fullText = metahismeTextFull.value;
+    const firstLineEnd = fullText.indexOf('\n\n');
+    return firstLineEnd !== -1 ? fullText.substring(firstLineEnd + 2) : fullText;
+  });
 
   // Image "Le mobile d'ouverture des univers parallèles"
   const mobileOuvertureImageUrl = ref(
@@ -286,10 +281,17 @@
 <style lang="scss" scoped>
   .homepage {
     min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
     background: var(--color-background);
     color: var(--color-text);
-    padding-top: calc(var(--header-height) + 2.5rem);
-    scroll-padding-top: calc(var(--header-height) + 2rem);
+    padding-top: 0;
+    scroll-padding-top: 0;
+
+    // Masquer les éléments Viewmake dans les iframes
+    iframe {
+      pointer-events: auto;
+    }
   }
 
   // Sections générales
@@ -351,24 +353,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(3.5rem, 7vw, 4.5rem) clamp(1.5rem, 4vw, 2.5rem) clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1rem, 3vw, 2rem) clamp(1.5rem, 4vw, 2.5rem) clamp(2.5rem, 5vw, 3.5rem);
     position: relative;
     min-height: 60vh;
+    overflow: visible;
+    height: auto;
 
-    .hero-content {
+    .hero-wrapper {
       width: 100%;
-        max-width: 1400px;
+      max-width: 1400px;
       box-sizing: border-box;
       margin: 0 auto;
       padding: 0 clamp(1rem, 4vw, 3rem);
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-        gap: clamp(2rem, 5vw, 4rem);
-        align-items: stretch;
+      display: flex;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 4rem);
+      overflow: visible;
 
       .hero-visual {
         position: relative;
-        width: 100%;
+        flex: 1.2;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        order: 2;
 
         .viewer-360 {
           width: 100%;
@@ -377,11 +385,22 @@
           position: relative;
           border: none;
           border-radius: 0;
-          overflow: hidden;
+          overflow: visible;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
           transition:
             transform 0.2s ease,
             box-shadow 0.2s ease;
+          // Overlay pour masquer les contrôles en haut
+          .viewer-overlay-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: transparent;
+            z-index: 999 !important;
+            pointer-events: none;
+          }
 
           &:hover {
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
@@ -480,73 +499,48 @@
           }
         }
 
-        .hero-text {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: flex-start;
-          padding: clamp(1rem, 3vw, 2.5rem) 0;
-          color: #5e6266;
-          text-transform: uppercase;
-          gap: 0.75rem;
+        .viewer-caption {
+          margin-top: 1.25rem;
+          text-align: left;
 
-          .hero-label {
-            font-size: 0.85rem;
-            letter-spacing: 0.3em;
-            color: #8a8f93;
-            margin: 0;
-          }
-
-          .hero-name {
-            font-size: clamp(2.8rem, 5vw, 3.8rem);
-            font-weight: 300;
-            letter-spacing: 0.3em;
-            margin: 0;
-            color: #2d3034;
-          }
-
-          .hero-subtitles {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-
-            span {
-              font-size: 0.9rem;
-              letter-spacing: 0.25em;
-              color: #7f8488;
-            }
-          }
-
-          .hero-descriptions {
-            margin-top: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
+          .artwork-title {
+            font-size: 1rem;
+            font-weight: 400;
+            margin: 0 0 0.5rem 0;
+            color: var(--color-text-light);
+            transition: color var(--transition-medium);
             text-transform: none;
-
-            p {
-              margin: 0;
-              font-size: 0.95rem;
-              letter-spacing: 0.05em;
-              text-transform: none;
-              color: #505457;
-            }
+            letter-spacing: normal;
+            line-height: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
           }
+        }
+      }
 
-          .hero-divider {
-            width: 80px;
-            height: 3px;
-            background: #a20101;
-            margin: 1rem 0 0.5rem;
-          }
+      .hero-text {
+        flex: 0.8;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0;
+        order: 1;
 
-          .hero-signature {
-            display: flex;
-            gap: 1.25rem;
-            font-size: 0.85rem;
-            letter-spacing: 0.25em;
-            color: #7f8488;
-          }
+        .hero-name {
+          margin: 0;
+          color: #2d3034;
+          text-transform: uppercase;
+          font-weight: 400;
+          line-height: 1.1;
+          font-size: clamp(1.49rem, 3.5vw, 2.69rem);
+          letter-spacing: 0.3em;
+          text-align: left;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
+          max-width: 100%;
         }
       }
     }
@@ -700,6 +694,15 @@
       .metahisme-text {
         .metahisme-definition {
           margin-top: 0.5rem;
+
+          .metahisme-declaration-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: #5e6266;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+          }
 
           .text-content {
             p {
@@ -968,17 +971,26 @@
   // Responsive - Tablette
   @media (max-width: 1024px) {
     .hero-section {
-      .hero-content {
+      .hero-wrapper {
+        flex-direction: column;
         gap: 2.5rem;
-        grid-template-columns: 1fr;
         padding: 0 1.5rem;
+
+        .hero-visual {
+          flex: 1;
+          order: 2;
+        }
       }
 
       .hero-text {
-        padding: 0 0 2rem;
+        flex: 1;
+        padding: 0;
+        min-height: auto;
+        order: 1;
 
         .hero-name {
-          font-size: 3rem;
+          font-size: 2.19rem;
+          text-align: left;
         }
       }
     }
@@ -1018,75 +1030,85 @@
   // Responsive - Mobile
   @media (max-width: 768px) {
     .homepage {
-      padding-top: calc(var(--header-height) + 1.5rem);
+      padding-top: 0;
+      scroll-padding-top: 0;
     }
 
     .hero-section {
-      padding: 1.5rem 0 0.5rem;
+      padding: 3rem 0 0.5rem;
       min-height: auto;
+      overflow: visible;
+      height: auto;
 
-      .hero-content {
-        grid-template-columns: 1fr;
+      .hero-wrapper {
+        flex-direction: column;
         gap: 2.5rem;
         padding: 0;
         max-width: 100%;
+        overflow: visible;
+
+        .hero-visual {
+          flex: 1;
+          order: 2;
+        }
+
+        .hero-text {
+          order: 1;
+          padding-top: 2rem;
+        }
       }
 
       .hero-visual {
         padding: 0 1rem;
         box-sizing: border-box;
+        overflow: visible;
+        width: 100%;
 
         .viewer-360 {
-          aspect-ratio: 4/3;
-          min-height: 320px;
+          aspect-ratio: 16/9;
           width: 100%;
-          margin: 0 auto;
+          max-width: 100%;
+          margin: 0;
+          padding: 0;
           box-shadow: none;
           border-radius: 0;
+          overflow: visible;
+
+          .video {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+          }
         }
 
         .viewer-caption {
           margin-top: 1.25rem;
           text-align: left;
 
-          .viewer-title {
-            font-size: 1.75rem;
-            font-weight: 300;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--color-text);
-            margin: 0;
-            line-height: 1.3;
+          .artwork-title {
+            font-size: 1rem;
+            font-weight: 400;
+            margin: 0 0 0.5rem 0;
+            color: var(--color-text-light);
+            transition: color var(--transition-medium);
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
           }
         }
       }
 
       .hero-text {
-        padding: 0 1rem 1.5rem;
-        gap: 0.5rem;
-
-        .hero-label {
-          letter-spacing: 0.2em;
-        }
+        flex: 1;
+        padding: 0;
+        min-height: auto;
 
         .hero-name {
-          font-size: 2.2rem;
-          letter-spacing: 0.18em;
-        }
-
-        .hero-subtitles span {
-          font-size: 0.85rem;
-          letter-spacing: 0.18em;
-        }
-
-        .hero-descriptions p {
-          font-size: 0.9rem;
-        }
-
-        .hero-signature {
-          flex-direction: column;
-          gap: 0.35rem;
-          letter-spacing: 0.15em;
+          font-size: 1.49rem;
+          text-align: left;
         }
       }
     }
@@ -1251,28 +1273,54 @@
   // Responsive - Petit mobile
   @media (max-width: 480px) {
     .homepage {
-      padding-top: calc(var(--header-height) + 0.5rem);
+      padding-top: 0;
+      scroll-padding-top: 0;
     }
 
     .hero-section {
-      padding: 1rem 0 0;
+      padding: 2.5rem 0 0;
+      overflow: visible;
+      height: auto;
 
-      .hero-content {
+      .hero-wrapper {
+        flex-direction: column;
         gap: 2rem;
         padding: 0;
         max-width: 100%;
+        overflow: visible;
+
+        .hero-visual {
+          flex: 1;
+          order: 2;
+        }
+
+        .hero-text {
+          order: 1;
+          padding-top: 1.5rem;
+        }
       }
 
       .hero-visual {
         padding: 0 0.8rem;
         box-sizing: border-box;
+        overflow: visible;
+        width: 100%;
 
         .viewer-360 {
           width: 100%;
-          margin: 0 auto;
+          max-width: 100%;
+          margin: 0;
+          padding: 0;
           aspect-ratio: 16/9;
           border-radius: 0;
           box-shadow: none;
+          overflow: visible;
+
+          .video {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+          }
 
           .fullscreen-button {
             top: 0.4rem;
@@ -1288,9 +1336,17 @@
         .viewer-caption {
           margin-top: 1rem;
 
-          .viewer-title {
-            font-size: 1.4rem;
-            letter-spacing: 0.06em;
+          .artwork-title {
+            font-size: 0.95rem;
+            margin: 0 0 0.4rem 0;
+            color: var(--color-text-light);
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
           }
         }
       }

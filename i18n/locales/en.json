@@ -131,6 +131,8 @@
     },
     "homepage": {
         "hero_title": "Patrick Laumond",
+        "hero_title_top": "Patrick",
+        "hero_title_bottom": "Laumond",
         "hero_subtitle_1": "Contemporary artist",
         "hero_subtitle_2": "Creator of Metahism",
         "hero_description_1": "A universe where art becomes metaphor,",
@@ -191,6 +193,7 @@
     },
     "header": {
         "search_placeholder": "Search for an artwork...",
+        "search_placeholder_short": "Search…",
         "switch_to_en": "Switch to English",
         "switch_to_fr": "Switch to French",
         "menu_open": "Open menu",
@@ -205,7 +208,8 @@
         "next": "Next",
         "loading": "Loading...",
         "error": "An error occurred",
-        "retry": "Retry"
+        "retry": "Retry",
+        "search": "Search"
     },
     "gallery": {
         "default_title": "Gallery",
