@@ -11,12 +11,18 @@
     "rootDir": ".",
     "moduleResolution": "node",
     "allowJs": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "#imports": ["types/nuxt-imports"],
+      "#app": ["types/nuxt-app"]
+    }
   },
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["scripts/**/*"],
+  "include": ["scripts/**/*", "types/**/*"],
   "exclude": ["node_modules"]
 }

@@ -1,6 +1,5 @@
-import { ref } from 'vue';
-
-import { useRuntimeConfig } from '#app';
+// @ts-expect-error - Provided by Nuxt auto-imports at build time
+import { useRuntimeConfig } from '#imports';
 
 interface IArtwork {
   title: string;
@@ -8,11 +7,15 @@ interface IArtwork {
   images: string[];
 }
 
-export default function useS3() {
+export default function useS3(): {
+  getArtworks: (category: string) => Promise<IArtwork[]>;
+  getArtworkImages: (category: string, folder: string) => Promise<string[]>;
+  getArtworkDescription: (category: string, folder: string) => Promise<string>;
+} {
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl;
 
-  const getArtworkImages = async (category: string, folder: string): Promise<string[]> => {
+  const getArtworkImages = (category: string, folder: string): Promise<string[]> => {
     try {
       // Construire les URLs des images en fonction de la catégorie
       const imageUrls: string[] = [];
@@ -24,10 +27,10 @@ export default function useS3() {
         imageUrls.push(imageUrl);
       }
 
-      return imageUrls;
+      return Promise.resolve(imageUrls);
     } catch (error) {
       console.error('Error fetching images:', error);
-      return [];
+      return Promise.resolve([]);
     }
   };
 

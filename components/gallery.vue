@@ -42,19 +42,31 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { ref, computed, onMounted } from 'vue';
 
   const props = defineProps({
-    title: String,
-    apiUrl: String,
-    subfolders: Array,
-    fileRanges: Array,
+    title: {
+      type: String,
+      default: '',
+    },
+    apiUrl: {
+      type: String,
+      default: '',
+    },
+    subfolders: {
+      type: Array,
+      default: () => [],
+    },
+    fileRanges: {
+      type: Array,
+      default: () => [],
+    },
   });
 
-  const imageUrls = ref([]);
-  const titles = ref({});
-  const currentImageIndex = ref(null);
+  const imageUrls = ref<string[]>([]);
+  const titles = ref<Record<string, string>>({});
+  const currentImageIndex = ref<number | null>(null);
   const itemsPerPage = ref(10);
   const currentPage = ref(0);
 
@@ -66,9 +78,11 @@
 
   const paginatedImages = computed(() => imageUrls.value.slice(startIndex.value, endIndex.value));
 
-  const loadImages = async () => {
-    for (const [i, subfolder] of props.subfolders.entries()) {
-      for (let j = props.fileRanges[i][0]; j <= props.fileRanges[i][1]; j++) {
+  const loadImages = async (): Promise<void> => {
+    const subfolders = props.subfolders as string[];
+    const fileRanges = props.fileRanges as Array<[number, number]>;
+    for (const [i, subfolder] of subfolders.entries()) {
+      for (let j = fileRanges[i][0]; j <= fileRanges[i][1]; j++) {
         const num = j.toString().padStart(2, '0');
         const imageUrl = `${props.apiUrl}/${subfolder}/${num}.jpg`;
         const textUrl = `${props.apiUrl}/${subfolder}/${num}.txt`;
@@ -83,19 +97,19 @@
     }
   };
 
-  const prevPage = () => {
+  const prevPage = (): void => {
     if (currentPage.value > 0) currentPage.value--;
   };
 
-  const nextPage = () => {
+  const nextPage = (): void => {
     if (endIndex.value < totalItems.value) currentPage.value++;
   };
 
-  const openModal = (index) => {
+  const openModal = (index: number): void => {
     currentImageIndex.value = index + startIndex.value;
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     currentImageIndex.value = null;
   };
 
@@ -153,7 +167,8 @@
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.117);
     transition: transform 0.3s ease-in-out;
-    background-color: #f5f5f5; /* Ajoute un fond pour éviter l'effet de vide autour des images plus petites */
+    /* Ajoute un fond pour éviter l'effet de vide autour des images plus petites */
+    background-color: #f5f5f5;
   }
 
   .image-item img:hover {

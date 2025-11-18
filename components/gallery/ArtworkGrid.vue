@@ -31,11 +31,13 @@
   import { ref, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
 
-  interface Props {
+  import useS3 from '../../composables/useS3';
+
+  interface IProps {
     category: string;
   }
 
-  const props = defineProps<Props>();
+  const props = defineProps<IProps>();
   const { getArtworks } = useS3();
   const { t } = useI18n();
 

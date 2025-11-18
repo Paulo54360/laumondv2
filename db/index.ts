@@ -9,7 +9,20 @@ export const supabase = createClient(
 );
 
 // Helper pour la recherche d'œuvres
-export async function searchArtworks(searchTerm: string) {
+export async function searchArtworks(searchTerm: string): Promise<
+  Array<{
+    id: number;
+    title: string;
+    description: string | null;
+    imageUrls: string[];
+    folderPath: string | null;
+    subcategory: string | null;
+    createdAt: string | null;
+    updatedAt: string | null;
+    categoryId: number | null;
+    category: { id: number; name: string; path: string } | null;
+  }>
+> {
   const { data, error } = await supabase
     .from('artworks')
     .select(
@@ -39,7 +52,7 @@ export async function searchArtworks(searchTerm: string) {
   return (
     data?.map((artwork) => {
       // Traiter les URLs d'images
-      let urls = [];
+      let urls: string[] = [];
       try {
         // Vérifier si image_urls existe
         if (artwork.image_urls) {
@@ -98,7 +111,10 @@ export async function searchArtworks(searchTerm: string) {
         updatedAt: artwork.updated_at,
         categoryId: artwork.category_id,
         // Renommer la propriété categories en category pour compatibilité
-        category: artwork.categories,
+        category:
+          Array.isArray(artwork.categories) && artwork.categories.length > 0
+            ? artwork.categories[0]
+            : (artwork.categories as { id: number; name: string; path: string } | null) || null,
       };
     }) || []
   );

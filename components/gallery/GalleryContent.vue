@@ -26,32 +26,33 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, inject } from 'vue';
+  import { computed, inject, type Ref, ref } from 'vue';
   import { useI18n } from 'vue-i18n';
 
-  const props = defineProps<{
+  defineProps<{
     title: string;
   }>();
 
-  const imageUrls = inject('imageUrls') as string[];
-  const showModal = inject('showModal') as any;
-  const openModal = inject('openModal') as (index: number) => void;
-  const itemsPerPage = inject('itemsPerPage') as number;
-  const currentPage = inject('currentPage') as any;
-  const totalPages = inject('totalPages') as any;
+  const imageUrls = inject<Ref<string[]>>('imageUrls', ref([]));
+  const openModal = inject<(index: number) => void>('openModal', () => {});
+  const itemsPerPage = inject<number>('itemsPerPage', 12);
+  const currentPage = inject<Ref<number>>('currentPage', ref(1));
+  const totalPages = inject<Ref<number>>('totalPages', ref(1));
 
   const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage);
-  const endIndex = computed(() => Math.min(startIndex.value + itemsPerPage, imageUrls.length));
-  const displayedImages = computed(() => imageUrls.slice(startIndex.value, endIndex.value));
+  const endIndex = computed(() =>
+    Math.min(startIndex.value + itemsPerPage, imageUrls.value.length)
+  );
+  const displayedImages = computed(() => imageUrls.value.slice(startIndex.value, endIndex.value));
   const { t } = useI18n();
 
-  const previousPage = () => {
+  const previousPage = (): void => {
     if (currentPage.value > 1) {
       currentPage.value--;
     }
   };
 
-  const nextPage = () => {
+  const nextPage = (): void => {
     if (currentPage.value < totalPages.value) {
       currentPage.value++;
     }

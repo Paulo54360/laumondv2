@@ -32,35 +32,26 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { ref, onMounted } from 'vue';
 
   // Définition des props
-  const props = defineProps({
-    title: {
-      type: String,
-      required: true,
-    },
-    images: {
-      type: Array,
-      required: true,
-    },
-    link: {
-      type: String,
-      default: '#',
-    },
-  });
+  const props = defineProps<{
+    title: string;
+    images: string[];
+    link?: string;
+  }>();
 
-  const carousel = ref(null);
-  const dynamicImages = ref([...props.images, ...props.images]); // Initialiser avec des images dupliquées
+  const carousel = ref<HTMLElement | null>(null);
+  const dynamicImages = ref<string[]>([...props.images, ...props.images]); // Initialiser avec des images dupliquées
 
   // Fonction pour ajouter dynamiquement des images à la fin
-  const addMoreImages = () => {
+  const addMoreImages = (): void => {
     dynamicImages.value.push(...props.images);
   };
 
   // Fonction pour gérer le défilement infini fluide
-  const handleScroll = () => {
+  const handleScroll = (): void => {
     if (!carousel.value) return;
 
     const scrollLeft = carousel.value.scrollLeft;

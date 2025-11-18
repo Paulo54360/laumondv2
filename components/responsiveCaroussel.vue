@@ -22,7 +22,10 @@
   import { useI18n } from 'vue-i18n';
 
   defineProps({
-    images: Array,
+    images: {
+      type: Array,
+      default: () => [],
+    },
   });
 
   const { t } = useI18n();

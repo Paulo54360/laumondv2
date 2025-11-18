@@ -21,14 +21,13 @@
           :alt="currentTab.title"
           @click="openModal(0)"
         />
-        <div class="image-info">
-          <h2 class="image-title">{{ currentTab.title }}</h2>
-          <div v-if="currentTab.location" class="image-location">{{ currentTab.location }}</div>
-          <div class="image-copyright">{{ currentTab.copyright }}</div>
-        </div>
       </div>
 
-      <h2 class="article-title">{{ currentTab.title }}</h2>
+      <div class="article-title-row">
+        <h2 class="article-title">{{ currentTab.title }}</h2>
+        <div v-if="currentTab.location" class="article-location">{{ currentTab.location }}</div>
+        <div class="article-copyright">{{ currentTab.copyright }}</div>
+      </div>
 
       <div class="author-section">
         <div class="author-info">
@@ -140,10 +139,41 @@
 
   const { t } = useI18n();
 
-  const tabs: Tab[] = [
+  interface IParagraph {
+    text: string;
+    type?: 'normal' | 'quote' | 'citation' | 'emphasis' | 'poeticLine';
+    class?: string;
+  }
+
+  interface IAuthorSignature {
+    name: string;
+    title?: string;
+    date?: string;
+  }
+
+  interface IFootnote {
+    number: string;
+    text: string;
+  }
+
+  interface ITab {
+    id: string;
+    title: string;
+    images: string[];
+    translations: { fr: string; en: string };
+    author: string;
+    analysisTitle: string;
+    paragraphs: IParagraph[];
+    authorSignature: IAuthorSignature;
+    footnotes?: IFootnote[];
+    location?: string;
+    copyright: string;
+  }
+
+  const tabs: ITab[] = [
     {
       id: 'portant',
-      title: 'Le Portant',
+      title: 'Le Portant (524C)',
       images: [`${S3_BASE_URL}/Deployments/00/10.jpg`, `${S3_BASE_URL}/Deployments/00/11.jpg`],
       translations: {
         fr: '',
@@ -180,14 +210,18 @@
     {
       id: 'concordance',
       title: 'Concordance Universelle',
-      images: [`${S3_BASE_URL}/Deployments/00/02.jpg`, `${S3_BASE_URL}/Deployments/00/04.jpg`],
+      images: [
+        `${S3_BASE_URL}/Deployments/00/02.jpg`,
+        `${S3_BASE_URL}/Deployments/00/03.jpg`,
+        `${S3_BASE_URL}/Deployments/00/04.jpg`,
+      ],
       translations: {
         fr: '',
         en: '',
       },
       author: 'Marion Zilio',
       analysisTitle: t('CU.TitreCU'),
-      location: '',
+      location: 'Biennale de Venise 2022 — Centre Culturel Européen d’Italie, Palazzo Bembo.',
       copyright: '© Matteo Losurdo',
       paragraphs: [{ text: t('CU.TexteCU'), type: 'normal' }],
       authorSignature: {
@@ -199,7 +233,7 @@
     },
     {
       id: 'aimants',
-      title: 'Comme deux aimants',
+      title: "Le Mobile d'ouverture des univers parallèles",
       images: [`${S3_BASE_URL}/Deployments/00/06.jpg`],
       translations: {
         fr: '',
@@ -207,7 +241,7 @@
       },
       author: 'Marion Zilio',
       analysisTitle: t('CDA.TitreCDA'),
-      location: '',
+      location: 'Espace Labasse, Saint-Viance.',
       copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('CDA.Texte1CDA'), type: 'normal' },
@@ -231,7 +265,7 @@
       },
       author: 'Isabelle de Maison Rouge',
       analysisTitle: t('AQJA.TitreAQJA'),
-      location: '',
+      location: 'Le Grand Mikado de la pensée humaine.',
       copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('AQJA.Texte1AQJA'), type: 'normal' },
@@ -291,44 +325,15 @@
     default: `${S3_BASE_URL}/authors/default-avatar.jpg`,
   };
 
-  const currentTab = computed(() => tabs.find((tab) => tab.id === activeTab.value));
+  const currentTab = computed((): ITab | undefined =>
+    tabs.find((tab) => tab.id === activeTab.value)
+  );
 
-  interface Paragraph {
-    text: string;
-    type?: 'normal' | 'quote' | 'citation' | 'emphasis' | 'poeticLine';
-    class?: string;
-  }
-
-  interface AuthorSignature {
-    name: string;
-    title?: string;
-    date?: string;
-  }
-
-  interface Footnote {
-    number: string;
-    text: string;
-  }
-
-  interface Tab {
-    id: string;
-    title: string;
-    images: string[];
-    translations: { fr: string; en: string };
-    author: string;
-    analysisTitle: string;
-    paragraphs: Paragraph[];
-    authorSignature: AuthorSignature;
-    footnotes?: Footnote[];
-    location?: string;
-    copyright: string;
-  }
-
-  const getAuthor = (tab: Tab): string => {
+  const getAuthor = (tab: ITab): string => {
     return tab.author || t('analyses.unknown_author');
   };
 
-  const getAuthorAvatar = (tab: Tab): string => {
+  const getAuthorAvatar = (tab: ITab): string => {
     if (!tab || !tab.author) return authorAvatars.default;
     if (tab.author === 'Edith Herlemont-Lassiat') {
       return authorAvatars.default;
@@ -336,16 +341,16 @@
     return authorAvatars[tab.author as string] || authorAvatars.default;
   };
 
-  const openModal = (index: number) => {
+  const openModal = (index: number): void => {
     currentImageIndex.value = index;
     showModal.value = true;
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     showModal.value = false;
   };
 
-  const toggleShowMore = () => {
+  const toggleShowMore = (): void => {
     showFullText.value = !showFullText.value;
   };
 </script>
@@ -403,14 +408,17 @@
     width: 100%;
     overflow: hidden;
     margin-bottom: 30px;
-    text-align: center;
     background-color: transparent;
-    padding: 20px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 
     .main-image {
-      max-width: 100%;
-      max-height: 500px;
-      object-fit: contain;
+      width: 100%;
+      height: 620px;
+      object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
       box-shadow: none;
@@ -419,38 +427,32 @@
         transform: scale(1.02);
       }
     }
-
-    .image-info {
-      margin-top: 1rem;
-      text-align: left;
-
-      .image-title {
-        font-size: 1.2rem;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: var(--color-text);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      .image-location {
-        font-size: 0.9rem;
-        color: var(--color-text-light);
-        margin-bottom: 0.3rem;
-        font-style: italic;
-      }
-
-      .image-copyright {
-        font-size: 0.85rem;
-        color: var(--color-text-light);
-      }
-    }
   }
 
-  .article-title {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #333;
+  .article-title-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1.5rem 0 2rem;
+
+    .article-title {
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+      color: #333;
+      text-align: left;
+    }
+
+    .article-location {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      font-style: italic;
+      margin-bottom: 0.3rem;
+    }
+
+    .article-copyright {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+    }
   }
 
   .author-section {
@@ -781,35 +783,21 @@
 
     .main-image-container {
       margin-bottom: 1.5rem;
-      padding: 1rem 0;
+      padding: 0;
+      align-items: center;
+      text-align: center;
 
       .main-image {
-        max-height: 300px;
-      }
-
-      .image-info {
-        margin-top: 1rem;
-        padding: 0 0.5rem;
-
-        .image-title {
-          font-size: 1.1rem;
-          margin-bottom: 0.4rem;
-        }
-
-        .image-location {
-          font-size: 0.85rem;
-          margin-bottom: 0.2rem;
-        }
-
-        .image-copyright {
-          font-size: 0.8rem;
-        }
+        height: 380px;
       }
     }
+    .article-title-row {
+      align-items: flex-start;
 
-    .article-title {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
+      .article-title {
+        font-size: 1.4rem;
+        text-align: left;
+      }
     }
 
     .author-section {
@@ -864,34 +852,22 @@
     }
 
     .main-image-container {
-      padding: 0.8rem 0;
+      padding: 0;
       margin-bottom: 1rem;
+      align-items: center;
 
       .main-image {
-        max-height: 250px;
-      }
-
-      .image-info {
-        padding: 0 0.3rem;
-
-        .image-title {
-          font-size: 1rem;
-          margin-bottom: 0.3rem;
-        }
-
-        .image-location {
-          font-size: 0.8rem;
-        }
-
-        .image-copyright {
-          font-size: 0.75rem;
-        }
+        height: 280px;
       }
     }
 
-    .article-title {
-      font-size: 1.2rem;
-      margin-bottom: 0.8rem;
+    .article-title-row {
+      align-items: flex-start;
+
+      .article-title {
+        font-size: 1.2rem;
+        text-align: left;
+      }
     }
 
     .author-section {

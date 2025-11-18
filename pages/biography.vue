@@ -197,13 +197,17 @@
     scroll-behavior: smooth;
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+    padding-right: 80px;
   }
 
   .Biographie .nav-menu {
     display: flex;
     flex-direction: column;
     position: fixed;
-    right: 25px;
+    right: 40px;
+    top: 120px;
   }
 
   .Biographie .nav-menu a {
@@ -223,9 +227,10 @@
   .Biographie .text-container {
     font-size: 1.2em;
     line-height: 1.5em;
-    padding: 20px;
-    width: 80%;
-    margin: auto 300px auto auto;
+    padding: 20px 220px 40px 40px;
+    width: 100%;
+    max-width: 1250px;
+    margin: 0;
     text-align: justify;
   }
 
@@ -241,6 +246,7 @@
   @media only screen and (max-width: 768px) {
     .Biographie {
       flex-direction: column;
+      padding-right: 0;
     }
 
     .Biographie .nav-menu {
@@ -252,6 +258,7 @@
     .Biographie .text-container {
       margin-right: 0;
       width: 100%;
+      padding: 20px;
       text-align: left;
     }
   }

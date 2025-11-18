@@ -25,7 +25,9 @@
 </template>
 
 <script setup lang="ts">
-  interface Props {
+  import { ref, computed, watch } from 'vue';
+
+  interface IProps {
     show: boolean;
     artwork: {
       title: string;
@@ -34,7 +36,7 @@
     };
   }
 
-  const props = defineProps<Props>();
+  const props = defineProps<IProps>();
   const emit = defineEmits<{
     (e: 'close'): void;
   }>();

@@ -53,23 +53,23 @@
 
   const { t } = useI18n();
 
-  interface Props {
+  interface IProps {
     images: string[];
     title: string;
     translations: Record<string, string>;
   }
 
-  const props = defineProps<Props>();
+  defineProps<IProps>();
 
   const showModal = ref(false);
   const currentImageIndex = ref(0);
 
-  const openModal = (index: number) => {
+  const openModal = (index: number): void => {
     currentImageIndex.value = index;
     showModal.value = true;
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     showModal.value = false;
   };
 </script>

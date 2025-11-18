@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
 
@@ -7,11 +7,24 @@
   const { t } = useI18n();
 
   const query = ref('');
-  const results = ref([]);
+  const results = ref<
+    Array<{
+      id: number;
+      title: string;
+      description: string | null;
+      imageUrls: string[];
+      folderPath: string | null;
+      subcategory: string | null;
+      createdAt: string | null;
+      updatedAt: string | null;
+      categoryId: number | null;
+      category: { id: number; name: string; path: string } | null;
+    }>
+  >([]);
   const loading = ref(false);
-  const error = ref(null);
+  const error = ref<string | null>(null);
 
-  const search = async () => {
+  const search = async (): Promise<void> => {
     if (!query.value.trim()) return;
 
     loading.value = true;

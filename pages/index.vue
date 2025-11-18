@@ -3,10 +3,6 @@
     <!-- Hero Section - Approche contemplative -->
     <section class="hero-section">
       <div class="hero-content">
-        <div class="hero-text">
-          <h1 class="hero-title">{{ $t('homepage.hero_title') }}</h1>
-          <div class="hero-metahisme">{{ $t('homepage.hero_metahisme') }}</div>
-        </div>
         <div class="hero-visual">
           <div class="viewer-360">
             <iframe
@@ -16,15 +12,31 @@
               allowfullscreen
               :title="$t('homepage.video_hint')"
             ></iframe>
-            <button
-              class="fullscreen-button"
-              @click="openFullscreen"
-              :aria-label="$t('homepage.fullscreen_button')"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+          </div>
+          <div class="viewer-caption section-header">
+            <h2 class="section-title">
+              Le mobile d’ouverture des univers parallèles, 2022 — Œuvre interactive 360°
+            </h2>
+            <div class="section-divider"></div>
+          </div>
+        </div>
+        <div class="hero-text">
+          <p class="hero-label">{{ $t('homepage.hero_metahisme') }}</p>
+          <h1 class="hero-name">{{ $t('homepage.hero_title') }}</h1>
+          <div class="hero-subtitles">
+            <span v-for="(subtitle, index) in heroSubtitles" :key="`subtitle-${index}`">
+              {{ subtitle }}
+            </span>
+          </div>
+          <div class="hero-descriptions">
+            <p v-for="(line, index) in heroDescriptions" :key="`desc-${index}`">
+              {{ line }}
+            </p>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="hero-signature">
+            <span>{{ $t('homepage.portrait_name') }}</span>
+            <span>{{ $t('homepage.hero_metahisme') }}</span>
           </div>
         </div>
       </div>
@@ -41,7 +53,7 @@
           <div class="biography-visual">
             <div class="portrait-showcase">
               <img
-                src="https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg"
+                :src="biographyPortraitUrl"
                 :alt="$t('homepage.portrait_name')"
                 class="portrait-artwork"
               />
@@ -55,20 +67,6 @@
             <div class="biography-intro">
               <div class="text-content" :class="{ collapsed: !showFullBiography }">
                 <p>{{ biographyText }}</p>
-                <div class="biography-timeline">
-                  <div class="timeline-item">
-                    <span class="year">2000</span>
-                    <span class="event">{{ $t('homepage.timeline_2000') }}</span>
-                  </div>
-                  <div class="timeline-item">
-                    <span class="year">2010</span>
-                    <span class="event">{{ $t('homepage.timeline_2010') }}</span>
-                  </div>
-                  <div class="timeline-item">
-                    <span class="year">2020</span>
-                    <span class="event">{{ $t('homepage.timeline_2020') }}</span>
-                  </div>
-                </div>
               </div>
               <button class="show-more-button" @click="showFullBiography = !showFullBiography">
                 <img
@@ -87,7 +85,7 @@
             </div>
           </div>
         </div>
-        <div class="section-link">
+        <div v-if="showFullBiography" class="section-link">
           <NuxtLink :to="localePath('/biography')" class="artistic-link">{{
             $t('homepage.read_biography')
           }}</NuxtLink>
@@ -138,7 +136,7 @@
             </div>
           </div>
         </div>
-        <div class="section-link">
+        <div v-if="showFullMetahisme" class="section-link">
           <NuxtLink :to="localePath('/metahism')" class="artistic-link">{{
             $t('homepage.discover_metahisme')
           }}</NuxtLink>
@@ -224,33 +222,9 @@
   const iframe360 = ref<HTMLIFrameElement | null>(null);
   const showFullBiography = ref(false);
   const showFullMetahisme = ref(false);
-
-  // Fonction pour ouvrir en plein écran
-  const openFullscreen = async (): Promise<void> => {
-    const viewer = iframe360.value?.parentElement;
-    if (!viewer) return;
-
-    try {
-      if (viewer.requestFullscreen) {
-        await viewer.requestFullscreen();
-      } else if ('webkitRequestFullscreen' in viewer) {
-        // Safari
-        const safariViewer = viewer as HTMLElement & { webkitRequestFullscreen: () => Promise<void> };
-        await safariViewer.webkitRequestFullscreen();
-      } else if ('mozRequestFullScreen' in viewer) {
-        // Firefox
-        const firefoxViewer = viewer as HTMLElement & { mozRequestFullScreen: () => Promise<void> };
-        await firefoxViewer.mozRequestFullScreen();
-      } else if ('msRequestFullscreen' in viewer) {
-        // IE/Edge
-        const msViewer = viewer as HTMLElement & { msRequestFullscreen: () => Promise<void> };
-        await msViewer.msRequestFullscreen();
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'ouverture en plein écran:", error);
-    }
-  };
-
+  const biographyPortraitUrl = ref(
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg'
+  );
   // Générer les liens avec la locale actuelle
   const localePath = (path: string): string => {
     const localeFromPath = route.path?.match(/^\/(fr|en)/)?.[1] || locale.value || 'fr';
@@ -260,6 +234,12 @@
   // Texte biographie et Métahisme - utilisation des traductions
   const biographyText = computed(() => t('homepage.biography_text'));
   const metahismeText = computed(() => t('homepage.metahisme_text'));
+  const heroSubtitles = computed(() => [t('homepage.hero_subtitle_1'), t('homepage.hero_subtitle_2')]);
+  const heroDescriptions = computed(() => [
+    t('homepage.hero_description_1'),
+    t('homepage.hero_description_2'),
+    t('homepage.hero_description_3'),
+  ]);
 
   // Image "Le mobile d'ouverture des univers parallèles"
   const mobileOuvertureImageUrl = ref(
@@ -308,26 +288,28 @@
     min-height: 100vh;
     background: var(--color-background);
     color: var(--color-text);
-    padding-top: calc(var(--header-height) + 1rem);
+    padding-top: calc(var(--header-height) + 2.5rem);
+    scroll-padding-top: calc(var(--header-height) + 2rem);
   }
 
   // Sections générales
   .section {
-    padding: 5rem 2rem;
+    padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 2rem);
     min-height: auto;
     display: flex;
     align-items: flex-start;
 
     .section-container {
+      width: 100%;
       max-width: var(--max-width-content);
       margin: 0 auto;
-      width: 100%;
       padding-top: 0;
       padding-bottom: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       min-height: auto;
+      box-sizing: border-box;
     }
 
     .section-header {
@@ -336,20 +318,21 @@
       margin-top: 0;
 
       .section-title {
-        font-size: 2.8rem;
+        font-size: clamp(2rem, 4vw, 3.2rem);
         font-weight: 300;
-        margin-bottom: 1.5rem;
-        color: var(--color-text);
-        letter-spacing: 0.05em;
-        display: flex;
-        align-items: center;
+        margin-bottom: 1rem;
+        color: #5e6266;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: baseline;
         line-height: 1.2;
       }
 
       .section-divider {
-        width: 80px;
-        height: 2px;
-        background: var(--color-text);
+        width: 110px;
+        height: 3px;
+        background: #a20101;
         margin: 0;
       }
     }
@@ -368,39 +351,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: clamp(3.5rem, 7vw, 4.5rem) clamp(1.5rem, 4vw, 2.5rem) clamp(2.5rem, 5vw, 3.5rem);
     position: relative;
     min-height: 60vh;
 
     .hero-content {
-      max-width: var(--max-width-content);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 4rem;
-      align-items: center;
       width: 100%;
-
-      .hero-text {
-        text-align: left;
-
-        .hero-title {
-          font-size: 4.5rem;
-          font-weight: 200;
-          margin-bottom: 2rem;
-          color: var(--color-text);
-          letter-spacing: 0.02em;
-          line-height: 1.1;
-        }
-
-        .hero-metahisme {
-          font-size: 1.3rem;
-          font-weight: 300;
-          color: var(--color-text-light);
-          letter-spacing: 0.1em;
-          line-height: 1.6;
-        }
-      }
+        max-width: 1400px;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 3rem);
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+        gap: clamp(2rem, 5vw, 4rem);
+        align-items: stretch;
 
       .hero-visual {
         position: relative;
@@ -408,10 +372,11 @@
 
         .viewer-360 {
           width: 100%;
-          aspect-ratio: 16/9;
+          aspect-ratio: 3 / 2;
+          min-height: 520px;
           position: relative;
           border: none;
-          border-radius: 8px;
+          border-radius: 0;
           overflow: hidden;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
           transition:
@@ -498,7 +463,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease, transform 0.2s ease;
+            transition:
+              background 0.2s ease,
+              transform 0.2s ease;
             z-index: 10;
 
             &:hover {
@@ -512,6 +479,75 @@
             }
           }
         }
+
+        .hero-text {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          padding: clamp(1rem, 3vw, 2.5rem) 0;
+          color: #5e6266;
+          text-transform: uppercase;
+          gap: 0.75rem;
+
+          .hero-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: #8a8f93;
+            margin: 0;
+          }
+
+          .hero-name {
+            font-size: clamp(2.8rem, 5vw, 3.8rem);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin: 0;
+            color: #2d3034;
+          }
+
+          .hero-subtitles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+
+            span {
+              font-size: 0.9rem;
+              letter-spacing: 0.25em;
+              color: #7f8488;
+            }
+          }
+
+          .hero-descriptions {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            text-transform: none;
+
+            p {
+              margin: 0;
+              font-size: 0.95rem;
+              letter-spacing: 0.05em;
+              text-transform: none;
+              color: #505457;
+            }
+          }
+
+          .hero-divider {
+            width: 80px;
+            height: 3px;
+            background: #a20101;
+            margin: 1rem 0 0.5rem;
+          }
+
+          .hero-signature {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
+            color: #7f8488;
+          }
+        }
       }
     }
   }
@@ -523,14 +559,15 @@
     .biography-content {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-      gap: 4rem;
+      gap: 2.5rem;
       align-items: flex-start;
 
       .biography-text {
         max-width: 100%;
+        padding-top: 0.5rem;
 
         .biography-intro {
-          margin-bottom: 3rem;
+          margin-bottom: 2rem;
 
           .text-content {
             p {
@@ -582,27 +619,6 @@
             }
           }
         }
-
-        .biography-timeline {
-          .timeline-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-
-            .year {
-              font-size: 1.2rem;
-              font-weight: 600;
-              color: var(--color-text);
-              margin-right: 2rem;
-              min-width: 60px;
-            }
-
-            .event {
-              font-size: 0.9rem;
-              color: var(--color-text-light);
-            }
-          }
-        }
       }
 
       .biography-visual {
@@ -612,17 +628,17 @@
         .portrait-showcase {
           position: relative;
           overflow: hidden;
-          background: white;
-          border: 1px solid var(--color-border);
-          border-radius: 8px;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+          background: transparent;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
 
           .portrait-artwork {
             width: 100%;
             height: 500px;
             object-fit: cover;
             transition: transform var(--transition-medium);
-            border-radius: 8px;
+            border-radius: 0;
           }
 
           .portrait-overlay {
@@ -666,6 +682,15 @@
   .metahisme-section {
     background: var(--color-background-alt);
 
+    .section-header {
+      margin-top: 0.75rem;
+
+      .section-title {
+        font-size: 2.2rem;
+        font-weight: 400;
+      }
+    }
+
     .metahisme-content {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -674,6 +699,8 @@
 
       .metahisme-text {
         .metahisme-definition {
+          margin-top: 0.5rem;
+
           .text-content {
             p {
               font-size: 1.05rem;
@@ -732,17 +759,17 @@
         .artwork-showcase {
           position: relative;
           overflow: hidden;
-          background: white;
-          border: 1px solid var(--color-border);
-          border-radius: 8px;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+          background: transparent;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
 
           .metahisme-artwork {
             width: 100%;
             height: 500px;
             object-fit: cover;
             transition: transform var(--transition-medium);
-            border-radius: 8px;
+            border-radius: 0;
           }
 
           .artwork-overlay {
@@ -814,21 +841,18 @@
         }
 
         .artwork-frame {
-          background: white;
+          background: transparent;
           padding: 0;
           border: none;
-          border-radius: 12px;
-          margin-bottom: 1.5rem;
+          border-radius: 0;
+          margin-bottom: 0.5rem;
           overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-          transition: box-shadow var(--transition-medium);
-
-          &:hover {
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
-          }
+          box-shadow: none;
+          transition: none;
 
           img {
             width: 100%;
+            display: block;
             height: 500px;
             object-fit: cover;
             transition: transform var(--transition-medium);
@@ -837,10 +861,10 @@
 
         .artwork-info {
           .artwork-title {
-            font-size: 1.15rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 400;
             margin-bottom: 0.5rem;
-            color: var(--color-text);
+            color: var(--color-text-light);
             transition: color var(--transition-medium);
           }
 
@@ -880,10 +904,11 @@
         .analysis-image {
           img {
             width: 100%;
-            height: 450px;
+            height: 520px;
             object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            box-shadow: none;
+            display: block;
             transition: transform var(--transition-medium);
 
             &:hover {
@@ -945,15 +970,21 @@
     .hero-section {
       .hero-content {
         gap: 2.5rem;
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
       }
 
-      .hero-text .hero-title {
-        font-size: 3.5rem;
+      .hero-text {
+        padding: 0 0 2rem;
+
+        .hero-name {
+          font-size: 3rem;
+        }
       }
     }
 
     .section {
-      padding: 2rem 1.5rem 3rem;
+      padding: 1.5rem clamp(1rem, 3vw, 1.5rem) 3rem;
     }
 
     .biography-content,
@@ -987,57 +1018,86 @@
   // Responsive - Mobile
   @media (max-width: 768px) {
     .homepage {
-      padding-top: calc(var(--header-height) + 1rem);
+      padding-top: calc(var(--header-height) + 1.5rem);
     }
 
     .hero-section {
-      padding: 2rem 1rem;
+      padding: 1.5rem 0 0.5rem;
       min-height: auto;
 
       .hero-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .hero-text {
-        text-align: left;
-
-        .hero-title {
-          font-size: 2.2rem;
-          line-height: 1.2;
-          margin-bottom: 0.8rem;
-        }
-
-        .hero-metahisme {
-          font-size: 0.95rem;
-        }
+        gap: 2.5rem;
+        padding: 0;
+        max-width: 100%;
       }
 
       .hero-visual {
+        padding: 0 1rem;
+        box-sizing: border-box;
+
         .viewer-360 {
-          aspect-ratio: 16/9;
+          aspect-ratio: 4/3;
+          min-height: 320px;
+          width: 100%;
+          margin: 0 auto;
+          box-shadow: none;
+          border-radius: 0;
+        }
 
-          .fullscreen-button {
-            top: 0.5rem;
-            right: 0.5rem;
-            padding: 0.5rem;
+        .viewer-caption {
+          margin-top: 1.25rem;
+          text-align: left;
 
-            svg {
-              width: 18px;
-              height: 18px;
-            }
+          .viewer-title {
+            font-size: 1.75rem;
+            font-weight: 300;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text);
+            margin: 0;
+            line-height: 1.3;
           }
+        }
+      }
+
+      .hero-text {
+        padding: 0 1rem 1.5rem;
+        gap: 0.5rem;
+
+        .hero-label {
+          letter-spacing: 0.2em;
+        }
+
+        .hero-name {
+          font-size: 2.2rem;
+          letter-spacing: 0.18em;
+        }
+
+        .hero-subtitles span {
+          font-size: 0.85rem;
+          letter-spacing: 0.18em;
+        }
+
+        .hero-descriptions p {
+          font-size: 0.9rem;
+        }
+
+        .hero-signature {
+          flex-direction: column;
+          gap: 0.35rem;
+          letter-spacing: 0.15em;
         }
       }
     }
 
     .section {
-      padding: 2rem 1rem;
+      padding: 1.25rem 1rem;
       min-height: auto;
 
       .section-container {
-        padding-top: 0.5rem;
-        padding-bottom: 1.5rem;
+        max-width: 100%;
+        padding: 0.5rem 0 1.5rem;
       }
     }
 
@@ -1047,6 +1107,7 @@
       .section-title {
         font-size: 1.6rem;
         margin-bottom: 0.6rem;
+        letter-spacing: 0.12em;
       }
 
       .section-divider {
@@ -1073,9 +1134,20 @@
         position: static;
         width: 100%;
 
-        .portrait-showcase .portrait-artwork,
-        .artwork-showcase .metahisme-artwork {
-          height: 300px;
+        .portrait-showcase,
+        .artwork-showcase {
+          background: transparent;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+
+          .portrait-artwork,
+          .metahisme-artwork {
+            width: 100%;
+            min-height: 300px;
+            height: auto;
+            border-radius: 0;
+          }
         }
       }
 
@@ -1116,6 +1188,7 @@
           width: 100%;
 
           .artwork-frame {
+            margin-bottom: 0.5rem;
             img {
               height: 280px;
             }
@@ -1148,7 +1221,9 @@
         }
 
         .analysis-image img {
-          height: 280px;
+          height: 320px;
+          border-radius: 0;
+          box-shadow: none;
         }
 
         .analysis-text-content {
@@ -1180,28 +1255,24 @@
     }
 
     .hero-section {
-      padding: 1.5rem 0.8rem;
+      padding: 1rem 0 0;
 
       .hero-content {
-        gap: 1.5rem;
-      }
-
-      .hero-text {
-        .hero-title {
-          font-size: 1.8rem;
-          margin-bottom: 0.6rem;
-          line-height: 1.15;
-        }
-
-        .hero-metahisme {
-          font-size: 0.85rem;
-        }
+        gap: 2rem;
+        padding: 0;
+        max-width: 100%;
       }
 
       .hero-visual {
+        padding: 0 0.8rem;
+        box-sizing: border-box;
+
         .viewer-360 {
+          width: 100%;
+          margin: 0 auto;
           aspect-ratio: 16/9;
-          border-radius: 4px;
+          border-radius: 0;
+          box-shadow: none;
 
           .fullscreen-button {
             top: 0.4rem;
@@ -1214,11 +1285,19 @@
             }
           }
         }
+        .viewer-caption {
+          margin-top: 1rem;
+
+          .viewer-title {
+            font-size: 1.4rem;
+            letter-spacing: 0.06em;
+          }
+        }
       }
     }
 
     .section {
-      padding: 1.5rem 0.8rem;
+      padding: 1.2rem 0.8rem;
 
       .section-container {
         padding-top: 0;
@@ -1232,6 +1311,7 @@
       .section-title {
         font-size: 1.4rem;
         margin-bottom: 0.5rem;
+        letter-spacing: 0.1em;
       }
 
       .section-divider {
@@ -1250,9 +1330,18 @@
         line-height: 1.6;
       }
 
-      .biography-visual .portrait-showcase .portrait-artwork,
-      .metahisme-visual .artwork-showcase .metahisme-artwork {
-        height: 250px;
+      .biography-visual .portrait-showcase,
+      .metahisme-visual .artwork-showcase {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+
+        .portrait-artwork,
+        .metahisme-artwork {
+          height: 250px;
+          border-radius: 0;
+        }
       }
 
       .biography-timeline .timeline-item {
@@ -1278,7 +1367,7 @@
 
         .artwork-item {
           .artwork-frame {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
 
             img {
               height: 240px;
@@ -1305,7 +1394,9 @@
         gap: 1.2rem;
 
         .analysis-image img {
-          height: 240px;
+          height: 280px;
+          border-radius: 0;
+          box-shadow: none;
         }
 
         .analysis-text-content {

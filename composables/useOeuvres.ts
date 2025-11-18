@@ -1,4 +1,14 @@
-export default function useOeuvres() {
+import { type Ref, ref } from 'vue';
+
+// @ts-expect-error - Provided by Nuxt auto-imports at build time
+import { useRuntimeConfig } from '#imports';
+
+export default function useOeuvres(): {
+  imageUrlsArchetypes: Ref<string[]>;
+  imageUrlsDeployments: Ref<string[]>;
+  imageUrlsDrawings: Ref<string[]>;
+  imageUrlsTranscriptions: Ref<string[]>;
+} {
   const config = useRuntimeConfig();
 
   const imageUrlsArchetypes = ref<string[]>([]);

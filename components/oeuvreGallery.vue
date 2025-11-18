@@ -11,14 +11,14 @@
       :link="deploymentsLink"
     />
     <CarouselSection
-      :title="$t('gallery.categories.drawing')"
-      :images="imageUrlsDrawings"
-      :link="drawingsLink"
-    />
-    <CarouselSection
       :title="$t('gallery.categories.transcriptions')"
       :images="imageUrlsTranscriptions"
       :link="transcriptionsLink"
+    />
+    <CarouselSection
+      :title="$t('gallery.categories.drawing')"
+      :images="imageUrlsDrawings"
+      :link="drawingsLink"
     />
   </div>
 </template>
