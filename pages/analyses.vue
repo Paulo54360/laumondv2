@@ -14,9 +14,27 @@
     </div>
 
     <div v-if="currentTab">
-      <div class="main-image-container">
+      <div
+        class="main-image-container"
+        :class="{
+          'images-side-by-side':
+            currentTab.id === 'advienne' && currentTab.images && currentTab.images.length > 1,
+        }"
+      >
+        <template
+          v-if="currentTab.id === 'advienne' && currentTab.images && currentTab.images.length > 1"
+        >
+          <img
+            v-for="(image, index) in currentTab.images"
+            :key="index"
+            class="main-image side-image"
+            :src="image"
+            :alt="currentTab.title"
+            @click="openModal(index)"
+          />
+        </template>
         <img
-          v-if="currentTab.images && currentTab.images.length > 0"
+          v-else-if="currentTab.images && currentTab.images.length > 0"
           class="main-image"
           :src="currentTab.images[0]"
           :alt="currentTab.title"
@@ -26,7 +44,9 @@
 
       <div class="article-title-row">
         <div class="article-title-header">
-          <h2 class="article-title">{{ currentTab.title }}</h2>
+          <h2 class="article-title">
+            {{ currentTab.analysisTitle || currentTab.title }}
+          </h2>
           <div class="article-divider"></div>
         </div>
         <div v-if="currentTab.location" class="article-location">{{ currentTab.location }}</div>
@@ -246,7 +266,7 @@
       },
       author: 'Marion Zilio',
       analysisTitle: t('CDA.TitreCDA'),
-      location: 'Espace Labasse, Saint-Viance.',
+      location: 'Espace Labasse — Saint-Viance, 2023',
       copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('CDA.Texte1CDA'), type: 'normal' },
@@ -263,14 +283,13 @@
     {
       id: 'advienne',
       title: t('AQJA.TitreAQJA'),
-      images: [`${S3_BASE_URL}/Deployments/00/06.jpg`, `${S3_BASE_URL}/Deployments/00/08.jpg`],
+      images: [`${S3_BASE_URL}/Archetypes/02/09.jpg`, `${S3_BASE_URL}/Archetypes/02/10.jpg`],
       translations: {
         fr: '',
         en: '',
       },
       author: 'Isabelle de Maison Rouge',
-      analysisTitle: t('AQJA.TitreAQJA'),
-      location: 'Le Grand Mikado de la pensée humaine.',
+      analysisTitle: 'Le Grand Mikado de la pensée humaine',
       copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('AQJA.Texte1AQJA'), type: 'normal' },
@@ -395,12 +414,14 @@
     border-bottom: 2px solid var(--color-border);
     padding-bottom: 1rem;
     padding-left: 0;
+    padding-right: 0;
     overflow-x: auto;
 
     button {
       background: none;
       border: none;
       padding: 0.5rem 1rem 0.5rem 0;
+      margin: 0;
       font-size: 1.1rem;
       color: var(--color-muted-dark);
       cursor: pointer;
@@ -453,7 +474,7 @@
 
     .main-image {
       width: 100%;
-      height: 620px;
+      height: 434px;
       object-fit: cover;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -461,6 +482,18 @@
 
       &:hover {
         transform: scale(1.02);
+      }
+    }
+
+    &.images-side-by-side {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: stretch;
+
+      .side-image {
+        width: calc(50% - 0.5rem);
+        height: 434px;
+        flex: 1 1 calc(50% - 0.5rem);
       }
     }
   }
@@ -849,7 +882,16 @@
       text-align: center;
 
       .main-image {
-        height: 380px;
+        height: 266px;
+      }
+
+      &.images-side-by-side {
+        flex-direction: column;
+
+        .side-image {
+          width: 100%;
+          height: 266px;
+        }
       }
     }
     .article-title-row {
@@ -919,7 +961,16 @@
       align-items: center;
 
       .main-image {
-        height: 280px;
+        height: 196px;
+      }
+
+      &.images-side-by-side {
+        flex-direction: column;
+
+        .side-image {
+          width: 100%;
+          height: 196px;
+        }
       }
     }
 
