@@ -47,7 +47,6 @@
           <h2 class="article-title">
             {{ currentTab.analysisTitle || currentTab.title }}
           </h2>
-          <div class="article-divider"></div>
         </div>
         <div v-if="currentTab.location" class="article-location">{{ currentTab.location }}</div>
         <div class="article-copyright">{{ currentTab.copyright }}</div>
@@ -258,14 +257,14 @@
     },
     {
       id: 'aimants',
-      title: "Le Mobile d'ouverture des univers parallèles",
+      title: 'Comme deux aimants',
       images: [`${S3_BASE_URL}/Deployments/00/06.jpg`],
       translations: {
         fr: '',
         en: '',
       },
       author: 'Marion Zilio',
-      analysisTitle: t('CDA.TitreCDA'),
+      analysisTitle: "Le Mobile d'ouverture des univers parallèles",
       location: 'Espace Labasse — Saint-Viance, 2023',
       copyright: '© Philibert Tapissier',
       paragraphs: [
@@ -411,7 +410,6 @@
     margin-bottom: 2rem;
     margin-left: 0;
     margin-right: 0;
-    border-bottom: 2px solid var(--color-border);
     padding-bottom: 1rem;
     padding-left: 0;
     padding-right: 0;
@@ -432,7 +430,7 @@
       &::after {
         content: '';
         position: absolute;
-        bottom: -1rem;
+        bottom: -0.5rem;
         left: 0;
         width: 100%;
         height: 2px;
@@ -508,7 +506,7 @@
       display: inline-flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.4rem;
+      gap: 0.2rem;
       width: max-content;
       max-width: 100%;
     }
@@ -539,7 +537,7 @@
       font-size: 0.95rem;
       color: var(--color-text-light);
       font-style: italic;
-      margin-bottom: 0.3rem;
+      margin-top: 1rem;
     }
 
     .article-copyright {
