@@ -15,7 +15,7 @@
         margin-bottom: calc(4rem - 1cm);
 
         .page-title {
-            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-size: 2.2rem;
             font-weight: 300;
             color: #5e6266;
             letter-spacing: 0.22em;
@@ -33,12 +33,7 @@
             background: var(--color-primary-dark);
             margin: 0;
             transform-origin: left center;
-            transform: scaleX(0);
-            transition: transform var(--transition-medium);
-        }
-
-        &:hover .page-title-divider {
-            transform: scaleX(1);
+            transform: scaleX(0.3);
         }
     }
 

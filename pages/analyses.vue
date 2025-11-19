@@ -26,7 +26,7 @@
 
       <div class="article-title-row">
         <div class="article-title-header">
-        <h2 class="article-title">{{ currentTab.title }}</h2>
+          <h2 class="article-title">{{ currentTab.title }}</h2>
           <div class="article-divider"></div>
         </div>
         <div v-if="currentTab.location" class="article-location">{{ currentTab.location }}</div>
@@ -262,7 +262,7 @@
     },
     {
       id: 'advienne',
-      title: "Afin qu'un jour advienne",
+      title: t('AQJA.TitreAQJA'),
       images: [`${S3_BASE_URL}/Deployments/00/06.jpg`, `${S3_BASE_URL}/Deployments/00/08.jpg`],
       translations: {
         fr: '',
@@ -383,21 +383,24 @@
 
 <style lang="scss" scoped>
   .analyses-page {
-    padding: 2rem;
+    padding: 2rem 1cm;
   }
 
   .tabs {
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
+    margin-left: 0;
+    margin-right: 0;
     border-bottom: 2px solid var(--color-border);
     padding-bottom: 1rem;
+    padding-left: 0;
     overflow-x: auto;
 
     button {
       background: none;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 1rem 0.5rem 0;
       font-size: 1.1rem;
       color: var(--color-muted-dark);
       cursor: pointer;
@@ -497,11 +500,6 @@
       margin: 0;
       transform-origin: left center;
       transform: scaleX(0.3);
-      transition: transform var(--transition-medium);
-    }
-
-    .article-title-header:hover .article-divider {
-      transform: scaleX(1);
     }
 
     .article-location {
@@ -819,13 +817,14 @@
 
   @media (max-width: 768px) {
     .analyses-page {
-      padding: 1rem 1rem 2rem;
+      padding: 2rem 1rem;
     }
 
     .tabs {
       flex-wrap: wrap;
       gap: 0.5rem;
-      padding: 0.8rem 0.5rem;
+      padding: 0.8rem 0;
+      padding-left: 0;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -899,11 +898,12 @@
 
   @media (max-width: 480px) {
     .analyses-page {
-      padding: 0.8rem 0.8rem 1.5rem;
+      padding: 2rem 1rem;
     }
 
     .tabs {
-      padding: 0.6rem 0.4rem;
+      padding: 0.6rem 0;
+      padding-left: 0;
       gap: 0.4rem;
       justify-content: flex-start;
 
