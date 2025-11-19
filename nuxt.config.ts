@@ -45,7 +45,7 @@ export default defineNuxtConfig({
   ],
 
   // Configuration CSS
-  css: ['~/assets/styles/main.scss'],
+  css: ['~/assets/css/main.scss'],
 
   // Configuration Vite
   vite: {

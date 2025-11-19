@@ -169,7 +169,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.117);
     transition: transform 0.3s ease-in-out;
     /* Ajoute un fond pour éviter l'effet de vide autour des images plus petites */
-    background-color: #f5f5f5;
+    background-color: var(--color-surface);
   }
 
   .image-item img:hover {

@@ -104,17 +104,17 @@
     width: 100%;
     padding: 12px 50px 12px 16px;
     font-size: 16px;
-    border: 1px solid #757b7d;
+    border: 1px solid var(--color-muted);
     border-radius: 0;
-    background: #fff;
-    color: #757b7d;
+    background: var(--color-white);
+    color: var(--color-muted);
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   .search-input:focus {
     outline: none;
-    border-color: #757b7d;
+    border-color: var(--color-muted);
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   }
 
@@ -125,9 +125,9 @@
     height: 100%;
     background: none;
     border: none;
-    border-left: 1px solid #757b7d;
+    border-left: 1px solid var(--color-muted);
     padding: 0 16px;
-    color: #757b7d;
+    color: var(--color-muted);
     cursor: pointer;
     transition:
       color 0.3s ease,
@@ -135,14 +135,14 @@
   }
 
   .search-button:hover {
-    color: #757b7d;
-    background-color: #f5f5f5;
+    color: var(--color-muted);
+    background-color: var(--color-surface);
   }
 
   .loading {
     text-align: center;
     padding: 20px;
-    color: #757b7d;
+    color: var(--color-muted);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -153,7 +153,7 @@
     width: 30px;
     height: 30px;
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #757b7d;
+    border-top: 3px solid var(--color-muted);
     border-radius: 0;
     animation: spin 1s linear infinite;
     margin-bottom: 10px;
@@ -169,21 +169,21 @@
   }
 
   .error {
-    color: #757b7d;
+    color: var(--color-muted);
     padding: 10px;
     margin-top: 10px;
-    border: 1px solid #757b7d;
-    background-color: rgba(117, 123, 125, 0.05);
+    border: 1px solid var(--color-muted);
+    background-color: rgba(var(--color-muted-rgb), 0.05);
   }
 
   .results {
     margin-top: 20px;
-    border: 1px solid #757b7d;
+    border: 1px solid var(--color-muted);
   }
 
   .result-item {
     padding: 15px;
-    border-bottom: 1px solid #757b7d;
+    border-bottom: 1px solid var(--color-muted);
     transition: background-color 0.3s ease;
   }
 
@@ -192,18 +192,18 @@
   }
 
   .result-item:hover {
-    background-color: #f5f5f5;
+    background-color: var(--color-surface);
   }
 
   .result-item h3 {
     margin: 0;
-    color: #757b7d;
+    color: var(--color-muted);
     font-weight: 500;
   }
 
   .result-item p {
     margin: 5px 0 0;
-    color: #757b7d;
+    color: var(--color-muted);
   }
 
   /* Styles responsifs */
@@ -228,7 +228,7 @@
       font-size: 14px;
       height: 40px;
       box-shadow: none;
-      border: 1px solid #757b7d;
+      border: 1px solid var(--color-muted);
     }
 
     .search-button {

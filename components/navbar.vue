@@ -360,12 +360,12 @@
     z-index: 1000;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(117, 123, 125, 0.1);
+    border-bottom: 1px solid rgba(var(--color-muted-rgb), 0.1);
     transition: all 0.3s ease;
 
     &.navbar-scrolled {
       background: rgba(255, 255, 255, 0.98);
-      border-bottom-color: rgba(117, 123, 125, 0.2);
+      border-bottom-color: rgba(var(--color-muted-rgb), 0.2);
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     }
 
@@ -385,17 +385,17 @@
       max-width: none;
       display: flex;
       align-items: stretch;
-      border: 1px solid rgba(117, 123, 125, 0.3);
+      border: 1px solid rgba(var(--color-muted-rgb), 0.3);
       border-radius: 0;
       overflow: hidden;
-      background: #fff;
+      background: var(--color-white);
       transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease;
 
       &:focus-within {
-        border-color: #cc0000;
-        box-shadow: 0 0 0 1px rgba(204, 0, 0, 0.15);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 1px rgba(var(--color-primary-rgb), 0.15);
       }
 
       .search-input {
@@ -414,9 +414,9 @@
       .search-button {
         width: 44px;
         border: none;
-        border-left: 1px solid rgba(117, 123, 125, 0.3);
+        border-left: 1px solid rgba(var(--color-muted-rgb), 0.3);
         background: transparent;
-        color: #757b7d;
+        color: var(--color-muted);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -426,8 +426,8 @@
           background-color 0.2s ease;
 
         &:hover {
-          color: #cc0000;
-          background-color: rgba(204, 0, 0, 0.05);
+          color: var(--color-primary);
+          background-color: rgba(var(--color-primary-rgb), 0.05);
         }
       }
     }
@@ -440,13 +440,13 @@
     .navbar-search-trigger {
       width: 48px;
       height: 48px;
-      border: 1px solid rgba(117, 123, 125, 0.3);
+      border: 1px solid rgba(var(--color-muted-rgb), 0.3);
       background: transparent;
       border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #757b7d;
+      color: var(--color-muted);
       cursor: pointer;
       transition:
         color 0.2s ease,
@@ -454,9 +454,9 @@
         background-color 0.2s ease;
 
       &:hover {
-        color: #cc0000;
-        border-color: #cc0000;
-        background-color: rgba(204, 0, 0, 0.05);
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+        background-color: rgba(var(--color-primary-rgb), 0.05);
       }
     }
 
@@ -477,7 +477,7 @@
         font-size: clamp(1.1rem, 2vw, 1.4rem);
         font-weight: 400;
         margin: 0;
-        color: #757b7d;
+        color: var(--color-muted);
         text-transform: uppercase;
         line-height: 1.05;
 
@@ -518,7 +518,7 @@
         .nav-item {
           .nav-link {
             text-decoration: none;
-            color: #757b7d;
+            color: var(--color-muted);
             font-size: clamp(0.7rem, 1.4vw, 0.9rem);
             font-weight: 500;
             letter-spacing: clamp(0.02em, 0.18vw, 0.08em);
@@ -534,13 +534,13 @@
               left: 0;
               width: 0;
               height: 2px;
-              background: #cc0000;
+              background: var(--color-primary);
               transition: width 0.3s ease;
             }
 
             &:hover,
             &.active {
-              color: #cc0000;
+              color: var(--color-primary);
 
               &::after {
                 width: 100%;
@@ -554,16 +554,16 @@
         display: flex;
         gap: 0.5rem;
         padding-left: clamp(0.5rem, 1vw, 1rem);
-        border-left: 1px solid rgba(117, 123, 125, 0.2);
+        border-left: 1px solid rgba(var(--color-muted-rgb), 0.2);
 
         .language-btn {
           display: flex;
           align-items: center;
           gap: 0.25rem;
           padding: 0.25rem 0.6rem;
-          border: 1px solid rgba(117, 123, 125, 0.3);
+          border: 1px solid rgba(var(--color-muted-rgb), 0.3);
           background: transparent;
-          color: #757b7d;
+          color: var(--color-muted);
           font-size: clamp(0.6rem, 1vw, 0.72rem);
           font-weight: 500;
           text-transform: uppercase;
@@ -580,9 +580,9 @@
 
           &:hover,
           &.active {
-            background: #cc0000;
-            border-color: #cc0000;
-            color: white;
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: var(--color-white);
           }
         }
       }
@@ -603,7 +603,7 @@
       .hamburger-line {
         width: 100%;
         height: 2px;
-        background: #757b7d;
+        background: var(--color-muted);
         transition: all 0.3s ease;
         transform-origin: 1px;
       }
@@ -789,7 +789,7 @@
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
-        border-bottom: 1px solid rgba(117, 123, 125, 0.1);
+        border-bottom: 1px solid rgba(var(--color-muted-rgb), 0.1);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 
         &.navbar-nav-open {
@@ -815,7 +815,7 @@
               display: block;
               padding: 1rem;
               font-size: 1rem;
-              border-bottom: 1px solid rgba(117, 123, 125, 0.1);
+              border-bottom: 1px solid rgba(var(--color-muted-rgb), 0.1);
 
               &::after {
                 display: none;
@@ -828,7 +828,7 @@
           justify-content: center;
           padding-left: 0;
           border-left: none;
-          border-top: 1px solid rgba(117, 123, 125, 0.2);
+          border-top: 1px solid rgba(var(--color-muted-rgb), 0.2);
           padding-top: 1rem;
 
           .language-btn {
@@ -878,7 +878,7 @@
 
   .search-panel {
     width: min(480px, 90vw);
-    background: #fff;
+    background: var(--color-white);
     border-radius: 4px;
     padding: 1rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -890,15 +890,15 @@
 
   .search-panel-input {
     flex: 1;
-    border: 1px solid rgba(117, 123, 125, 0.4);
+    border: 1px solid rgba(var(--color-muted-rgb), 0.4);
     padding: 0.65rem 0.9rem;
     font-size: 1rem;
   }
 
   .search-panel-btn {
     border: none;
-    background: #cc0000;
-    color: #fff;
+    background: var(--color-primary);
+    color: var(--color-white);
     padding: 0.6rem 1rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -914,6 +914,6 @@
     background: transparent;
     font-size: 1.2rem;
     cursor: pointer;
-    color: #757b7d;
+    color: var(--color-muted);
   }
 </style>

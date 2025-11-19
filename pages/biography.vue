@@ -216,7 +216,7 @@
   }
 
   .Biographie .nav-menu a {
-    color: #000;
+    color: var(--color-black);
     font-weight: bold;
     transition:
       color 0.2s ease-in-out,
@@ -229,7 +229,7 @@
   }
 
   .Biographie .nav-menu a:hover {
-    color: #cc0000;
+    color: var(--color-primary);
     transform: translateY(-5px);
   }
 

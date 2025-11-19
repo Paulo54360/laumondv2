@@ -120,7 +120,7 @@
     font-size: clamp(1.1rem, 2vw, 1.4rem);
     font-weight: 400;
     margin-bottom: 0.3rem;
-    color: #757b7d;
+    color: var(--color-muted);
     letter-spacing: 0.22em;
     text-transform: uppercase;
     display: block;
@@ -131,7 +131,7 @@
   .carousel-divider {
     width: 110px;
     height: 3px;
-    background: #a20101;
+    background: var(--color-primary-dark);
     margin: 0;
   }
 

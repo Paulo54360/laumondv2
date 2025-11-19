@@ -195,7 +195,7 @@
   }
 
   .logo a {
-    color: #757b7d; /* Remplacé par la couleur demandée */
+    color: var(--color-muted); /* Remplacé par la couleur demandée */
     text-decoration: none; /* Supprime la décoration (par exemple, soulignement) */
     transition: color 0.3s ease; /* Ajoute une transition fluide pour le changement de couleur */
     font-weight: bold;
@@ -203,7 +203,7 @@
   }
 
   .logo a:hover {
-    color: #cc0000; /* Applique la même couleur de survol */
+    color: var(--color-primary); /* Applique la même couleur de survol */
   }
 
   /* Conteneur pour les éléments à droite */
@@ -219,12 +219,12 @@
     padding: 5px 12px; /* Augmentation du padding */
     margin-left: 18px; /* Plus d'espace entre les éléments */
     border: none; /* Suppression du cadre */
-    color: #757b7d;
+    color: var(--color-muted);
     transition: color 0.3s ease;
   }
 
   .menu-icon:hover {
-    color: #cc0000;
+    color: var(--color-primary);
   }
 
   .nav-links {
@@ -240,7 +240,7 @@
   }
 
   .nav-links a {
-    color: #757b7d; /* Remplacé par la couleur demandée */
+    color: var(--color-muted); /* Remplacé par la couleur demandée */
     text-decoration: none;
     transition: color 0.3s ease;
     font-weight: 500;
@@ -250,7 +250,7 @@
   }
 
   .nav-links a:hover {
-    color: #cc0000; /* Couleur des liens au survol */
+    color: var(--color-primary); /* Couleur des liens au survol */
   }
 
   .navbar-container {
@@ -288,7 +288,7 @@
     right: -250px; /* Masquer la sidebar par défaut */
     width: 250px;
     height: 100%;
-    background-color: #757b7d;
+    background-color: var(--color-muted);
     transition: right 0.3s ease;
     z-index: 1001;
   }
@@ -307,7 +307,7 @@
   }
 
   .sidebar li a {
-    color: #fff;
+    color: var(--color-white);
     text-decoration: none;
     font-size: 1.2rem;
     text-transform: uppercase;
@@ -315,8 +315,8 @@
 
   .close-btn {
     background: none;
-    border: 1px solid #fff;
-    color: #fff;
+    border: 1px solid var(--color-white);
+    color: var(--color-white);
     font-size: 1.5em;
     cursor: pointer;
     position: absolute;
@@ -339,16 +339,16 @@
     width: 100%;
     padding: 10px 45px 10px 16px; /* Augmentation légère du padding */
     font-size: 15px; /* Police plus grande */
-    border: 1px solid #757b7d;
+    border: 1px solid var(--color-muted);
     border-radius: 0; /* Suppression des coins arrondis */
-    background: #fff;
-    color: #757b7d;
+    background: var(--color-white);
+    color: var(--color-muted);
     transition: all 0.3s ease;
   }
 
   .search-input:focus {
     outline: none;
-    border-color: #cc0000;
+    border-color: var(--color-primary);
     box-shadow: none;
   }
 
@@ -359,9 +359,9 @@
     height: 100%;
     background: none;
     border: none;
-    border-left: 1px solid #757b7d; /* Ajout d'une bordure gauche */
+    border-left: 1px solid var(--color-muted); /* Ajout d'une bordure gauche */
     padding: 0 15px; /* Padding augmenté */
-    color: #757b7d;
+    color: var(--color-muted);
     cursor: pointer;
     transition:
       color 0.3s ease,
@@ -369,7 +369,7 @@
   }
 
   .search-button:hover {
-    color: #cc0000;
+    color: var(--color-primary);
     background-color: #f0f0f0; /* Léger fond au survol */
   }
 

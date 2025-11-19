@@ -132,12 +132,13 @@
 
 <script setup lang="ts">
   import { useRuntimeConfig } from 'nuxt/app';
-  import { ref, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import { useRoute } from 'vue-router';
   const runtimeConfig = useRuntimeConfig();
 
   const S3_BASE_URL = runtimeConfig.public.apiUrl;
-
+  const route = useRoute();
   const { t } = useI18n();
 
   interface IParagraph {
@@ -330,6 +331,16 @@
     tabs.find((tab) => tab.id === activeTab.value)
   );
 
+  watch(
+    () => route.query.tab,
+    (tab) => {
+      if (typeof tab === 'string' && tabs.some((entry) => entry.id === tab)) {
+        activeTab.value = tab;
+      }
+    },
+    { immediate: true }
+  );
+
   const getAuthor = (tab: ITab): string => {
     return tab.author || t('analyses.unknown_author');
   };
@@ -397,13 +408,13 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: #757b7d;
+        background-color: var(--color-muted);
         transform: scaleX(0);
         transition: transform 0.3s ease;
       }
 
       &.active {
-        color: #757b7d;
+        color: var(--color-muted);
 
         &::after {
           transform: scaleX(1);
@@ -411,7 +422,7 @@
       }
 
       &:hover {
-        color: #757b7d;
+        color: var(--color-muted);
       }
     }
   }
@@ -451,7 +462,7 @@
       font-size: clamp(1.1rem, 2vw, 1.4rem);
       font-weight: 400;
       margin-bottom: 0.3rem;
-      color: #757b7d;
+      color: var(--color-muted);
       letter-spacing: 0.22em;
       text-transform: uppercase;
       display: block;
@@ -477,7 +488,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-border);
     margin-bottom: 20px;
 
     .author-info {
@@ -510,7 +521,7 @@
         }
 
         .author-title {
-          color: #757b7d;
+          color: var(--color-muted);
           font-size: 0.8rem;
         }
       }
@@ -535,7 +546,7 @@
   .analysis-main-title {
     font-size: 2.2rem;
     font-weight: 700;
-    color: #2c3e50;
+    color: var(--color-text);
     margin-bottom: 2rem;
     line-height: 1.3;
     text-align: left;
@@ -594,8 +605,8 @@
       display: block;
       margin: 1.5rem 0;
       padding: 1rem 1.5rem;
-      background: #f8f9fa;
-      border-left: 4px solid #757b7d;
+      background: var(--color-background-alt);
+      border-left: 4px solid var(--color-muted);
       font-style: italic;
       color: #555;
       line-height: 1.6;
@@ -609,7 +620,7 @@
     .emphasis-text {
       font-style: italic;
       font-weight: 500;
-      color: #2c3e50;
+      color: var(--color-text);
     }
 
     em {
@@ -620,26 +631,26 @@
   .author-signature {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--color-border);
     text-align: right;
 
     .author-name-signature {
       font-weight: 700;
       font-size: 1.1rem;
-      color: #2c3e50;
+      color: var(--color-text);
       margin-bottom: 0.3rem;
     }
 
     .author-title-signature {
       font-style: italic;
       font-size: 0.95rem;
-      color: #757b7d;
+      color: var(--color-muted);
       margin-bottom: 0.2rem;
     }
 
     .author-date {
       font-size: 0.9rem;
-      color: #999;
+      color: var(--color-muted);
     }
   }
 
@@ -660,7 +671,7 @@
       margin-bottom: 0.8rem;
 
       sup {
-        color: #757b7d;
+        color: var(--color-muted);
         font-weight: 600;
         margin-right: 0.3rem;
       }
@@ -749,7 +760,7 @@
     margin-top: 10px;
     cursor: pointer;
     font-size: 2.2rem;
-    color: #757b7d;
+    color: var(--color-muted);
     z-index: 2;
     position: relative;
   }

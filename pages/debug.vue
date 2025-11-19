@@ -136,7 +136,7 @@
   }
 
   pre {
-    background: #f5f5f5;
+    background: var(--color-surface);
     padding: 1rem;
     border-radius: 4px;
     overflow: auto;
@@ -231,7 +231,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #999;
+    color: var(--color-muted);
   }
 
   img.error {

@@ -37,7 +37,7 @@
 
 <style lang="scss" scoped>
   .footer {
-    background-color: #f5f5f5;
+    background-color: var(--color-surface);
     padding: 20px 0;
     width: 100%;
     text-align: center;

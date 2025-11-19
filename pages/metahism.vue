@@ -87,7 +87,7 @@
     /* alignement du texte */
   }
   .text-container #Patrick {
-    color: #525252;
+    color: var(--color-muted-dark);
     font-style: normal;
     font-weight: bold;
   }
@@ -97,7 +97,7 @@
     text-align: left;
   }
   .text-container #ps {
-    color: #999999;
+    color: var(--color-muted);
     font-size: 0.8em;
     font-style: italic;
     text-align: left;

@@ -1,0 +1,84 @@
+// Brand palette
+$color-primary: #cc0000;
+$color-primary-dark: #a20101;
+$color-primary-rgb: 204,
+0,
+0;
+$color-muted: #999999;
+$color-muted-light: #bfbfbf;
+$color-muted-dark: #525252;
+$color-muted-rgb: 153,
+153,
+153;
+$color-text: #2c3e50;
+$color-text-light: #6c757d;
+$color-background: #ffffff;
+$color-background-alt: #f8f9fa;
+$color-surface: #f5f5f5;
+$color-white: #ffffff;
+$color-black: #525252;
+$color-ink: #333333;
+$color-border: #e0e0e0;
+$color-border-strong: #d5d5d5;
+// Typography
+$font-family-base: 'Inter',
+-apple-system,
+BlinkMacSystemFont,
+'Segoe UI',
+Roboto,
+sans-serif;
+$font-family-heading: $font-family-base;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+// Spacing scale
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 2rem;
+$spacing-xl: 4rem;
+// Layout metrics
+$max-width-content: 1200px;
+$header-height: 4rem;
+$border-radius: 4px;
+// Motion
+$transition-fast: 0.2s ease;
+$transition-medium: 0.3s ease;
+$transition-slow: 0.5s ease;
+// Z-index stack
+$z-index-header: 100;
+$z-index-modal: 1000;
+$z-index-tooltip: 1100;
+// Shadow presets
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+// Responsive mixins
+@mixin sm {
+    @media (min-width: #{$breakpoint-sm}) {
+        @content;
+    }
+}
+
+@mixin md {
+    @media (min-width: #{$breakpoint-md}) {
+        @content;
+    }
+}
+
+@mixin lg {
+    @media (min-width: #{$breakpoint-lg}) {
+        @content;
+    }
+}
+
+@mixin xl {
+    @media (min-width: #{$breakpoint-xl}) {
+        @content;
+    }
+}
