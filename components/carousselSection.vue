@@ -89,7 +89,7 @@
   .carousel-header-wrapper {
     max-width: var(--max-width-content, 1200px);
     margin: 0 auto;
-    padding: 0 clamp(1.5rem, 4vw, 2rem) 1cm;
+    padding: 0 clamp(1.5rem, 4vw, 2rem) calc(1cm - 1rem);
     width: 100%;
   }
 
@@ -100,6 +100,13 @@
   .carousel-header {
     text-align: left;
     margin-bottom: 0;
+    margin-top: 2rem;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    width: max-content;
+    max-width: 100%;
   }
 
   .carousel-full-width {
@@ -114,25 +121,34 @@
 
   .carousel-title-link {
     text-decoration: none;
+    color: inherit;
   }
 
   .carousel-title {
     font-size: clamp(1.1rem, 2vw, 1.4rem);
     font-weight: 400;
-    margin-bottom: 0.3rem;
+    margin: 0;
+    padding: 0;
     color: var(--color-muted);
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    display: block;
+    display: inline-block;
     line-height: 1.2;
     text-align: left;
   }
 
   .carousel-divider {
-    width: 110px;
+    width: calc(100% - 0.22em);
     height: 3px;
     background: var(--color-primary-dark);
     margin: 0;
+    transform-origin: left center;
+    transform: scaleX(0.3);
+    transition: transform var(--transition-medium);
+  }
+
+  .carousel-header:hover .carousel-divider {
+    transform: scaleX(1);
   }
 
   .carousel {

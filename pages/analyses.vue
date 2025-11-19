@@ -25,7 +25,10 @@
       </div>
 
       <div class="article-title-row">
+        <div class="article-title-header">
         <h2 class="article-title">{{ currentTab.title }}</h2>
+          <div class="article-divider"></div>
+        </div>
         <div v-if="currentTab.location" class="article-location">{{ currentTab.location }}</div>
         <div class="article-copyright">{{ currentTab.copyright }}</div>
       </div>
@@ -396,10 +399,11 @@
       border: none;
       padding: 0.5rem 1rem;
       font-size: 1.1rem;
-      color: var(--color-text);
+      color: var(--color-muted-dark);
       cursor: pointer;
       position: relative;
       white-space: nowrap;
+      transition: color var(--transition-medium);
 
       &::after {
         content: '';
@@ -408,13 +412,15 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: var(--color-muted);
+        background-color: var(--color-primary);
         transform: scaleX(0);
-        transition: transform 0.3s ease;
+        transform-origin: left center;
+        transition: transform var(--transition-medium);
       }
 
       &.active {
-        color: var(--color-muted);
+        color: var(--color-primary);
+        font-weight: 600;
 
         &::after {
           transform: scaleX(1);
@@ -422,7 +428,11 @@
       }
 
       &:hover {
-        color: var(--color-muted);
+        color: var(--color-primary);
+
+        &::after {
+          transform: scaleX(1);
+        }
       }
     }
   }
@@ -458,16 +468,40 @@
     align-items: flex-start;
     margin: 1.5rem 0 2rem;
 
+    .article-title-header {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+      width: max-content;
+      max-width: 100%;
+    }
+
     .article-title {
       font-size: clamp(1.1rem, 2vw, 1.4rem);
       font-weight: 400;
-      margin-bottom: 0.3rem;
+      margin: 0;
+      padding: 0;
       color: var(--color-muted);
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      display: block;
+      display: inline-block;
       line-height: 1.2;
       text-align: left;
+    }
+
+    .article-divider {
+      width: calc(100% - 0.22em);
+      height: 3px;
+      background: var(--color-primary-dark);
+      margin: 0;
+      transform-origin: left center;
+      transform: scaleX(0.3);
+      transition: transform var(--transition-medium);
+    }
+
+    .article-title-header:hover .article-divider {
+      transform: scaleX(1);
     }
 
     .article-location {
@@ -822,7 +856,7 @@
     .article-title-row {
       align-items: flex-start;
 
-      .article-title {
+      .article-title-header .article-title {
         font-size: 1.3rem;
         text-align: left;
       }
@@ -892,7 +926,7 @@
     .article-title-row {
       align-items: flex-start;
 
-      .article-title {
+      .article-title-header .article-title {
         font-size: 1.1rem;
         text-align: left;
       }

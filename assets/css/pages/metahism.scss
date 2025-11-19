@@ -1,0 +1,103 @@
+.metahism-page {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    padding: 2rem 1cm;
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+
+    .page-title-header {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+        width: max-content;
+        max-width: 100%;
+        margin-bottom: calc(4rem - 1cm);
+
+        .page-title {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 300;
+            color: #5e6266;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            display: inline-block;
+            align-items: baseline;
+            line-height: 1.2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-title-divider {
+            width: calc(100% - 0.22em);
+            height: 3px;
+            background: var(--color-primary-dark);
+            margin: 0;
+            transform-origin: left center;
+            transform: scaleX(0);
+            transition: transform var(--transition-medium);
+        }
+
+        &:hover .page-title-divider {
+            transform: scaleX(1);
+        }
+    }
+
+    .text-content {
+        font-size: 1.2em;
+        line-height: 1.7;
+        text-align: justify;
+        text-justify: inter-word;
+
+        p {
+            margin: 1.2em 0;
+            padding: 0;
+            color: var(--color-text);
+        }
+
+        #Patrick {
+            color: var(--color-muted-dark);
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        #citation {
+            font-size: 1em;
+            font-style: italic;
+            text-align: left;
+        }
+
+        #ps {
+            color: var(--color-muted);
+            font-size: 0.8em;
+            font-style: italic;
+            text-align: left;
+        }
+
+        h1 {
+            -webkit-hyphens: auto;
+            -moz-hyphens: auto;
+            -ms-hyphens: auto;
+            hyphens: auto;
+        }
+    }
+}
+
+// Responsive - Tablette
+@media (max-width: 1024px) {
+    .metahism-page {
+        padding: 2rem clamp(1.5rem, 4vw, 2rem);
+    }
+}
+
+// Responsive - Mobile
+@media (max-width: 768px) {
+    .metahism-page {
+        padding: 2rem 1rem;
+
+        .text-content {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+    }
+}
+

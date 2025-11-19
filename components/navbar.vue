@@ -98,16 +98,6 @@
         <ul class="nav-list">
           <li class="nav-item">
             <NuxtLink
-              :to="localePath('/')"
-              class="nav-link"
-              :class="{ active: isCurrentRoute('/') }"
-              @click="closeMobileMenu"
-            >
-              {{ $t('navbar.home') }}
-            </NuxtLink>
-          </li>
-          <li class="nav-item">
-            <NuxtLink
               :to="localePath('/metahism')"
               class="nav-link"
               :class="{ active: isCurrentRoute('/metahism') }"
@@ -297,7 +287,8 @@
 
   const updateSearchMode = (): void => {
     if (!process.client) return;
-    const compact = window.innerWidth < 1100;
+    // Passer en mode compact sous tablette (768px)
+    const compact = window.innerWidth < 768;
     if (compact !== isCompactSearch.value) {
       isCompactSearch.value = compact;
       if (!compact) {
@@ -372,12 +363,12 @@
     .navbar-container {
       max-width: var(--max-width-content);
       margin: 0 auto;
-      padding: 1rem 2rem 1rem;
+      padding: 1rem 1cm;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: clamp(1rem, 3vw, 2rem);
+      gap: clamp(1rem, 2vw, 1.5rem);
       min-height: var(--header-height, 80px);
+      font-family: var(--font-family-base);
     }
 
     .navbar-search {
@@ -433,8 +424,10 @@
     }
 
     .navbar-search--desktop {
-      justify-self: center;
-      width: clamp(240px, 18vw, 320px);
+      flex: 1 1 auto;
+      min-width: 200px;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .navbar-search-trigger {
@@ -467,6 +460,9 @@
     }
 
     .navbar-brand {
+      flex-shrink: 0;
+      white-space: nowrap;
+
       .brand-link {
         text-decoration: none;
         color: inherit;
@@ -484,7 +480,7 @@
         .brand-name-top,
         .brand-name-bottom {
           display: block;
-      }
+        }
 
         .brand-name-top {
           letter-spacing: 0.25em;
@@ -503,6 +499,7 @@
       align-items: center;
       justify-content: flex-end;
       gap: clamp(0.8rem, 1.8vw, 2.2rem);
+      flex-shrink: 0;
 
       .nav-list {
         display: flex;
@@ -555,6 +552,7 @@
         gap: 0.5rem;
         padding-left: clamp(0.5rem, 1vw, 1rem);
         border-left: 1px solid rgba(var(--color-muted-rgb), 0.2);
+        flex-shrink: 0;
 
         .language-btn {
           display: flex;
@@ -571,6 +569,7 @@
           cursor: pointer;
           transition: all 0.3s ease;
           border-radius: 2px;
+          flex-shrink: 0;
 
           .flag-icon {
             width: 16px;
@@ -625,11 +624,58 @@
       }
     }
 
-    // Responsive
-    @media (max-width: 1400px) {
+    // Responsive - 3 formats uniquement
+    // 1. ORDINATEUR (> 1024px) : par défaut, pas de media query
+
+    // 2. TABLETTE (768px - 1024px)
+    @media (max-width: 1024px) {
       .navbar-container {
         padding: 1rem 1.5rem;
-        gap: 0.5rem;
+        gap: 1rem;
+      }
+
+      .navbar-brand {
+        .brand-title {
+          font-size: 1.2rem;
+        }
+      }
+
+      .navbar-search--desktop {
+        min-width: 180px;
+        max-width: 280px;
+      }
+
+      .navbar-nav {
+        gap: 1.2rem;
+
+        .nav-list {
+          gap: 0.8rem;
+
+          .nav-link {
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+          }
+        }
+
+        .language-selector {
+          padding-left: 0.75rem;
+          gap: 0.4rem;
+
+          .language-btn {
+            padding: 0.3rem 0.5rem;
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+
+    // 3. SMARTPHONE (< 768px)
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0.75rem 1rem;
+        min-height: 70px;
+        flex-wrap: wrap;
+        gap: 0.75rem;
       }
 
       .navbar-brand {
@@ -637,134 +683,6 @@
           font-size: 1.25rem;
         }
       }
-
-      .navbar-search--desktop {
-        width: clamp(200px, 16vw, 260px);
-      }
-
-      .navbar-nav {
-        gap: 1.8rem;
-
-        .nav-list {
-          gap: 1.2rem;
-        }
-      }
-    }
-
-    @media (max-width: 1120px) {
-      .navbar-container {
-        padding: 1rem 1.5rem;
-        gap: 0.45rem;
-      }
-
-      .navbar-search--desktop {
-        width: clamp(170px, 14vw, 210px);
-
-        .search-input::placeholder {
-          color: transparent;
-        }
-      }
-
-      .navbar-nav {
-        gap: 1.5rem;
-
-        .nav-list {
-          gap: 1.1rem;
-
-          .nav-link {
-            font-size: 0.82rem;
-            letter-spacing: 0.07em;
-          }
-        }
-
-        .language-selector {
-          padding-left: 0.5rem;
-        }
-      }
-    }
-
-    @media (max-width: 1024px) {
-      .navbar-container {
-        padding: 1rem 1.1rem;
-        gap: 0.3rem;
-      }
-
-      .navbar-brand {
-        .brand-title {
-          font-size: 1.05rem;
-        }
-      }
-
-      .navbar-search--desktop {
-        width: clamp(150px, 13vw, 190px);
-      }
-
-      .navbar-nav {
-        gap: 0.55rem;
-
-        .nav-list {
-          gap: 0.25rem;
-
-          .nav-link {
-            font-size: 0.62rem;
-            letter-spacing: 0.02em;
-          }
-        }
-
-        .language-selector {
-          gap: 0.25rem;
-
-          .language-btn {
-            padding: 0.18rem 0.4rem;
-            font-size: 0.58rem;
-          }
-        }
-      }
-    }
-
-    @media (max-width: 980px) {
-      .navbar-container {
-        padding: 1rem;
-        gap: 0.25rem;
-      }
-
-      .navbar-brand {
-        .brand-title {
-          font-size: 0.95rem;
-        }
-      }
-
-      .navbar-search--desktop {
-        width: 150px;
-      }
-
-      .navbar-nav {
-        gap: 0.45rem;
-
-        .language-selector {
-          gap: 0.2rem;
-          padding-left: 0.15rem;
-
-          .language-btn {
-            padding: 0.16rem 0.35rem;
-            font-size: 0.52rem;
-          }
-        }
-      }
-    }
-
-    @media (max-width: 768px) {
-      .navbar-container {
-        padding: 0.75rem 1rem;
-        height: auto;
-        min-height: 70px;
-      }
-
-      .navbar-brand {
-        .brand-title {
-          font-size: 1.3rem;
-        }
-        }
 
       .navbar-search--desktop,
       .navbar-search-trigger {
@@ -836,30 +754,6 @@
             font-size: 0.8rem;
           }
         }
-      }
-    }
-
-    @media (max-width: 480px) {
-      .navbar-container {
-        padding: 0.75rem 0.8rem;
-        height: auto;
-        min-height: 60px;
-      }
-
-      .navbar-brand {
-        .brand-title {
-          font-size: 1.1rem;
-        }
-      }
-
-      .mobile-menu-btn {
-        width: 25px;
-        height: 25px;
-      }
-
-      .navbar-nav {
-        top: 60px;
-        padding: 1.5rem;
       }
     }
   }

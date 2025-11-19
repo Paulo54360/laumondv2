@@ -122,25 +122,25 @@
   const featuredArtworks = computed(() => {
     const artworksLink = localePath('/artworks');
     return [
-      {
-        id: 1,
-        title: t('homepage.artwork_portant'),
-        author: t('homepage.artwork_portant_author'),
-        imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg',
+    {
+      id: 1,
+      title: t('homepage.artwork_portant'),
+      author: t('homepage.artwork_portant_author'),
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg',
         link: artworksLink,
-      },
-      {
-        id: 2,
-        title: t('homepage.artwork_concordance'),
-        author: t('homepage.artwork_concordance_author'),
-        imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/02.jpg',
+    },
+    {
+      id: 2,
+      title: t('homepage.artwork_concordance'),
+      author: t('homepage.artwork_concordance_author'),
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/02.jpg',
         link: artworksLink,
-      },
-      {
-        id: 3,
-        title: t('homepage.artwork_mobile_ouverture'),
-        author: t('homepage.artwork_mobile_author'),
-        imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/06.jpg',
+    },
+    {
+      id: 3,
+      title: t('homepage.artwork_mobile_ouverture'),
+      author: t('homepage.artwork_mobile_author'),
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/06.jpg',
         link: artworksLink,
       },
     ];
@@ -150,16 +150,16 @@
     const analysesBase = localePath('/analyses');
     const buildLink = (tab: string): string => `${analysesBase}?tab=${tab}`;
     return [
-      {
-        title: t('homepage.analysis_portant_title'),
-        excerpt: t('homepage.analysis_portant_excerpt'),
-        imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg',
+    {
+      title: t('homepage.analysis_portant_title'),
+      excerpt: t('homepage.analysis_portant_excerpt'),
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/10.jpg',
         link: buildLink('portant'),
-      },
-      {
-        title: t('homepage.analysis_concordance_title'),
-        excerpt: t('homepage.analysis_concordance_excerpt'),
-        imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/02.jpg',
+    },
+    {
+      title: t('homepage.analysis_concordance_title'),
+      excerpt: t('homepage.analysis_concordance_excerpt'),
+      imageUrl: 'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/02.jpg',
         link: buildLink('concordance'),
       },
     ];
