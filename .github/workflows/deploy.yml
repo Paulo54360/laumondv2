@@ -1,0 +1,101 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permet de déclencher manuellement
+
+jobs:
+  deploy:
+    name: Deploy to OVH VPS
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          NUXT_PUBLIC_API_URL: ${{ secrets.NUXT_PUBLIC_API_URL }}
+
+      - name: Prepare deployment files
+        run: npm run deploy:prepare
+
+      - name: Create deployment archive
+        run: |
+          cd .deploy/output
+          tar -czf ../../deployment.tar.gz .
+          cd ../..
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          source: "deployment.tar.gz"
+          target: "/root/laumond-app/"
+
+      - name: Extract and restart on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            cd /root/laumond-app
+            
+            # Sauvegarder l'ancienne version
+            if [ -d "server" ]; then
+              echo "📦 Sauvegarde de l'ancienne version..."
+              mkdir -p backups
+              tar -czf "backups/backup-$(date +%Y%m%d-%H%M%S).tar.gz" server public nitro.json 2>/dev/null || true
+            fi
+            
+            # Extraire la nouvelle version
+            echo "📤 Extraction de la nouvelle version..."
+            tar -xzf deployment.tar.gz
+            
+            # S'assurer que .env existe (ne pas écraser s'il existe déjà)
+            if [ ! -f ".env" ]; then
+              echo "⚠️  Fichier .env manquant, créez-le manuellement avec vos variables"
+            else
+              echo "✅ Fichier .env préservé"
+            fi
+            
+            # Installer les dépendances
+            echo "📦 Installation des dépendances..."
+            cd server
+            npm install --production
+            cd ..
+            
+            # Redémarrer l'application
+            echo "🔄 Redémarrage de l'application..."
+            pm2 restart laumond-nuxt || pm2 start server/index.mjs --name "laumond-nuxt"
+            pm2 save
+            
+            # Nettoyer
+            rm -f deployment.tar.gz
+            
+            echo "✅ Déploiement terminé !"
+            pm2 status
+
+      - name: Cleanup
+        if: always()
+        run: rm -f deployment.tar.gz
+

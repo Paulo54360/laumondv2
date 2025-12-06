@@ -27,20 +27,20 @@ export default defineEventHandler(async (event) => {
     console.log(`🔍 Recherche pour: "${searchTerm}" (pattern: "${searchPattern}")`);
     
     const selectFields = `
-      id,
-      title,
-      description,
-      image_urls,
-      folder_path,
-      subcategory,
-      created_at,
-      updated_at,
-      category_id,
-      categories (
         id,
-        name,
-        path
-      )
+        title,
+        description,
+        image_urls,
+        folder_path,
+        subcategory,
+        created_at,
+        updated_at,
+        category_id,
+        categories (
+          id,
+          name,
+          path
+        )
     `;
 
     // Recherche 1 : dans title

@@ -267,19 +267,19 @@ async function syncAllArtworks() {
     },
     {
       s3Path: 'Archetypes',
-      categoryName: 'Archetypes',
+      categoryName: 'Archétype',
       subfolders: [], // À compléter
       fileRanges: []
     },
     {
       s3Path: 'Deployments',
-      categoryName: 'Deployments',
+      categoryName: 'Déploiement',
       subfolders: [], // À compléter
       fileRanges: []
     },
     {
       s3Path: 'Drawings+',
-      categoryName: 'Drawings',
+      categoryName: 'Dessin',
       subfolders: [], // À compléter
       fileRanges: []
     }

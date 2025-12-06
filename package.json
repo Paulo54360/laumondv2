@@ -26,7 +26,10 @@
     "test:search": "tsx scripts/test-search.ts",
     "test:anthropocene": "tsx scripts/test-anthropocene.ts",
     "sync:transcriptions": "tsx scripts/sync-transcriptions-to-db.ts",
-    "sync:all": "tsx scripts/sync-all-artworks.ts"
+    "sync:all": "tsx scripts/sync-all-artworks.ts",
+    "deploy:prepare": "tsx scripts/prepare-deploy.ts node",
+    "deploy:prepare-static": "tsx scripts/prepare-deploy.ts static",
+    "setup:cicd": "bash scripts/setup-cicd.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
