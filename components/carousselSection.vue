@@ -110,13 +110,10 @@
   }
 
   .carousel-full-width {
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    width: 100%;
+    max-width: 100%;
     margin-bottom: 0.25rem;
+    box-sizing: border-box;
   }
 
   .carousel-title-link {
@@ -157,7 +154,8 @@
     scroll-behavior: smooth;
     gap: 20px;
     width: 100%;
-    padding: 0 clamp(1.5rem, 4vw, 2rem);
+    max-width: 100%;
+    padding: 0;
     white-space: nowrap;
     position: relative;
     box-sizing: border-box;

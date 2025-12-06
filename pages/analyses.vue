@@ -45,7 +45,7 @@
       <div class="article-title-row">
         <div class="article-title-header">
           <h2 class="article-title">
-            {{ currentTab.analysisTitle || currentTab.title }}
+            {{ currentTab.analysisTitle }}
           </h2>
         </div>
         <div v-if="currentTab.location" class="article-location">{{ currentTab.location }}</div>
@@ -70,6 +70,7 @@
             <div class="text-content" :class="{ collapsed: !showFullText }">
               <!-- Contenu de l'analyse avec formatage -->
               <div class="analysis-body">
+                <h3 class="section-title-in-text">{{ currentTab.title }}</h3>
                 <p
                   v-for="(paragraph, index) in currentTab.paragraphs"
                   :key="index"
@@ -197,14 +198,14 @@
   const tabs: ITab[] = [
     {
       id: 'portant',
-      title: 'Le Portant (524C)',
+      title: "Laumond à l'espace Commines",
       images: [`${S3_BASE_URL}/Deployments/00/10.jpg`, `${S3_BASE_URL}/Deployments/00/11.jpg`],
       translations: {
         fr: '',
         en: '',
       },
       author: 'Edith Herlemont-Lassiat',
-      analysisTitle: t('LAEC.TitreLAEC'),
+      analysisTitle: 'Le portant (524C)',
       location: 'Espace Commines, Paris',
       copyright: '© Philibert Tapissier',
       paragraphs: [
@@ -233,7 +234,7 @@
     },
     {
       id: 'concordance',
-      title: 'Concordance Universelle',
+      title: "MétaHisme, une tentative d'élargissement des possibles",
       images: [
         `${S3_BASE_URL}/Deployments/00/02.jpg`,
         `${S3_BASE_URL}/Deployments/00/03.jpg`,
@@ -244,7 +245,7 @@
         en: '',
       },
       author: 'Marion Zilio',
-      analysisTitle: t('CU.TitreCU'),
+      analysisTitle: 'Concordance universelle',
       location: 'Biennale de Venise 2022 — Centre Culturel Européen d’Italie, Palazzo Bembo.',
       copyright: '© Matteo Losurdo',
       paragraphs: [{ text: t('CU.TexteCU'), type: 'normal' }],
@@ -281,14 +282,14 @@
     },
     {
       id: 'advienne',
-      title: t('AQJA.TitreAQJA'),
+      title: "Afin qu'un jouradvienne",
       images: [`${S3_BASE_URL}/Archetypes/02/09.jpg`, `${S3_BASE_URL}/Archetypes/02/10.jpg`],
       translations: {
         fr: '',
         en: '',
       },
       author: 'Isabelle de Maison Rouge',
-      analysisTitle: 'Le Grand Mikado de la pensée humaine',
+      analysisTitle: 'Le grand Mikado de la pensée humaine',
       copyright: '© Philibert Tapissier',
       paragraphs: [
         { text: t('AQJA.Texte1AQJA'), type: 'normal' },
@@ -420,7 +421,7 @@
       border: none;
       padding: 0.5rem 1rem 0.5rem 0;
       margin: 0;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       color: var(--color-muted-dark);
       cursor: pointer;
       position: relative;
@@ -524,15 +525,6 @@
       text-align: left;
     }
 
-    .article-divider {
-      width: calc(100% - 0.22em);
-      height: 3px;
-      background: var(--color-primary-dark);
-      margin: 0;
-      transform-origin: left center;
-      transform: scaleX(0.3);
-    }
-
     .article-location {
       font-size: 0.95rem;
       color: var(--color-text-light);
@@ -617,6 +609,20 @@
 
   .analysis-body {
     margin-bottom: 3rem;
+
+    .section-title-in-text {
+      font-family: var(--font-family-heading);
+      font-size: clamp(0.6rem, 1.2vw, 0.9rem);
+      font-weight: 600;
+      color: #333;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      display: block;
+      line-height: 1.2;
+      margin: 0 0 0.5rem 0;
+      padding: 0;
+      text-align: left;
+    }
 
     .paragraph-item {
       margin-bottom: 0.7em;

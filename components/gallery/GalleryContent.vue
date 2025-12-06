@@ -64,12 +64,20 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    font-family: var(--font-family-base, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+    font-family:
+      var(--font-family-base),
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
 
     h1 {
       text-align: center;
       margin-bottom: 2rem;
-      font-size: 2rem;
+      font-size: 0.7rem;
+      font-weight: 400;
       color: #333;
     }
   }

@@ -21,36 +21,124 @@ export default defineEventHandler(async (event) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Recherche dans la base de données
-    const { data: artworks, error } = await supabase
-      .from('artworks')
-      .select(
-        `
+    // Recherche simple et fiable : faire des requêtes séparées pour chaque champ
+    const searchPattern = `%${searchTerm.trim()}%`;
+    
+    console.log(`🔍 Recherche pour: "${searchTerm}" (pattern: "${searchPattern}")`);
+    
+    const selectFields = `
+      id,
+      title,
+      description,
+      image_urls,
+      folder_path,
+      subcategory,
+      created_at,
+      updated_at,
+      category_id,
+      categories (
         id,
-        title,
-        description,
-        image_urls,
-        folder_path,
-        subcategory,
-        created_at,
-        updated_at,
-        category_id,
-        categories (
-          id,
-          name,
-          path
-        )
-      `
+        name,
+        path
       )
-      .or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
-      .limit(20)
-      .order('title', { ascending: true });
+    `;
 
-    if (error) throw error;
+    // Recherche 1 : dans title
+    const { data: byTitle, error: errorTitle } = await supabase
+      .from('artworks')
+      .select(selectFields)
+      .ilike('title', searchPattern)
+      .limit(200);
+
+    if (errorTitle) {
+      console.error('❌ Erreur recherche title:', errorTitle);
+    }
+
+    // Recherche 2 : dans description (uniquement si description n'est pas null)
+    const { data: byDescription, error: errorDescription } = await supabase
+      .from('artworks')
+      .select(selectFields)
+      .not('description', 'is', null)
+      .ilike('description', searchPattern)
+      .limit(200);
+
+    if (errorDescription) {
+      console.error('❌ Erreur recherche description:', errorDescription);
+    }
+
+    // Recherche 3 : dans subcategory
+    const { data: bySubcategory, error: errorSubcategory } = await supabase
+      .from('artworks')
+      .select(selectFields)
+      .not('subcategory', 'is', null)
+      .ilike('subcategory', searchPattern)
+      .limit(200);
+
+    if (errorSubcategory) {
+      console.error('❌ Erreur recherche subcategory:', errorSubcategory);
+    }
+
+    // Recherche 4 : dans categories.name
+    const { data: matchingCategories, error: categoriesError } = await supabase
+      .from('categories')
+      .select('id')
+      .ilike('name', searchPattern)
+      .limit(50);
+
+    let byCategory = [];
+    if (!categoriesError && matchingCategories && matchingCategories.length > 0) {
+      const categoryIds = matchingCategories.map((cat) => cat.id);
+      const { data: artworksByCategory, error: categoryArtworksError } = await supabase
+        .from('artworks')
+        .select(selectFields)
+        .in('category_id', categoryIds)
+        .limit(200);
+      
+      if (!categoryArtworksError && artworksByCategory) {
+        byCategory = artworksByCategory;
+      } else if (categoryArtworksError) {
+        console.error('❌ Erreur recherche par category:', categoryArtworksError);
+      }
+    }
+
+    // Combiner tous les résultats et supprimer les doublons
+    const allResults = [
+      ...(byTitle || []),
+      ...(byDescription || []),
+      ...(bySubcategory || []),
+      ...(byCategory || [])
+    ];
+
+    const uniqueArtworksMap = new Map();
+    allResults.forEach((artwork) => {
+      if (artwork && artwork.id) {
+        uniqueArtworksMap.set(artwork.id, artwork);
+      }
+    });
+
+    // Trier par titre
+    const artworks = Array.from(uniqueArtworksMap.values()).sort((a, b) =>
+      (a.title || '').localeCompare(b.title || '', undefined, { sensitivity: 'base' })
+    );
+
+    // Log pour debug
+    console.log(`✅ Recherche "${searchTerm}": ${artworks.length} résultats totaux`);
+    console.log(`   - Title: ${byTitle?.length || 0}, Description: ${byDescription?.length || 0}, Subcategory: ${bySubcategory?.length || 0}, Category: ${byCategory.length}`);
+
+    // Si aucune erreur critique n'a été détectée, continuer
+    const hasCriticalError = errorTitle || errorDescription || errorSubcategory || categoriesError;
+    if (hasCriticalError && artworks.length === 0) {
+      console.error('❌ Erreurs de recherche:', {
+        title: errorTitle,
+        description: errorDescription,
+        subcategory: errorSubcategory,
+        categories: categoriesError
+      });
+    }
 
     // Formater les données pour qu'elles soient compatibles avec l'interface
     const formattedArtworks =
-      artworks?.map((artwork) => {
+      (artworks || []).map((artwork) => {
         // Traiter les URLs d'images
         let urls = [];
         try {

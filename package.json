@@ -23,7 +23,10 @@
     "db:import-data": "tsx scripts/import-data.ts",
     "db:clean-titles": "tsx scripts/clean-titles.ts",
     "db:clean-titles-unique": "tsx scripts/clean-titles-unique.ts",
-    "test:search": "tsx scripts/test-search.ts"
+    "test:search": "tsx scripts/test-search.ts",
+    "test:anthropocene": "tsx scripts/test-anthropocene.ts",
+    "sync:transcriptions": "tsx scripts/sync-transcriptions-to-db.ts",
+    "sync:all": "tsx scripts/sync-all-artworks.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",

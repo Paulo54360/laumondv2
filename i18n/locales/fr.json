@@ -220,7 +220,8 @@
         "loading": "Chargement...",
         "error": "Une erreur est survenue",
         "retry": "Réessayer",
-        "search": "Rechercher"
+        "search": "Rechercher",
+        "scroll_to_top": "Remonter en haut de la page"
     },
     "gallery": {
         "default_title": "Galerie",

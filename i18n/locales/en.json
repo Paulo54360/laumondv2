@@ -220,7 +220,8 @@
         "loading": "Loading...",
         "error": "An error occurred",
         "retry": "Retry",
-        "search": "Search"
+        "search": "Search",
+        "scroll_to_top": "Scroll to top"
     },
     "gallery": {
         "default_title": "Gallery",

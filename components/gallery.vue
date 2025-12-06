@@ -178,9 +178,9 @@
 
   .image-item h2 {
     margin-top: 10px;
-    font-size: 16px;
+    font-size: 14px;
     color: #333;
-    font-weight: bold;
+    font-weight: 400;
     text-align: center;
   }
   .modal {

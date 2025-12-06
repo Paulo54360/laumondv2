@@ -29,13 +29,10 @@
 
   import CarouselSection from './carousselSection.vue';
 
-  import { useRuntimeConfig } from '#app';
   import { useI18n } from '#i18n';
 
-  const config = useRuntimeConfig();
   const route = useRoute();
   const { locale } = useI18n();
-  const bucketUrl = config.public.apiUrl;
 
   // Obtenir la locale actuelle depuis la route (priorité) ou i18n
   // La computed property se met à jour automatiquement quand route.path change
@@ -54,24 +51,35 @@
   const drawingsLink = computed(() => `/${currentLocale.value}/drawings`);
   const transcriptionsLink = computed(() => `/${currentLocale.value}/transcriptions`);
 
-  const imageUrlsArchetypes = ref([]);
-  const imageUrlsDeployments = ref([]);
-  const imageUrlsDrawings = ref([]);
-  const imageUrlsTranscriptions = ref([]);
-  const image = ref('');
+  // URLs des images - Modifiez directement ces tableaux avec vos liens
+  const imageUrlsArchetypes = ref([
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/04/07.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/03/01.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/09/05.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/03/02.jpg',
+  ]);
 
-  // Chargement des images
-  for (let i = 1; i <= 6; i++) {
-    const num = i.toString().padStart(2, '0');
-    imageUrlsArchetypes.value.push(`${bucketUrl}/Archetypes/09/${num}.jpg`);
-    imageUrlsArchetypes.value.push(`${bucketUrl}/Archetypes/03/${num}.jpg`);
-    imageUrlsDeployments.value.push(`${bucketUrl}/Deployments/03/${num}.jpg`);
-    imageUrlsDrawings.value.push(`${bucketUrl}/Drawings+/01/${num}.jpg`);
-    imageUrlsTranscriptions.value.push(`${bucketUrl}/Transcriptions/02/${num}.jpg`);
-  }
+  const imageUrlsDeployments = ref([
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/05/01.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/01/03.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/02/01.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/03.jpg',
+  ]);
 
-  // Assigner une image par défaut
-  image.value = imageUrlsArchetypes.value.length > 0 ? imageUrlsArchetypes.value[0] : '';
+  const imageUrlsDrawings = ref([
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/01.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/02.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/03.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/04.jpg',
+  ]);
+
+  const imageUrlsTranscriptions = ref([
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/01.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/02.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/03.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/04.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/05.jpg',
+  ]);
 </script>
 
 <style scoped>
@@ -79,7 +87,19 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    font-family: var(--font-family-base, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-    width: 100%;
+    font-family: var(
+      --font-family-base,
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif
+    );
+    width: calc(100% - 1cm);
+    max-width: calc(100% - 1cm);
+    margin: 0 0.5cm;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 </style>
