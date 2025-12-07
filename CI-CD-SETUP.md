@@ -64,15 +64,17 @@ Si ça fonctionne sans mot de passe, c'est bon ! ✅
 
 ### Secrets nécessaires :
 
-| Nom du secret | Valeur | Description |
-|--------------|--------|-------------|
-| `VPS_HOST` | `37.59.110.130` | Adresse IP de votre VPS |
-| `VPS_USER` | `root` | Utilisateur SSH |
-| `VPS_SSH_KEY` | Contenu de `~/.ssh/github_actions_deploy` (la clé **privée**) | Clé SSH privée |
-| `VPS_PORT` | `22` (optionnel) | Port SSH |
-| `SUPABASE_URL` | Votre URL Supabase | Pour le build |
-| `SUPABASE_KEY` | Votre clé Supabase | Pour le build |
-| `NUXT_PUBLIC_API_URL` | `https://plaumondpicture.s3.eu-west-3.amazonaws.com` | Pour le build |
+| Nom du secret GitHub | Variable .env correspondante | Valeur/Description |
+|---------------------|------------------------------|-------------------|
+| `VPS_HOST` | - | `37.59.110.130` (Adresse IP du VPS) |
+| `VPS_USER` | - | `root` (Utilisateur SSH) |
+| `VPS_SSH_KEY` | - | Contenu de `~/.ssh/github_actions_deploy` (clé **privée**) |
+| `VPS_PORT` | - | `22` (optionnel, port SSH) |
+| `SUPABASE_URL` | `SUPABASE_URL` | Votre URL Supabase (ex: `https://xxxxx.supabase.co`) |
+| `SUPABASE_KEY` | `SUPABASE_KEY` | Votre clé Supabase |
+| `NUXT_PUBLIC_API_URL` | `NUXT_PUBLIC_API_URL` | `https://plaumondpicture.s3.eu-west-3.amazonaws.com` |
+
+**⚠️ Important :** Les noms `SUPABASE_URL`, `SUPABASE_KEY` et `NUXT_PUBLIC_API_URL` doivent être identiques dans GitHub Secrets et dans votre fichier `.env` sur le VPS.
 
 ### Comment obtenir la clé privée :
 
@@ -143,10 +145,12 @@ cd /root/laumond-app
 
 # Créer le fichier .env (important, ne sera pas écrasé)
 nano .env
-# Ajoutez vos variables d'environnement
-# SUPABASE_URL=...
-# SUPABASE_KEY=...
-# etc.
+# Ajoutez vos variables d'environnement (mêmes noms que dans GitHub Secrets)
+# SUPABASE_URL=https://xxxxx.supabase.co
+# SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+# NUXT_PUBLIC_API_URL=https://plaumondpicture.s3.eu-west-3.amazonaws.com
+# PORT=3000
+# NODE_ENV=production
 
 chmod 600 .env
 

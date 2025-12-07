@@ -97,3 +97,5 @@ Une fois connecté via la console web, vous pourrez :
 - Configurer SSH correctement
 - Copier la clé SSH
 
+
+

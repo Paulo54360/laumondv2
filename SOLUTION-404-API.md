@@ -74,3 +74,5 @@ Cela vous dira si votre VPS est bien listé et quel est son vrai identifiant.
 
 Ensuite, si ça ne fonctionne toujours pas, utilisez l'interface web pour chercher la console KVM ou contactez le support OVH.
 
+
+

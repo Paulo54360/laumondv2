@@ -95,3 +95,5 @@ Suivez les instructions pour définir un nouveau mot de passe.
 2. **Vérifiez** tous les onglets du menu latéral
 3. **Cherchez** "password", "mot de passe", "reset", "réinitialiser" dans l'interface
 
+
+

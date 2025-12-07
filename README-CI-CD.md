@@ -22,13 +22,13 @@ Suivez les instructions affichées.
 
 Allez sur GitHub → Votre repo → `Settings` → `Secrets and variables` → `Actions`
 
-Ajoutez ces secrets :
+Ajoutez ces secrets (les noms doivent correspondre à ceux dans votre `.env`) :
 - `VPS_HOST` = `37.59.110.130`
 - `VPS_USER` = `root`
-- `VPS_SSH_KEY` = (contenu de votre clé privée)
-- `SUPABASE_URL` = (votre URL)
-- `SUPABASE_KEY` = (votre clé)
-- `NUXT_PUBLIC_API_URL` = `https://plaumondpicture.s3.eu-west-3.amazonaws.com`
+- `VPS_SSH_KEY` = (contenu de votre clé privée SSH)
+- `SUPABASE_URL` = (votre URL Supabase - **même nom que dans .env**)
+- `SUPABASE_KEY` = (votre clé Supabase - **même nom que dans .env**)
+- `NUXT_PUBLIC_API_URL` = `https://plaumondpicture.s3.eu-west-3.amazonaws.com` (**même nom que dans .env**)
 
 ### 3. Pusher sur main
 
