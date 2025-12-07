@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Permet de déclencher manuellement
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -48,7 +48,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           source: "deployment.tar.gz"
-          target: "/root/laumond-app/"
+          target: "/home/ubuntu/laumond-app/"  # <-- CHANGÉ ICI (plus de /root)
 
       - name: Extract and restart on VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -58,7 +58,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
-            cd /root/laumond-app
+            # Créer le dossier s'il n'existe pas
+            mkdir -p /home/ubuntu/laumond-app
+            cd /home/ubuntu/laumond-app
             
             # Sauvegarder l'ancienne version
             if [ -d "server" ]; then
@@ -71,21 +73,34 @@ jobs:
             echo "📤 Extraction de la nouvelle version..."
             tar -xzf deployment.tar.gz
             
-            # S'assurer que .env existe (ne pas écraser s'il existe déjà)
+            # S'assurer que .env existe
             if [ ! -f ".env" ]; then
-              echo "⚠️  Fichier .env manquant, créez-le manuellement avec vos variables"
+              echo "⚠️ Fichier .env manquant ! Pensez à le créer."
             else
               echo "✅ Fichier .env préservé"
             fi
             
+            # Vérifier si Node/NPM est installé sur le VPS, sinon l'installer (Version simplifiée)
+            if ! command -v npm &> /dev/null; then
+                echo "🛑 Node.js n'est pas installé sur le VPS. Installation requise manuellement."
+                exit 1
+            fi
+
             # Installer les dépendances
             echo "📦 Installation des dépendances..."
             cd server
             npm install --production
             cd ..
             
+            # Installer PM2 globalement si absent
+            if ! command -v pm2 &> /dev/null; then
+                echo "Installing PM2..."
+                sudo npm install -g pm2
+            fi
+
             # Redémarrer l'application
             echo "🔄 Redémarrage de l'application..."
+            # On utilise le chemin complet pour éviter les soucis de PATH
             pm2 restart laumond-nuxt || pm2 start server/index.mjs --name "laumond-nuxt"
             pm2 save
             
@@ -98,4 +113,3 @@ jobs:
       - name: Cleanup
         if: always()
         run: rm -f deployment.tar.gz
-
