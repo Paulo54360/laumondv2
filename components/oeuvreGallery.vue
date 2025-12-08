@@ -27,7 +27,7 @@
   import { ref, computed } from 'vue';
   import { useRoute } from 'vue-router';
 
-  import CarouselSection from './carousselSection.vue';
+  import CarouselSection from './carousel/CarouselSection.vue';
 
   import { useI18n } from '#i18n';
 

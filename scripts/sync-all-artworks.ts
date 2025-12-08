@@ -1,6 +1,7 @@
+import { execSync } from 'child_process';
+
 import { createClient } from '@supabase/supabase-js';
 import { config } from 'dotenv';
-import { execSync } from 'child_process';
 
 config();
 
@@ -10,7 +11,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ Variables d\'environnement Supabase manquantes');
+  console.error("❌ Variables d'environnement Supabase manquantes");
   process.exit(1);
 }
 
@@ -21,10 +22,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  */
 function readS3File(key: string): string {
   try {
-    const output = execSync(
-      `aws s3 cp s3://plaumondpicture/${key} - 2>&1`,
-      { encoding: 'utf-8', stdio: 'pipe' }
-    );
+    const output = execSync(`aws s3 cp s3://plaumondpicture/${key} - 2>&1`, {
+      encoding: 'utf-8',
+      stdio: 'pipe',
+    });
     return output.trim();
   } catch (error: any) {
     const errorMsg = error.stderr || error.stdout || error.message || '';
@@ -40,15 +41,17 @@ function readS3File(key: string): string {
  */
 function listS3Files(folderPath: string): string[] {
   try {
-    const output = execSync(
-      `aws s3 ls s3://plaumondpicture/${folderPath}/ --recursive 2>&1`,
-      { encoding: 'utf-8', stdio: 'pipe' }
-    );
+    const output = execSync(`aws s3 ls s3://plaumondpicture/${folderPath}/ --recursive 2>&1`, {
+      encoding: 'utf-8',
+      stdio: 'pipe',
+    });
     return output.split('\n').filter((line) => line.trim());
   } catch (error: any) {
     const errorMsg = error.stderr || error.stdout || error.message || '';
-    if (errorMsg.includes('Unable to locate credentials') || 
-        errorMsg.includes('AuthorizationHeaderMalformed')) {
+    if (
+      errorMsg.includes('Unable to locate credentials') ||
+      errorMsg.includes('AuthorizationHeaderMalformed')
+    ) {
       console.error(`❌ Erreur AWS: Les credentials AWS ne sont pas configurés.`);
       console.error(`   Configurez AWS CLI avec: aws configure`);
       throw error;
@@ -93,7 +96,7 @@ async function syncCategory(config: CategoryConfig) {
   for (let i = 0; i < config.subfolders.length; i++) {
     const subfolder = config.subfolders[i];
     const [minFile, maxFile] = config.fileRanges[i] || [1, 10];
-    
+
     console.log(`  📁 ${config.s3Path}/${subfolder} (images ${minFile}-${maxFile})...`);
 
     // 3. Pour chaque fichier dans la plage
@@ -127,11 +130,10 @@ async function syncCategory(config: CategoryConfig) {
       }
 
       // Chercher si une œuvre avec le même chemin exact existe
-      let artworkToUpdate = existing?.find(art => {
+      const artworkToUpdate = existing?.find((art) => {
         try {
-          const urls = typeof art.image_urls === 'string' 
-            ? JSON.parse(art.image_urls) 
-            : art.image_urls || [];
+          const urls =
+            typeof art.image_urls === 'string' ? JSON.parse(art.image_urls) : art.image_urls || [];
           return urls.some((url: string) => url.includes(`/${num}.jpg`));
         } catch {
           return false;
@@ -143,10 +145,10 @@ async function syncCategory(config: CategoryConfig) {
         if (artworkToUpdate.title !== cleanTitle) {
           const { error: updateError } = await supabase
             .from('artworks')
-            .update({ 
+            .update({
               title: cleanTitle,
               image_urls: JSON.stringify(imageUrls),
-              updated_at: new Date().toISOString() 
+              updated_at: new Date().toISOString(),
             })
             .eq('id', artworkToUpdate.id);
 
@@ -255,34 +257,66 @@ async function syncAllArtworks() {
     {
       s3Path: 'Transcriptions',
       categoryName: 'Transcriptions',
-      subfolders: ['17', '16', '15', '14', '13', '12', '11', '10', '09', '08', '07', '06', '05', '04', '03', '02', '01'],
+      subfolders: [
+        '17',
+        '16',
+        '15',
+        '14',
+        '13',
+        '12',
+        '11',
+        '10',
+        '09',
+        '08',
+        '07',
+        '06',
+        '05',
+        '04',
+        '03',
+        '02',
+        '01',
+      ],
       fileRanges: [
         [1, 4], // 17
-        [1, 9], [1, 9], [1, 9], [1, 9], [1, 9], // 13-16
-        [1, 9], [1, 9], [1, 9], [1, 9], [1, 9], // 09-12
-        [1, 8], [1, 9], [1, 9], [1, 9], [1, 9], // 05-08
-        [1, 9], [1, 9], [1, 9], // 02-04
+        [1, 9],
+        [1, 9],
+        [1, 9],
+        [1, 9],
+        [1, 9], // 13-16
+        [1, 9],
+        [1, 9],
+        [1, 9],
+        [1, 9],
+        [1, 9], // 09-12
+        [1, 8],
+        [1, 9],
+        [1, 9],
+        [1, 9],
+        [1, 9], // 05-08
+        [1, 9],
+        [1, 9],
+        [1, 9], // 02-04
         [1, 9], // 01
-      ]
+      ],
     },
     {
       s3Path: 'Archetypes',
       categoryName: 'Archétype',
       subfolders: [], // À compléter
-      fileRanges: []
+      fileRanges: [],
     },
     {
       s3Path: 'Deployments',
       categoryName: 'Déploiement',
       subfolders: [], // À compléter
-      fileRanges: []
+      fileRanges: [],
     },
     {
       s3Path: 'Drawings+',
       categoryName: 'Dessin',
       subfolders: [], // À compléter
-      fileRanges: []
-    }
+      fileRanges: [],
+    },
   ];
 
   // Détecter automatiquement les sous-dossiers pour chaque catégorie
@@ -291,8 +325,8 @@ async function syncAllArtworks() {
       console.log(`\n🔍 Détection automatique des sous-dossiers pour ${category.s3Path}...`);
       const files = listS3Files(category.s3Path);
       const subfolders = new Set<string>();
-      
-      files.forEach(line => {
+
+      files.forEach((line) => {
         const match = line.match(new RegExp(`${category.s3Path}/(\\d+)/`));
         if (match) {
           subfolders.add(match[1].padStart(2, '0'));
@@ -300,9 +334,9 @@ async function syncAllArtworks() {
       });
 
       category.subfolders = Array.from(subfolders).sort().reverse();
-      
+
       // Détecter automatiquement les plages de fichiers
-      category.fileRanges = category.subfolders.map(subfolder => {
+      category.fileRanges = category.subfolders.map((subfolder) => {
         let maxFile = 1;
         for (let i = 1; i <= 20; i++) {
           const num = i.toString().padStart(2, '0');
@@ -348,4 +382,3 @@ async function syncAllArtworks() {
 }
 
 syncAllArtworks().catch(console.error);
-

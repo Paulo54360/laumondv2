@@ -7,7 +7,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ Variables d\'environnement Supabase manquantes');
+  console.error("❌ Variables d'environnement Supabase manquantes");
   process.exit(1);
 }
 
@@ -25,11 +25,10 @@ async function checkCategories() {
   }
 
   console.log('\n📋 Catégories dans Supabase:\n');
-  categories?.forEach(cat => {
+  categories?.forEach((cat) => {
     console.log(`  - ID: ${cat.id}, Nom: "${cat.name}", Path: "${cat.path}"`);
   });
   console.log(`\nTotal: ${categories?.length || 0} catégorie(s)\n`);
 }
 
 checkCategories().catch(console.error);
-

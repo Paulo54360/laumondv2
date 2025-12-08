@@ -24,13 +24,13 @@ function copyDir(src: string, dest: string) {
   }
 
   fs.mkdirSync(dest, { recursive: true });
-  
+
   const entries = fs.readdirSync(src, { withFileTypes: true });
-  
+
   for (const entry of entries) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
-    
+
     if (entry.isDirectory()) {
       copyDir(srcPath, destPath);
     } else {
@@ -41,32 +41,32 @@ function copyDir(src: string, dest: string) {
 
 function prepareStatic() {
   console.log('📦 Préparation pour déploiement STATIQUE...\n');
-  
+
   // Vérifier que generate a été fait
   if (!fs.existsSync('.output/public')) {
-    console.error('❌ .output/public n\'existe pas. Exécutez d\'abord: npm run generate');
+    console.error("❌ .output/public n'existe pas. Exécutez d'abord: npm run generate");
     process.exit(1);
   }
-  
+
   cleanDeployDir();
   copyDir('.output/public', path.join(DEPLOY_DIR, 'public'));
-  
+
   console.log('✅ Fichiers prêts dans .deploy/public/');
   console.log('📤 Déployez tout le contenu de .deploy/public/ via Cyberduck\n');
 }
 
 function prepareNode() {
   console.log('📦 Préparation pour déploiement NODE.JS...\n');
-  
+
   // Vérifier que build a été fait
   if (!fs.existsSync('.output')) {
-    console.error('❌ .output n\'existe pas. Exécutez d\'abord: npm run build');
+    console.error("❌ .output n'existe pas. Exécutez d'abord: npm run build");
     process.exit(1);
   }
-  
+
   cleanDeployDir();
   copyDir('.output', path.join(DEPLOY_DIR, 'output'));
-  
+
   // Créer un fichier README avec les instructions
   const readme = `# Instructions de déploiement
 
@@ -96,9 +96,9 @@ Une fois déployé, vérifiez que :
 - ✅ La recherche fonctionne (/api/search)
 - ✅ Les images s'affichent
 `;
-  
+
   fs.writeFileSync(path.join(DEPLOY_DIR, 'README-DEPLOY.md'), readme);
-  
+
   console.log('✅ Fichiers prêts dans .deploy/output/');
   console.log('📤 Déployez tout le contenu de .deploy/output/ via Cyberduck');
   console.log('📋 Instructions dans .deploy/README-DEPLOY.md\n');
@@ -117,4 +117,3 @@ if (mode === 'static') {
   console.error('  node   - Pour hébergement avec Node.js (par défaut)');
   process.exit(1);
 }
-

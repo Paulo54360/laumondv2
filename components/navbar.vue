@@ -394,7 +394,7 @@
         border: none;
         padding: 0 0.75rem;
         font-size: 0.9rem;
-        color: #404447;
+        color: var(--color-text);
         height: 38px;
 
         &:focus {

@@ -1,0 +1,55 @@
+# Project Rules & Guidelines
+
+## 1. Project Context
+- **Product**: Patrick Laumond artistic showcase site (FR/EN).
+- **Stack**: Nuxt 3 + Vue 3 + TypeScript (strict mode).
+- **Infrastructure**: Supabase (PostgreSQL), AWS S3 (media), OVH VPS (deployment via PM2).
+
+## 2. Architecture & Structure
+- **Nuxt Structure**:
+  - `pages/`: Application pages.
+  - `components/[feature]/`: Feature-specific components.
+  - `components/base/`: Generic reusable components.
+  - `public/`: Public static assets.
+- **Style Architecture**:
+  - **Tokens**: `assets/css/_tokens.scss` (Source of truth for SCSS variables).
+  - **Global Props**: `assets/css/main.scss` (Exposes tokens as CSS custom properties `var(--color-...)`).
+  - **Page Styles**: `assets/css/pages/[page].scss`. Import via `<style lang="scss" src="~/assets/css/pages/[page].scss"></style>` in page components.
+  - **Component Styles**: Use `<style scoped>` for light styles, but prefer external files for complexity. Always use `var(--color-...)`.
+
+## 3. Development Rules (KISS + TDD)
+- **Philosophy**: KISS (Keep It Simple, Stupid) & YAGNI (You Ain't Gonna Need It). Code only what is necessary.
+- **Process**:
+  1. **TDD**: Write failing test -> Code minimum to pass -> Refactor.
+  2. **Tools**: Vitest + @vue/test-utils / @nuxt/test-utils.
+  3. **Linting**: run `npm run lint:fix` before commit. No `console.log` or unused imports.
+- **Security**: No secrets in code. `.env` is never committed.
+
+## 4. UI/UX & Styling Guidelines
+- **Typography**: Inter (400/500/600). Titles uppercase, letter-spacing `0.22em`.
+- **Colors**:
+  - Primary Red: `#cc0000` (Dark: `#a20101`)
+  - Grays: `#999999` (Muted), `#525252` (Dark Muted/Black)
+  - Text: `#2c3e50`, `#333333`
+  - Backgrounds: `#ffffff`, `#f8f9fa`, `#f5f5f5`
+- **Layout**:
+  - Content Max Width: `1200px`.
+  - Padding: `1cm` horizontal standard.
+  - Text Alignment: Justified, line-height ~1.7.
+- **Specific Components**:
+  - **Section Titles**: 3px red bar under title.
+    - *Homepage*: Animated bar (30% -> 100% width on wrapper hover).
+    - *Other Pages*: Fixed bar (30% width).
+- **Mobile**: Check responsive breakpoints (768px/1024px/1280px). Navbar padding reduces on mobile.
+
+## 5. CI/CD & Deployment
+- **Pipeline**: GitHub Actions (`deploy.yml`) on `push main`.
+- **Target**: OVH VPS (`/root/laumond-app`), managed by PM2 (`laumond-nuxt`).
+- **Secrets**: Managed via GitHub Secrets (`VPS_*`, `SUPABASE_*`, `NUXT_PUBLIC_API_URL`).
+- **Process**: Automated build -> pack -> SCP -> install -> restart.
+
+## 6. Definition of Done
+- [ ] Tests passed (focused, no heavy snapshots).
+- [ ] Linting passed.
+- [ ] Visual regression check (Strictly identical rendering).
+- [ ] Data/Strings via `useI18n`.

@@ -1,6 +1,7 @@
+import { execSync } from 'child_process';
+
 import { createClient } from '@supabase/supabase-js';
 import { config } from 'dotenv';
-import { execSync } from 'child_process';
 
 config();
 
@@ -10,7 +11,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ Variables d\'environnement Supabase manquantes');
+  console.error("❌ Variables d'environnement Supabase manquantes");
   process.exit(1);
 }
 
@@ -21,10 +22,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  */
 function readS3File(key: string): string {
   try {
-    const output = execSync(
-      `aws s3 cp s3://plaumondpicture/${key} - 2>&1`,
-      { encoding: 'utf-8', stdio: 'pipe' }
-    );
+    const output = execSync(`aws s3 cp s3://plaumondpicture/${key} - 2>&1`, {
+      encoding: 'utf-8',
+      stdio: 'pipe',
+    });
     return output.trim();
   } catch (error: any) {
     const errorMsg = error.stderr || error.stdout || error.message || '';
@@ -40,15 +41,17 @@ function readS3File(key: string): string {
  */
 function listS3Files(folderPath: string): string[] {
   try {
-    const output = execSync(
-      `aws s3 ls s3://plaumondpicture/${folderPath}/ --recursive 2>&1`,
-      { encoding: 'utf-8', stdio: 'pipe' }
-    );
+    const output = execSync(`aws s3 ls s3://plaumondpicture/${folderPath}/ --recursive 2>&1`, {
+      encoding: 'utf-8',
+      stdio: 'pipe',
+    });
     return output.split('\n').filter((line) => line.trim());
   } catch (error: any) {
     const errorMsg = error.stderr || error.stdout || error.message || '';
-    if (errorMsg.includes('Unable to locate credentials') || 
-        errorMsg.includes('AuthorizationHeaderMalformed')) {
+    if (
+      errorMsg.includes('Unable to locate credentials') ||
+      errorMsg.includes('AuthorizationHeaderMalformed')
+    ) {
       console.error(`❌ Erreur AWS: Les credentials AWS ne sont pas configurés.`);
       console.error(`   Configurez AWS CLI avec: aws configure`);
     } else {
@@ -70,18 +73,20 @@ async function syncTranscriptions() {
 
   if (catError || !categories || categories.length === 0) {
     console.error('❌ Catégorie "Transcriptions" non trouvée dans Supabase');
-    console.error('   Créez d\'abord la catégorie dans Supabase');
+    console.error("   Créez d'abord la catégorie dans Supabase");
     return;
   }
 
   const category = categories[0];
-  console.log(`✅ Catégorie trouvée: ${category.name} (ID: ${category.id}, path: ${category.path})`);
+  console.log(
+    `✅ Catégorie trouvée: ${category.name} (ID: ${category.id}, path: ${category.path})`
+  );
 
   // 2. Lister tous les sous-dossiers de Transcriptions
   const files = listS3Files('Transcriptions');
   const subfolders = new Set<string>();
-  
-  files.forEach(line => {
+
+  files.forEach((line) => {
     const match = line.match(/Transcriptions\/(\d+)\//);
     if (match) {
       subfolders.add(match[1].padStart(2, '0'));
@@ -97,15 +102,15 @@ async function syncTranscriptions() {
 
   for (const subfolder of Array.from(subfolders).sort()) {
     console.log(`\n📂 Traitement de Transcriptions/${subfolder}...`);
-    
+
     // Lister les fichiers .txt dans ce sous-dossier
     const txtFiles: { number: string; title: string }[] = [];
-    
+
     for (let i = 1; i <= 20; i++) {
       const num = i.toString().padStart(2, '0');
       const txtPath = `Transcriptions/${subfolder}/${num}.txt`;
       const title = readS3File(txtPath);
-      
+
       if (title && title.trim()) {
         txtFiles.push({ number: num, title: title.trim() });
       }
@@ -117,7 +122,7 @@ async function syncTranscriptions() {
     for (const { number, title } of txtFiles) {
       const folderPath = `Transcriptions/${subfolder}`;
       const imageUrl = `${S3_BASE_URL}/${folderPath}/${number}.jpg`;
-      
+
       // Vérifier si l'œuvre existe déjà
       const { data: existing, error: searchError } = await supabase
         .from('artworks')
@@ -158,7 +163,10 @@ async function syncTranscriptions() {
             .eq('id', artwork.id);
 
           if (updateError) {
-            console.error(`   ⚠️  Erreur lors de la mise à jour de "${title}":`, updateError.message);
+            console.error(
+              `   ⚠️  Erreur lors de la mise à jour de "${title}":`,
+              updateError.message
+            );
             skipped++;
           } else {
             console.log(`   ✅ Mis à jour: "${title}" (ID: ${artwork.id})`);
@@ -247,4 +255,3 @@ async function syncTranscriptions() {
 }
 
 syncTranscriptions().catch(console.error);
-

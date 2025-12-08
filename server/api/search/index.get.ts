@@ -23,9 +23,9 @@ export default defineEventHandler(async (event) => {
 
     // Recherche simple et fiable : faire des requêtes séparées pour chaque champ
     const searchPattern = `%${searchTerm.trim()}%`;
-    
+
     console.log(`🔍 Recherche pour: "${searchTerm}" (pattern: "${searchPattern}")`);
-    
+
     const selectFields = `
         id,
         title,
@@ -93,7 +93,7 @@ export default defineEventHandler(async (event) => {
         .select(selectFields)
         .in('category_id', categoryIds)
         .limit(200);
-      
+
       if (!categoryArtworksError && artworksByCategory) {
         byCategory = artworksByCategory;
       } else if (categoryArtworksError) {
@@ -106,7 +106,7 @@ export default defineEventHandler(async (event) => {
       ...(byTitle || []),
       ...(byDescription || []),
       ...(bySubcategory || []),
-      ...(byCategory || [])
+      ...(byCategory || []),
     ];
 
     const uniqueArtworksMap = new Map();
@@ -123,7 +123,9 @@ export default defineEventHandler(async (event) => {
 
     // Log pour debug
     console.log(`✅ Recherche "${searchTerm}": ${artworks.length} résultats totaux`);
-    console.log(`   - Title: ${byTitle?.length || 0}, Description: ${byDescription?.length || 0}, Subcategory: ${bySubcategory?.length || 0}, Category: ${byCategory.length}`);
+    console.log(
+      `   - Title: ${byTitle?.length || 0}, Description: ${byDescription?.length || 0}, Subcategory: ${bySubcategory?.length || 0}, Category: ${byCategory.length}`
+    );
 
     // Si aucune erreur critique n'a été détectée, continuer
     const hasCriticalError = errorTitle || errorDescription || errorSubcategory || categoriesError;
@@ -132,7 +134,7 @@ export default defineEventHandler(async (event) => {
         title: errorTitle,
         description: errorDescription,
         subcategory: errorSubcategory,
-        categories: categoriesError
+        categories: categoriesError,
       });
     }
 

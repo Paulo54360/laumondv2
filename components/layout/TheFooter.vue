@@ -52,7 +52,7 @@
   .footer-line {
     width: 100px;
     height: 1px;
-    background: #333;
+    background: var(--color-ink);
     margin: 0 auto 2rem;
   }
 
@@ -69,7 +69,7 @@
   .social-link {
     display: inline-block;
     margin-right: 10px;
-    color: #333;
+    color: var(--color-ink);
     font-size: 20px;
   }
 

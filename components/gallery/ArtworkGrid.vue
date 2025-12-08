@@ -82,7 +82,7 @@
     }
 
     .error {
-      color: red;
+      color: var(--color-primary);
     }
 
     .grid {
