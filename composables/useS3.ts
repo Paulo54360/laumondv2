@@ -7,11 +7,8 @@ interface IArtwork {
   images: string[];
 }
 
-export default function useS3(): {
-  getArtworks: (category: string) => Promise<IArtwork[]>;
-  getArtworkImages: (category: string, folder: string) => Promise<string[]>;
-  getArtworkDescription: (category: string, folder: string) => Promise<string>;
-} {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function useS3() {
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl;
 
@@ -29,7 +26,6 @@ export default function useS3(): {
 
       return Promise.resolve(imageUrls);
     } catch (error) {
-      console.error('Error fetching images:', error);
       return Promise.resolve([]);
     }
   };
@@ -42,7 +38,6 @@ export default function useS3(): {
       }
       return await response.text();
     } catch (error) {
-      console.error('Error fetching description:', error);
       return '';
     }
   };
@@ -94,7 +89,7 @@ export default function useS3(): {
           images,
         });
       } catch (error) {
-        console.error(`Error processing artwork ${folder} in category ${category}:`, error);
+        // Fail silently for individual artworks to avoid console noise
       }
     }
 

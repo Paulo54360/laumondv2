@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-  import OeuvreGallery from '~/components/oeuvreGallery.vue';
+  import OeuvreGallery from '~/components/gallery/OeuvreGallery.vue';
 </script>

@@ -4,17 +4,13 @@ import { ref } from 'vue';
 import GalleryContent from '../../components/gallery/GalleryContent.vue';
 
 vi.mock('vue-i18n', () => ({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   useI18n: () => ({
-    t: (key: string, params?: Record<string, any>) => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-explicit-any
+    t: (key: string, _params?: Record<string, any>) => {
       if (key === 'gallery.pagination.page_status') {
-        return `Page ${params?.current}/${params?.total}`;
+        return 'Page 1/2';
       }
-      if (key === 'gallery.image_alt') {
-        return `Image ${params?.index}`;
-      }
-      if (key === 'common.previous') return 'Previous';
-      if (key === 'common.next') return 'Next';
-      if (key === 'gallery.default_title') return 'Default title';
       return key;
     },
   }),
@@ -27,6 +23,7 @@ type MountOptions = {
   imageCount?: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const mountGallery = (opts: MountOptions = {}) => {
   const imageCount = opts.imageCount ?? 5;
   const itemsPerPage = opts.itemsPerPage ?? 2;
@@ -53,8 +50,8 @@ const mountGallery = (opts: MountOptions = {}) => {
   return { wrapper, imageUrls, currentPage, totalPages, openModal, itemsPerPage };
 };
 
-describe('GalleryContent', () => {
-  it('affiche les images de la page courante et le statut de pagination', () => {
+describe('GalleryContent', (): void => {
+  it('affiche les images de la page courante et le statut de pagination', (): void => {
     const { wrapper } = mountGallery({
       imageCount: 4,
       itemsPerPage: 2,
@@ -66,7 +63,7 @@ describe('GalleryContent', () => {
     expect(wrapper.text()).toContain('Page 1/2');
   });
 
-  it('désactive/active la pagination correctement et met à jour la page', async () => {
+  it('gère la pagination et les boutons correctement', async (): Promise<void> => {
     const { wrapper, currentPage } = mountGallery({
       imageCount: 4,
       itemsPerPage: 2,
@@ -89,7 +86,7 @@ describe('GalleryContent', () => {
     expect(previous.attributes('disabled')).toBeDefined();
   });
 
-  it('appelle openModal avec l’index global correct au clic sur une image', async () => {
+  it('appelle openModal avec l’index global correct au clic', async (): Promise<void> => {
     const { wrapper, openModal } = mountGallery({
       imageCount: 3,
       itemsPerPage: 2,

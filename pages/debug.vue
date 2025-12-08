@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="debug-page">
     <h1>{{ t('debug.title') }}</h1>
@@ -61,7 +62,6 @@
   import { useI18n } from 'vue-i18n';
 
   const { t } = useI18n();
-
   const connectionResults = ref(null);
   const testImages = ref([
     'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/01/01.jpg',
@@ -75,6 +75,7 @@
   const searchError = ref(null);
   const isSearching = ref(false);
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   async function testConnection() {
     try {
       connectionResults.value = await $fetch('/api/test-connection');
@@ -86,6 +87,7 @@
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   async function testSearch() {
     if (!searchQuery.value.trim()) return;
 
@@ -99,7 +101,7 @@
       });
 
       searchResults.value = response.artworks;
-      console.log('Résultats de recherche:', response);
+      // console.log('Résultats de recherche:', response);
     } catch (error) {
       console.error('Erreur de recherche:', error);
       searchError.value = {
@@ -111,6 +113,7 @@
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   function handleImageError(event) {
     const img = event.target;
     img.src = 'https://via.placeholder.com/300x200?text=Image+non+disponible';

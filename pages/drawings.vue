@@ -16,7 +16,7 @@
 <script setup>
   import { useRuntimeConfig } from '#app';
 
-  import GalleryComponent from '~/components/gallery/GalleryWrapper.vue';
+  import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl.trim(); // Récupération de l'URL de base depuis nuxt.config.ts

@@ -25,7 +25,7 @@
 - Chaînes/données UI via `useI18n`.
 
 ## À éviter
-- Dupliquer des variables SCSS/CSS : ajouter uniquement dans `_tokens.scss` + `main.scss`.
+- Dupliquer des variables SCSS/CSS : utiliser `var(--color-...)` définies dans `main.scss`.
 - Mélanger plusieurs pages/features dans une même livraison.
-- Styles inline volumineux : préférer `assets/css/pages/`.
-- Fichiers géants : décomposer en sous-composants, mais rester minimaliste.
+- Styles inline : interdit, utiliser `assets/css/`.
+- Fichiers géants : extraire la logique dans `composables/` et les sous-composants.

@@ -1,22 +1,23 @@
 import { mount } from '@vue/test-utils';
-import { ref } from 'vue';
 
 import ArtworkGrid from '../../components/gallery/ArtworkGrid.vue';
 
 vi.mock('vue-i18n', () => ({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   useI18n: () => ({
-    t: (key: string) => key,
+    t: (key: string, _params?: Record<string, unknown>): string => key,
   }),
 }));
 
 vi.mock('../../composables/useS3', () => ({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   default: () => ({
     getArtworks: vi.fn(),
   }),
 }));
 
-describe('ArtworkGrid', () => {
-  it('affiche un état de chargement initial', () => {
+describe('GalleryContent', (): void => {
+  it('affiche les images de la page courante et le statut de pagination', (): void => {
     const wrapper = mount(ArtworkGrid, {
       props: { category: 'deployments' },
     });
@@ -25,7 +26,7 @@ describe('ArtworkGrid', () => {
     expect(wrapper.text()).toContain('gallery.loading');
   });
 
-  it('affiche une erreur si le chargement échoue', async () => {
+  it('gère la pagination et la mise à jour de la page', async (): Promise<void> => {
     const { useS3 } = await import('../../composables/useS3');
     const mockGetArtworks = vi.fn().mockRejectedValue(new Error('Failed'));
     vi.mocked(useS3().getArtworks).mockImplementation(mockGetArtworks);
@@ -39,7 +40,7 @@ describe('ArtworkGrid', () => {
     expect(wrapper.find('.error').exists()).toBe(true);
   });
 
-  it("affiche la grille d'œuvres après chargement réussi", async () => {
+  it("affiche la grille d'œuvres après chargement réussi", async (): Promise<void> => {
     const mockArtworks = [
       {
         title: 'Test Artwork',
@@ -63,7 +64,7 @@ describe('ArtworkGrid', () => {
     expect(wrapper.text()).toContain('Test Artwork');
   });
 
-  it('émet un événement select au clic sur une œuvre', async () => {
+  it('appelle openModal au clic sur une image', async (): Promise<void> => {
     const mockArtworks = [
       {
         title: 'Test Artwork',

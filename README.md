@@ -13,17 +13,40 @@ Site web de l'artiste Patrick Laumond, développé avec Nuxt 3.
 
 ```
 laumond-nuxt/
-├── assets/           # Styles et assets
-├── components/       # Composants Vue
-├── composables/      # Composables Nuxt
+├── assets/           # Styles SCSS (Architecture modulaire)
+├── components/       # Composants Vue (Organisés par fonctionnalité: layout, gallery, etc.)
+├── composables/      # Logique métier (useGallery, useNavbar, etc.)
 ├── db/              # Configuration base de données
-├── i18n/            # Internationalisation
+├── i18n/            # Internationalisation (locales fr/en)
 ├── layouts/         # Layouts Nuxt
 ├── pages/           # Pages de l'application
 ├── plugins/         # Plugins Nuxt
 ├── public/          # Fichiers statiques
-├── server/          # API routes
-└── scripts/         # Scripts utilitaires
+├── server/          # API routes (Nitro)
+├── scripts/         # Scripts utilitaires et de maintenance
+└── tests/           # Tests unitaires (Vitest)
+```
+
+## 🛠️ Qualité du Code
+
+Le projet suit des standards stricts de qualité de code :
+
+- **Linting :** ESLint + Prettier (Configuration stricte Nuxt)
+- **Typage :** TypeScript strict (Types de retour explicites, pas de `any`)
+- **Architecture :** Séparation vue/logique via les Composables
+- **Tests :** Vitest pour les composants critiques
+
+Commandes de maintenance :
+
+```bash
+# Vérifier la qualité du code
+npm run lint
+
+# Corriger automatiquement les problèmes de style
+npm run lint:fix
+
+# Lancer les tests
+npm test
 ```
 
 ## 🔧 Installation

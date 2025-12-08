@@ -19,7 +19,7 @@
 <script setup>
   import { useRuntimeConfig } from '#app';
 
-  import GalleryComponent from '~/components/gallery/GalleryWrapper.vue';
+  import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();
   // On force l'URL à être absolue et sans préfixe de langue

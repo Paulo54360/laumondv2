@@ -6,9 +6,10 @@
 - Si nouvelle variable : l’ajouter dans `_tokens.scss` **et** la propager dans `main.scss` (pas ailleurs).
 
 ## Fichiers et structure
-- Un fichier de styles par page dans `assets/css/pages/[page].scss` importé via `<style lang="scss" src="~/assets/css/pages/[page].scss"></style>`.
-- Pas de gros styles inline dans les `.vue` ; si nécessaire, préférer `<style scoped>` minimal ou déplacer dans `assets/css/pages/`.
-- Composants globaux : styles légers possibles en `<style scoped>`, mais tokens et variables toujours via `var(--...)`.
+- Un fichier de styles par page dans `assets/css/pages/[page].scss`.
+- Un fichier de styles par composant complexe dans `assets/css/components/[component].scss`.
+- Pas de styles inline. Utilisez `<style scoped>` pour des ajustements mineurs uniquement.
+- Composants globaux : styles importés ou scoped, utilisant `var(--...)`.
 - Principe : la typographie de base (h1, h2, h3, p, span, liens) est définie globalement dans `assets/css/main.scss` à partir des tokens. L’usage dans les templates se limite à écrire `<h2>...</h2>` ou `<p>...</p>` pour obtenir le style harmonisé (pas de styles inline ni de duplication locale).
 
 ## Typographie & palette

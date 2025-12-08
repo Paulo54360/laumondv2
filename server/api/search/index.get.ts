@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     // Recherche simple et fiable : faire des requêtes séparées pour chaque champ
     const searchPattern = `%${searchTerm.trim()}%`;
 
-    console.log(`🔍 Recherche pour: "${searchTerm}" (pattern: "${searchPattern}")`);
+    // console.log(`🔍 Recherche pour: "${searchTerm}" (pattern: "${searchPattern}")`);
 
     const selectFields = `
         id,
@@ -85,7 +85,8 @@ export default defineEventHandler(async (event) => {
       .ilike('name', searchPattern)
       .limit(50);
 
-    let byCategory = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let byCategory: any[] = [];
     if (!categoriesError && matchingCategories && matchingCategories.length > 0) {
       const categoryIds = matchingCategories.map((cat) => cat.id);
       const { data: artworksByCategory, error: categoryArtworksError } = await supabase
@@ -120,29 +121,11 @@ export default defineEventHandler(async (event) => {
     const artworks = Array.from(uniqueArtworksMap.values()).sort((a, b) =>
       (a.title || '').localeCompare(b.title || '', undefined, { sensitivity: 'base' })
     );
-
-    // Log pour debug
-    console.log(`✅ Recherche "${searchTerm}": ${artworks.length} résultats totaux`);
-    console.log(
-      `   - Title: ${byTitle?.length || 0}, Description: ${byDescription?.length || 0}, Subcategory: ${bySubcategory?.length || 0}, Category: ${byCategory.length}`
-    );
-
-    // Si aucune erreur critique n'a été détectée, continuer
-    const hasCriticalError = errorTitle || errorDescription || errorSubcategory || categoriesError;
-    if (hasCriticalError && artworks.length === 0) {
-      console.error('❌ Erreurs de recherche:', {
-        title: errorTitle,
-        description: errorDescription,
-        subcategory: errorSubcategory,
-        categories: categoriesError,
-      });
-    }
-
     // Formater les données pour qu'elles soient compatibles avec l'interface
     const formattedArtworks =
       (artworks || []).map((artwork) => {
         // Traiter les URLs d'images
-        let urls = [];
+        let urls: string[] = [];
         try {
           // Vérifier si image_urls existe
           if (artwork.image_urls) {

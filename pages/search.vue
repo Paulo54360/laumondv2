@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="search-page">
     <h1 class="search-title">{{ t('search.title') }}</h1>
@@ -136,23 +137,24 @@
     return urls[currentImageIndex.value] || undefined;
   });
 
-  function openModal(artwork: IArtwork) {
+  function openModal(artwork: IArtwork): void {
     selectedArtwork.value = artwork;
     currentImageIndex.value = 0;
   }
 
-  function closeModal() {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const closeModal = () => {
     selectedArtwork.value = null;
     currentImageIndex.value = 0;
-  }
+  };
 
-  function previousImage() {
+  function previousImage(): void {
     if (currentImageIndex.value > 0) {
       currentImageIndex.value--;
     }
   }
 
-  function nextImage() {
+  function nextImage(): void {
     if (!selectedArtwork.value) return;
     const urls = getImageUrls(selectedArtwork.value);
     if (currentImageIndex.value < urls.length - 1) {
@@ -160,7 +162,7 @@
     }
   }
 
-  async function fetchResults() {
+  async function fetchResults(): Promise<void> {
     if (!searchQuery.value) {
       artworks.value = [];
       return;
@@ -177,7 +179,8 @@
       });
 
       artworks.value = response.artworks;
-      console.log('Résultats de recherche:', artworks.value);
+      // console.log('Résultats de recherche:', artworks.value);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       error.value = e.data?.message || t('common.error');
       console.error('Erreur de recherche:', e);
@@ -196,11 +199,12 @@
     { immediate: true }
   );
 
-  function handleImageError(event: Event) {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const handleImageError = (event: Event) => {
     const img = event.target as HTMLImageElement;
     img.src = 'https://via.placeholder.com/300x200?text=Image+non+disponible';
     img.classList.add('error');
-  }
+  };
 </script>
 
 <style lang="scss" scoped>
