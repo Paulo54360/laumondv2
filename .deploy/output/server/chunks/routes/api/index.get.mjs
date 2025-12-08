@@ -26,20 +26,20 @@ const index_get = defineEventHandler(async (event) => {
     const searchPattern = `%${searchTerm.trim()}%`;
     console.log(`\u{1F50D} Recherche pour: "${searchTerm}" (pattern: "${searchPattern}")`);
     const selectFields = `
-      id,
-      title,
-      description,
-      image_urls,
-      folder_path,
-      subcategory,
-      created_at,
-      updated_at,
-      category_id,
-      categories (
         id,
-        name,
-        path
-      )
+        title,
+        description,
+        image_urls,
+        folder_path,
+        subcategory,
+        created_at,
+        updated_at,
+        category_id,
+        categories (
+          id,
+          name,
+          path
+        )
     `;
     const { data: byTitle, error: errorTitle } = await supabase.from("artworks").select(selectFields).ilike("title", searchPattern).limit(200);
     if (errorTitle) {

@@ -76,3 +76,5 @@ Si vraiment rien ne fonctionne, contactez le support OVH qui peut changer le mod
 **Le point clé :** Il faut changer le mode de boot AVANT de redémarrer !
 
 
+
+

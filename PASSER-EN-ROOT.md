@@ -50,3 +50,5 @@ ssh root@37.59.110.130  # Se reconnecter en root
 
 Une fois en root, vous pourrez installer Node.js sans problème.
 
+
+

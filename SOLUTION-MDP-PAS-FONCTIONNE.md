@@ -107,3 +107,5 @@ Si ça ne fonctionne toujours pas, utilisez la console KVM/VNC (Solution 2).
 
 
 
+
+
