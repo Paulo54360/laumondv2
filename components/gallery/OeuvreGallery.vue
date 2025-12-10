@@ -54,7 +54,7 @@
   const imageUrlsArchetypes = ref([
     'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/04/07.jpg',
     'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/09/11.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/09/12.jpg',
+    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/09/05.jpg',
     'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/03/02.jpg',
   ]);
 
