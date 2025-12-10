@@ -69,7 +69,10 @@
           <div class="text-content-wrapper">
             <div class="text-content" :class="{ collapsed: !showFullText }">
               <!-- Contenu de l'analyse avec formatage -->
-              <div class="analysis-body">
+              <div
+                class="analysis-body"
+                :class="{ 'dense-spacing': currentTab.id === 'advienne' }"
+              >
                 <h3 class="section-title-in-text">{{ currentTab.title }}</h3>
                 <p
                   v-for="(paragraph, index) in currentTab.paragraphs"
@@ -609,6 +612,12 @@
 
   .analysis-body {
     margin-bottom: 3rem;
+
+    &.dense-spacing {
+      .paragraph-item {
+        margin-bottom: 0;
+      }
+    }
 
     .section-title-in-text {
       font-family: var(--font-family-heading);
