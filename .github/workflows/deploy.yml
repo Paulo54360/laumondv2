@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Deploy to VPS (Docker)
 
 on:
   push:
@@ -11,38 +11,21 @@ jobs:
     name: Deploy to OVH VPS
     runs-on: ubuntu-latest
     environment: Production
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npm test -- --run
-
-      - name: Build application
-        run: npm run build
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          NUXT_PUBLIC_API_URL: ${{ secrets.NUXT_PUBLIC_API_URL }}
-
-      - name: Prepare deployment files
-        run: npm run deploy:prepare
-
       - name: Create deployment archive
         run: |
-          cd .deploy/output
-          tar -czf ../../deployment.tar.gz .
-          cd ../..
+          # Exclude heavy/unnecessary folders
+          tar -czf deployment.tar.gz . \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.nuxt \
+            --exclude=.output \
+            --exclude=.github \
+            --exclude=tests
 
       - name: Deploy to VPS via SSH
         uses: appleboy/scp-action@v0.1.7
@@ -51,10 +34,10 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
-          source: "deployment.tar.gz"
-          target: "/home/ubuntu/laumond-app/"  # <-- CHANGÉ ICI (plus de /root)
+          source: 'deployment.tar.gz'
+          target: '/home/ubuntu/laumond-app/'
 
-      - name: Extract and restart on VPS
+      - name: Extract and start Docker on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -65,55 +48,43 @@ jobs:
             # Créer le dossier s'il n'existe pas
             mkdir -p /home/ubuntu/laumond-app
             cd /home/ubuntu/laumond-app
-            
-            # Sauvegarder l'ancienne version
-            if [ -d "server" ]; then
-              echo "📦 Sauvegarde de l'ancienne version..."
-              mkdir -p backups
-              tar -czf "backups/backup-$(date +%Y%m%d-%H%M%S).tar.gz" server public nitro.json 2>/dev/null || true
+
+            # Sauvegarder .env s'il existe (non inclus dans le tar)
+            if [ -f ".env" ]; then
+              cp .env .env.bak
             fi
-            
+
             # Extraire la nouvelle version
             echo "📤 Extraction de la nouvelle version..."
             tar -xzf deployment.tar.gz
-            
-            # S'assurer que .env existe
-            if [ ! -f ".env" ]; then
-              echo "⚠️ Fichier .env manquant ! Pensez à le créer."
-            else
-              echo "✅ Fichier .env préservé"
+
+            # Restaurer .env
+            if [ -f ".env.bak" ]; then
+              mv .env.bak .env
             fi
-            
-            # Vérifier si Node/NPM est installé sur le VPS, sinon l'installer (Version simplifiée)
-            if ! command -v npm &> /dev/null; then
-                echo "🛑 Node.js n'est pas installé sur le VPS. Installation requise manuellement."
+
+            # Nettoyer l'archive
+            rm -f deployment.tar.gz
+
+            # Arrêter l'ancien processus PM2 s'il tourne encore (pour libérer le port 3000)
+            if command -v pm2 &> /dev/null; then
+               pm2 stop laumond-nuxt || true
+               pm2 delete laumond-nuxt || true
+            fi
+
+            # Lancer Docker Compose
+            echo "🐳 Démarrage de Docker Compose..."
+
+            # Vérifier si docker compose (v2) est dispo, sinon essayer docker-compose (v1)
+            if docker compose version &> /dev/null; then
+                docker compose down --remove-orphans || true
+                docker compose up -d --build
+            elif command -v docker-compose &> /dev/null; then
+                docker-compose down --remove-orphans || true
+                docker-compose up -d --build
+            else
+                echo "❌ Docker Compose n'est pas trouvé sur le serveur."
                 exit 1
             fi
 
-            # Installer les dépendances
-            echo "📦 Installation des dépendances..."
-            cd server
-            npm install --production
-            cd ..
-            
-            # Installer PM2 globalement si absent
-            if ! command -v pm2 &> /dev/null; then
-                echo "Installing PM2..."
-                sudo npm install -g pm2
-            fi
-
-            # Redémarrer l'application
-            echo "🔄 Redémarrage de l'application..."
-            # On utilise le chemin complet pour éviter les soucis de PATH
-            pm2 restart laumond-nuxt || pm2 start server/index.mjs --name "laumond-nuxt"
-            pm2 save
-            
-            # Nettoyer
-            rm -f deployment.tar.gz
-            
             echo "✅ Déploiement terminé !"
-            pm2 status
-
-      - name: Cleanup
-        if: always()
-        run: rm -f deployment.tar.gz
