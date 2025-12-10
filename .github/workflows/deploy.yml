@@ -19,13 +19,16 @@ jobs:
       - name: Create deployment archive
         run: |
           # Exclude heavy/unnecessary folders
-          tar -czf deployment.tar.gz . \
-            --exclude=node_modules \
-            --exclude=.git \
-            --exclude=.nuxt \
-            --exclude=.output \
-            --exclude=.github \
-            --exclude=tests
+          # Options must come before the target directory '.'
+          tar \
+            --exclude='node_modules' \
+            --exclude='.git' \
+            --exclude='.nuxt' \
+            --exclude='.output' \
+            --exclude='.github' \
+            --exclude='tests' \
+            --exclude='deployment.tar.gz' \
+            -czf deployment.tar.gz .
 
       - name: Deploy to VPS via SSH
         uses: appleboy/scp-action@v0.1.7
