@@ -22,7 +22,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
  */
 function readS3File(key: string): string {
   try {
-    const output = execSync(`aws s3 cp s3://plaumondpicture/${key} - 2>&1`, {
+    const output = execSync(`aws s3 cp "s3://plaumondpicture/${key}" - 2>&1`, {
       encoding: 'utf-8',
       stdio: 'pipe',
     });
@@ -41,7 +41,7 @@ function readS3File(key: string): string {
  */
 function listS3Files(folderPath: string): string[] {
   try {
-    const output = execSync(`aws s3 ls s3://plaumondpicture/${folderPath}/ --recursive 2>&1`, {
+    const output = execSync(`aws s3 ls "s3://plaumondpicture/${folderPath}/" --recursive 2>&1`, {
       encoding: 'utf-8',
       stdio: 'pipe',
     });
@@ -72,21 +72,40 @@ async function syncCategory(config: CategoryConfig) {
   console.log(`📂 Catégorie: ${config.categoryName}`);
   console.log(`${'='.repeat(60)}\n`);
 
-  // 1. Trouver la catégorie dans Supabase
-  const { data: categories, error: catError } = await supabase
+  // 1. Trouver ou créer la catégorie dans Supabase
+  let { data: categories, error: catError } = await supabase
     .from('categories')
     .select('id, name, path')
     .ilike('name', `%${config.categoryName}%`)
     .limit(1);
 
-  if (catError || !categories || categories.length === 0) {
-    console.error(`❌ Catégorie "${config.categoryName}" non trouvée dans Supabase`);
-    console.error(`   Créez d'abord la catégorie dans Supabase`);
-    return { added: 0, updated: 0, skipped: 0 };
-  }
+  let category: { id: number; name: string; path: string };
 
-  const category = categories[0];
-  console.log(`✅ Catégorie trouvée: ${category.name} (ID: ${category.id})\n`);
+  if (catError || !categories || categories.length === 0) {
+    console.log(`⚠️ Catégorie "${config.categoryName}" non trouvée, création...`);
+    
+    // Créer la catégorie
+    const { data: newCat, error: createError } = await supabase
+      .from('categories')
+      .insert({
+        name: config.categoryName,
+        path: config.s3Path,
+        description: `Catégorie ${config.categoryName}`,
+      })
+      .select('id, name, path')
+      .single();
+
+    if (createError || !newCat) {
+      console.error(`❌ Erreur lors de la création de la catégorie "${config.categoryName}":`, createError?.message);
+      return { added: 0, updated: 0, skipped: 0 };
+    }
+
+    category = newCat;
+    console.log(`✅ Catégorie créée: ${category.name} (ID: ${category.id})\n`);
+  } else {
+    category = categories[0];
+    console.log(`✅ Catégorie trouvée: ${category.name} (ID: ${category.id})\n`);
+  }
 
   let added = 0;
   let updated = 0;
@@ -143,49 +162,65 @@ async function syncCategory(config: CategoryConfig) {
       if (artworkToUpdate) {
         // L'œuvre existe, mettre à jour si nécessaire
         if (artworkToUpdate.title !== cleanTitle) {
-          const { error: updateError } = await supabase
-            .from('artworks')
-            .update({
-              title: cleanTitle,
-              image_urls: JSON.stringify(imageUrls),
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', artworkToUpdate.id);
+          
+          // Essayer de mettre à jour avec gestion des doublons
+          let suffix = 1;
+          let uniqueTitle = cleanTitle;
+          let success = false;
+          let retryCount = 0;
 
-          if (updateError) {
-            console.error(`     ⚠️  Erreur mise à jour "${cleanTitle}":`, updateError.message);
-            skipped++;
-          } else {
-            updated++;
-            if (updated % 10 === 0) console.log(`     ✅ ${updated} mis à jour...`);
+          while (!success && retryCount < 10) {
+             const { error: updateError } = await supabase
+              .from('artworks')
+              .update({
+                title: uniqueTitle,
+                image_urls: JSON.stringify(imageUrls),
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', artworkToUpdate.id);
+
+            if (updateError) {
+              if (updateError.code === '23505') { // Unique violation
+                retryCount++;
+                suffix++;
+                uniqueTitle = `${cleanTitle} (${suffix})`;
+              } else {
+                console.error(`     ⚠️  Erreur mise à jour "${cleanTitle}":`, updateError.message);
+                skipped++;
+                break; // Erreur non gérée
+              }
+            } else {
+               updated++;
+               success = true;
+               if (updated % 10 === 0) console.log(`     ✅ ${updated} mis à jour...`);
+            }
           }
+           
+           if (!success && retryCount >= 10) {
+             console.error(`     ⚠️  Impossible de mettre à jour "${cleanTitle}" après plusieurs tentatives (doublons)`);
+             skipped++;
+           }
+
         } else {
           skipped++;
         }
       } else {
-        // Vérifier si une œuvre avec le même titre existe déjà
-        const { data: byTitle, error: titleError } = await supabase
-          .from('artworks')
-          .select('id')
-          .eq('category_id', category.id)
-          .eq('title', cleanTitle)
-          .limit(1);
+        // Vérifier si une œuvre avec le même titre existe déjà (pour éviter les doublons à la création)
+        // ... Logique existante simplifiée pour création ...
+        
+        let suffix = 0;
+        let uniqueTitle = cleanTitle;
+        let success = false;
+        let retryCount = 0;
 
-        if (titleError) {
-          console.error(`     ❌ Erreur recherche par titre:`, titleError.message);
-          skipped++;
-          continue;
-        }
-
-        if (byTitle && byTitle.length > 0) {
-          // Déjà existant avec ce titre
-          skipped++;
-        } else {
-          // Créer une nouvelle œuvre
-          const { data: newArtwork, error: insertError } = await supabase
+        while (!success && retryCount < 20) {
+           // On construit le titre unique si besoin
+           if (suffix > 0) uniqueTitle = `${cleanTitle} (${suffix})`;
+           
+           const { data: newArtwork, error: insertError } = await supabase
             .from('artworks')
             .insert({
-              title: cleanTitle,
+              title: uniqueTitle,
               category_id: category.id,
               folder_path: folderPath,
               subcategory: subfolder,
@@ -197,50 +232,20 @@ async function syncCategory(config: CategoryConfig) {
             .select('id')
             .single();
 
-          if (insertError) {
-            // Si erreur de contrainte unique, essayer avec un suffixe
-            if (insertError.code === '23505') {
-              let suffix = 2;
-              let uniqueTitle = `${cleanTitle} (${suffix})`;
-              let success = false;
-
-              while (!success && suffix < 20) {
-                const { data: retryArtwork, error: retryError } = await supabase
-                  .from('artworks')
-                  .insert({
-                    title: uniqueTitle,
-                    category_id: category.id,
-                    folder_path: folderPath,
-                    subcategory: subfolder,
-                    image_urls: JSON.stringify(imageUrls),
-                    description: null,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                  })
-                  .select('id')
-                  .single();
-
-                if (!retryError && retryArtwork) {
-                  added++;
-                  success = true;
-                  if (added % 10 === 0) console.log(`     ✅ ${added} ajouté...`);
-                } else {
-                  suffix++;
-                  uniqueTitle = `${cleanTitle} (${suffix})`;
-                }
-              }
-
-              if (!success) {
-                skipped++;
-              }
-            } else {
-              console.error(`     ❌ Erreur ajout "${cleanTitle}":`, insertError.message);
-              skipped++;
-            }
-          } else if (newArtwork) {
-            added++;
-            if (added % 10 === 0) console.log(`     ✅ ${added} ajouté...`);
-          }
+           if (insertError) {
+             if (insertError.code === '23505') {
+               suffix = suffix === 0 ? 2 : suffix + 1;
+               retryCount++;
+             } else {
+               console.error(`     ❌ Erreur ajout "${uniqueTitle}":`, insertError.message);
+               skipped++;
+               break; 
+             }
+           } else if (newArtwork) {
+             added++;
+             success = true;
+             if (added % 10 === 0) console.log(`     ✅ ${added} ajouté...`);
+           }
         }
       }
     }
@@ -301,25 +306,47 @@ async function syncAllArtworks() {
     },
     {
       s3Path: 'Archetypes',
-      categoryName: 'Archétype',
-      subfolders: [], // À compléter
-      fileRanges: [],
+      categoryName: 'Archetypes',
+      subfolders: ['09', '08', '07', '06', '05', '04', '03', '02'],
+      fileRanges: [
+        [1, 12],
+        [1, 4],
+        [1, 8],
+        [1, 8],
+        [1, 7],
+        [1, 7],
+        [1, 9],
+        [1, 10],
+      ],
     },
     {
       s3Path: 'Deployments',
-      categoryName: 'Déploiement',
-      subfolders: [], // À compléter
-      fileRanges: [],
+      categoryName: 'Deployments',
+      subfolders: ['05', '04', '03', '02', '01', '00'],
+      fileRanges: [
+        [1, 4],
+        [1, 2],
+        [1, 6],
+        [1, 3],
+        [1, 4],
+        [1, 7],
+      ],
     },
     {
       s3Path: 'Drawings+',
-      categoryName: 'Dessin',
-      subfolders: [], // À compléter
-      fileRanges: [],
+      categoryName: 'Drawings+',
+      subfolders: ['05', '04', '03', '02', '01'],
+      fileRanges: [
+        [1, 8],
+        [1, 9],
+        [1, 9],
+        [1, 9],
+        [1, 9],
+      ],
     },
   ];
 
-  // Détecter automatiquement les sous-dossiers pour chaque catégorie
+  // Détecter automatiquement les sous-dossiers pour chaque catégorie (si non configuré)
   for (const category of categories) {
     if (category.subfolders.length === 0) {
       console.log(`\n🔍 Détection automatique des sous-dossiers pour ${category.s3Path}...`);

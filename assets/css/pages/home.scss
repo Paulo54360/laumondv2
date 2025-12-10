@@ -34,6 +34,10 @@
     }
     .section-header {
         @include section-header(true);
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+        }
     }
     .section-link {
         text-align: left;
@@ -337,10 +341,6 @@
     background: var(--color-background-alt);
     .section-header {
         margin-top: 0.75rem;
-        .section-title {
-            font-size: 2.2rem;
-            font-weight: 300;
-        }
     }
     .metahisme-content {
         display: grid;
