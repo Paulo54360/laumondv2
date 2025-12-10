@@ -59,4 +59,9 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  // Résolution des problèmes de build avec Supabase
+  build: {
+    transpile: ['@supabase/supabase-js'],
+  },
 });
