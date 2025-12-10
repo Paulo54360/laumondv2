@@ -67,6 +67,7 @@
   // State managed locally for the UI controls
   const itemsPerPage = ref(10);
   const currentPage = ref(1);
+  const titles = ref<Record<string, string>>({}); // Cache for titles
 
   const totalItems = computed(() => imageUrls.value.length);
   const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
@@ -84,6 +85,35 @@
 
   const displayedImages = computed(() => imageUrls.value.slice(startIndex.value, endIndex.value));
 
+  // Fetch titles for displayed images
+  const fetchTitlesForImages = async (images: string[]) => {
+    await Promise.all(images.map(async (url) => {
+        if (titles.value[url] !== undefined || !url) return; // Already fetched or invalid
+        
+        try {
+            // Replace extension with .txt
+            const txtUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt');
+            const response = await fetch(txtUrl);
+            if (response.ok) {
+                const text = await response.text();
+                titles.value[url] = text && text.trim() ? text.trim() : '';
+            } else {
+                titles.value[url] = ''; // Mark as visited/empty
+            }
+        } catch (e) {
+            console.error('Error fetching title for', url, e);
+            titles.value[url] = '';
+        }
+    }));
+  };
+
+  // Watch for changes in displayed images to fetch their titles
+  watch(displayedImages, (newImages) => {
+    if (newImages && newImages.length > 0) {
+      fetchTitlesForImages(newImages);
+    }
+  }, { immediate: true });
+
   const previousPage = (): void => {
     if (currentPage.value > 1) {
       currentPage.value--;
@@ -97,17 +127,18 @@
   };
 
   // Helper to extract a displayable title from the URL provided
-  // Since we don't have explicit titles yet, we'll format the filename or use a placeholder
   const extractTitle = (url: string): string => {
-      // Logic to mimic the "TITLE - LOCATION" format if possible, or just cleanup filename
-      // For now, returning a generic title or filename cleaned up
-      // Example: .../01.jpg -> "ŒUVRE 01"
+      // Use fetched title if available
+      if (titles.value[url]) {
+         return titles.value[url].toUpperCase();
+      }
+
+      // Fallback to filename while loading or if no title
       if (!url) return '';
       const parts = url.split('/');
       const filename = parts.pop() || '';
       const name = filename.replace(/\.[^/.]+$/, ''); // remove extension
-      // To match design style (Uppercase)
-      return `ŒUVRE ${name} - COLLECTION PRIVÉE`; 
+      return `ŒUVRE ${name}`; 
   };
 </script>
 
