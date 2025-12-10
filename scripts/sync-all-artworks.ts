@@ -90,7 +90,6 @@ async function syncCategory(config: CategoryConfig) {
       .insert({
         name: config.categoryName,
         path: config.s3Path,
-        description: `Catégorie ${config.categoryName}`,
       })
       .select('id, name, path')
       .single();

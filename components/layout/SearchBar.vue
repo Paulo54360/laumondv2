@@ -2,7 +2,7 @@
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
 
-  import { searchArtworks } from '../db';
+  // import { searchArtworks } from '../db'; // Incorrect import and usage of server-side code on client
 
   const { t } = useI18n();
 
@@ -25,13 +25,24 @@
   const error = ref<string | null>(null);
 
   const search = async (): Promise<void> => {
-    if (!query.value.trim()) return;
+    if (!query.value.trim()) {
+      results.value = [];
+      return;
+    }
 
     loading.value = true;
     error.value = null;
 
     try {
-      results.value = await searchArtworks(query.value);
+      const data = await $fetch<{ artworks: any[] }>('/api/search', {
+        params: { q: query.value },
+      });
+
+      if (data && data.artworks) {
+        results.value = data.artworks;
+      } else {
+        results.value = [];
+      }
     } catch (e) {
       error.value = e instanceof Error ? e.message : t('common.error');
       console.error('Erreur lors de la recherche:', e);
@@ -81,7 +92,7 @@
     <div v-if="results.length > 0" class="results">
       <div v-for="artwork in results" :key="artwork.id" class="result-item">
         <h3>{{ artwork.title }}</h3>
-        <p>{{ t('search.category_label', { category: artwork.categories?.name || '' }) }}</p>
+        <p>{{ t('search.category_label', { category: artwork.category?.name || '' }) }}</p>
       </div>
     </div>
   </div>
