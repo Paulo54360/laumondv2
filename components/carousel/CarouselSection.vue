@@ -51,7 +51,13 @@
   }>();
 
   const carousel = ref<HTMLElement | null>(null);
-  const dynamicImages = ref<string[]>([...props.images, ...props.images]); // Initialiser avec des images dupliquées
+  
+  // Sécuriser l'initialisation des images (éviter l'erreur "not iterable" si props.images est undefined)
+  const getInitialImages = (): string[] => {
+    return Array.isArray(props.images) ? props.images : [];
+  };
+
+  const dynamicImages = ref<string[]>([...getInitialImages(), ...getInitialImages()]); // Initialiser avec des images dupliquées
 
   // Fonction pour ajouter dynamiquement des images à la fin
   const addMoreImages = (): void => {
