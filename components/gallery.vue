@@ -19,19 +19,21 @@
     const { apiUrl, subfolders, fileRanges } = props;
 
     // Ensure apiUrl does not end with a slash
-    const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+    const baseUrl = apiUrl?.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
 
-    subfolders.forEach((subfolder, index) => {
-      const range = fileRanges[index];
-      if (!range || range.length < 2) return;
+    if (Array.isArray(subfolders) && Array.isArray(fileRanges)) {
+      subfolders.forEach((subfolder, index) => {
+        const range = fileRanges[index];
+        if (!range || !Array.isArray(range) || range.length < 2) return;
 
-      const [start, end] = range;
-      for (let i = start; i <= end; i++) {
-        // Pads with 0 to ensure 2 digits (e.g. 1 -> 01)
-        const fileNum = i.toString().padStart(2, '0');
-        urls.push(`${baseUrl}/${subfolder}/${fileNum}.jpg`);
-      }
-    });
+        const [start, end] = range;
+        for (let i = start; i <= end; i++) {
+          // Pads with 0 to ensure 2 digits (e.g. 1 -> 01)
+          const fileNum = i.toString().padStart(2, '0');
+          urls.push(`${baseUrl}/${subfolder}/${fileNum}.jpg`);
+        }
+      });
+    }
 
     return urls;
   });

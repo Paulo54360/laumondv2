@@ -1,4 +1,4 @@
-name: Deploy to VPS (Docker)
+name: Build & Deploy to VPS
 
 on:
   push:
@@ -6,89 +6,84 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
-  deploy:
-    name: Deploy to OVH VPS
+  build-and-deploy:
     runs-on: ubuntu-latest
-    environment: Production
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create deployment archive
+      - name: Lowercase repo name
         run: |
-          # Create archive in /tmp to avoid "file changed as we read it" error
-          tar \
-            --exclude='node_modules' \
-            --exclude='.git' \
-            --exclude='.nuxt' \
-            --exclude='.output' \
-            --exclude='.github' \
-            --exclude='tests' \
-            -czf /tmp/deployment.tar.gz .
+          echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
-          # Move it back to workspace for the next step
-          mv /tmp/deployment.tar.gz ./deployment.tar.gz
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Deploy to VPS via SSH
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Copy docker-compose.yml to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
-          source: 'deployment.tar.gz'
+          source: 'docker-compose.yml'
           target: '/home/ubuntu/laumond-app/'
 
-      - name: Extract and start Docker on VPS
+      - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USER: ${{ github.actor }}
+          REGISTRY: ${{ env.REGISTRY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
+          envs: GH_TOKEN,GH_USER,REGISTRY,IMAGE_NAME
           script: |
-            # Créer le dossier s'il n'existe pas
+            # Créer le dossier si nécessaire
             mkdir -p /home/ubuntu/laumond-app
             cd /home/ubuntu/laumond-app
 
-            # Sauvegarder .env s'il existe (non inclus dans le tar)
-            if [ -f ".env" ]; then
-              cp .env .env.bak
-            fi
+            # Se connecter au registre pour pouvoir pull l'image privée
+            echo $GH_TOKEN | docker login $REGISTRY -u $GH_USER --password-stdin
 
-            # Extraire la nouvelle version
-            echo "📤 Extraction de la nouvelle version..."
-            tar -xzf deployment.tar.gz
+            # Pull de la nouvelle image
+            echo "⬇️ Downloading new image..."
+            docker compose pull
 
-            # Restaurer .env
-            if [ -f ".env.bak" ]; then
-              mv .env.bak .env
-            fi
+            # Redémarrage des conteneurs
+            echo "🚀 Restarting containers..."
+            docker compose up -d
 
-            # Nettoyer l'archive
-            rm -f deployment.tar.gz
-
-            # Arrêter l'ancien processus PM2 s'il tourne encore (pour libérer le port 3000)
-            if command -v pm2 &> /dev/null; then
-               pm2 stop laumond-nuxt || true
-               pm2 delete laumond-nuxt || true
-            fi
-
-            # Lancer Docker Compose
-            echo "🐳 Démarrage de Docker Compose..."
-
-            # Vérifier si docker compose (v2) est dispo, sinon essayer docker-compose (v1)
-            if docker compose version &> /dev/null; then
-                docker compose down --remove-orphans || true
-                docker compose up -d --build
-            elif command -v docker-compose &> /dev/null; then
-                docker-compose down --remove-orphans || true
-                docker-compose up -d --build
-            else
-                echo "❌ Docker Compose n'est pas trouvé sur le serveur."
-                exit 1
-            fi
+            # Nettoyage
+            docker logout $REGISTRY
+            docker image prune -f
 
             echo "✅ Déploiement terminé !"
