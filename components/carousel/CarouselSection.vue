@@ -23,10 +23,18 @@
       </div>
     </div>
     <div class="carousel-full-width">
-      <div ref="carousel" class="carousel" @scroll="handleScroll">
-        <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
-          <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
+      <div class="carousel-wrapper">
+        <button class="nav-button prev" @click="scrollLeft" aria-label="Previous">
+          <img src="~/assets/images/common/Down Arrow Icon.png" alt="Previous" class="arrow-icon arrow-left" />
+        </button>
+        <div ref="carousel" class="carousel" @scroll="handleScroll">
+          <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
+            <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
+          </div>
         </div>
+        <button class="nav-button next" @click="scrollRight" aria-label="Next">
+          <img src="~/assets/images/common/Down Arrow Icon.png" alt="Next" class="arrow-icon arrow-right" />
+        </button>
       </div>
     </div>
   </div>
@@ -61,6 +69,18 @@
     // Ajouter des images à la fin lorsque la fin est proche
     if (scrollLeft + visibleWidth >= totalWidth - 200) {
       addMoreImages();
+    }
+  };
+
+  const scrollLeft = () => {
+    if (carousel.value) {
+      carousel.value.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carousel.value) {
+      carousel.value.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
 
@@ -148,21 +168,30 @@
     transform: scaleX(1);
   }
 
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
   .carousel {
     display: flex;
     overflow-x: scroll;
     scroll-behavior: smooth;
     gap: 20px;
-    width: 100%;
-    max-width: 100%;
+    flex: 1; /* Take remaining space */
+    min-width: 0; /* Important for scrollable flex item */
     padding: 0;
     white-space: nowrap;
     position: relative;
     box-sizing: border-box;
+    /* Hide scrollbar for Firefox */
+    scrollbar-width: none; 
   }
 
   .carousel::-webkit-scrollbar {
-    display: none; /* Masquer la barre de défilement */
+    display: none; /* Hide scrollbar for Chrome/Safari */
   }
 
   .carousel-item {
@@ -181,9 +210,53 @@
     transform: scale(1.05);
   }
 
+  .nav-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+  }
+
+  .nav-button:hover {
+    opacity: 1;
+  }
+
+  .arrow-icon {
+    width: 20px;
+    height: auto;
+    display: block;
+  }
+
+  .arrow-left {
+    transform: rotate(90deg);
+  }
+
+  .arrow-right {
+    transform: rotate(-90deg);
+  }
+
   @media (max-width: 1024px) {
     .carousel-item {
       width: 400px;
+    }
+    
+    .nav-button {
+       display: none; /* On mobile/tablet, native touch scrolling is usually better/sufficient, but user asked for buttons. Keeping them visible on desktop. */
+       /* Actually, user said "souris" (mouse) doesn't work, implying desktop issue. Hiding on mobile is standard behavior. */
+    }
+    
+    /* Re-enable if user insists on mobile buttons, but usually touch swipe works. */
+    @media (hover: none) and (pointer: coarse) {
+        .nav-button {
+             display: none;
+        }
     }
   }
 
@@ -225,6 +298,10 @@
 
     .carousel-header {
       margin-bottom: 1.5rem;
+    }
+    
+    .arrow-icon {
+        width: 16px;
     }
   }
 
