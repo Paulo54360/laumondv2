@@ -64,4 +64,11 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@supabase/supabase-js', '@supabase/postgrest-js'],
   },
+
+  // Éviter que Nitro n'essaie de bundler ces dépendances (elles seront chargées depuis node_modules)
+  nitro: {
+    externals: {
+      external: ['@supabase/supabase-js', '@supabase/postgrest-js'],
+    },
+  },
 });
