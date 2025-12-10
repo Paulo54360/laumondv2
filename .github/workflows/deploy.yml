@@ -18,8 +18,7 @@ jobs:
 
       - name: Create deployment archive
         run: |
-          # Exclude heavy/unnecessary folders
-          # Options must come before the target directory '.'
+          # Create archive in /tmp to avoid "file changed as we read it" error
           tar \
             --exclude='node_modules' \
             --exclude='.git' \
@@ -27,8 +26,10 @@ jobs:
             --exclude='.output' \
             --exclude='.github' \
             --exclude='tests' \
-            --exclude='deployment.tar.gz' \
-            -czf deployment.tar.gz .
+            -czf /tmp/deployment.tar.gz .
+
+          # Move it back to workspace for the next step
+          mv /tmp/deployment.tar.gz ./deployment.tar.gz
 
       - name: Deploy to VPS via SSH
         uses: appleboy/scp-action@v0.1.7
