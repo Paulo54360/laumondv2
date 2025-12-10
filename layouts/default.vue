@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
-  import ButtonUpPage from '~/components/buttonUpPage.vue';
+  import ButtonUpPage from '~/components/base/ButtonUpPage.vue';
   import TheFooter from '~/components/layout/TheFooter.vue';
-  import Navbar from '~/components/navbar.vue';
+  import Navbar from '~/components/layout/Navbar.vue';
   // Layout par défaut avec Navbar + Footer + Bouton remonter en haut
 </script>
 

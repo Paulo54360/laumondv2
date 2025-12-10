@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: laumond-nuxt
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NUXT_PUBLIC_API_URL=${NUXT_PUBLIC_API_URL:-https://plaumondpicture.s3.eu-west-3.amazonaws.com}
+      # Add other environment variables here if needed
+    # If you need to mount volumes for persistence or config
+    # volumes:
+    #   - ./logs:/app/logs
