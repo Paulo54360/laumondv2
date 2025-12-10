@@ -282,7 +282,7 @@
     },
     {
       id: 'advienne',
-      title: "Afin qu'un \u00A0jour advienne",
+      title: "Afin qu'un jour \u00A0advienne",
       images: [`${S3_BASE_URL}/Archetypes/02/09.jpg`, `${S3_BASE_URL}/Archetypes/02/10.jpg`],
       translations: {
         fr: '',
