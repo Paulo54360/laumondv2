@@ -133,13 +133,14 @@ async function syncCategory(config: CategoryConfig) {
       const imageUrls = [imageUrl];
 
       // 4. Vérifier si l'œuvre existe déjà (par folder_path + numéro)
+      // 4. Vérifier si l'œuvre existe déjà (par image_url spécifique)
+      // Cette méthode est plus robuste que la recherche par dossier qui peut échouer si la limite est atteinte
       const { data: existing, error: searchError } = await supabase
         .from('artworks')
         .select('id, title, image_urls')
         .eq('category_id', category.id)
-        .eq('folder_path', folderPath)
-        .eq('subcategory', subfolder)
-        .limit(10);
+        .ilike('image_urls', `%/${num}.jpg%`)
+        .limit(1);
 
       if (searchError) {
         console.error(`     ❌ Erreur lors de la recherche:`, searchError.message);
@@ -147,16 +148,8 @@ async function syncCategory(config: CategoryConfig) {
         continue;
       }
 
-      // Chercher si une œuvre avec le même chemin exact existe
-      const artworkToUpdate = existing?.find((art) => {
-        try {
-          const urls =
-            typeof art.image_urls === 'string' ? JSON.parse(art.image_urls) : art.image_urls || [];
-          return urls.some((url: string) => url.includes(`/${num}.jpg`));
-        } catch {
-          return false;
-        }
-      });
+      // Comme la recherche DB est spécifique, on prend le premier résultat
+      const artworkToUpdate = existing && existing.length > 0 ? existing[0] : null;
 
       if (artworkToUpdate) {
         // L'œuvre existe, mettre à jour si nécessaire
