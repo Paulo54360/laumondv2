@@ -31,7 +31,7 @@
   import { ref, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
 
-  import useS3 from '../../composables/useS3';
+  import { useS3 } from '../../composables/useS3';
 
   interface IProps {
     category: string;
@@ -54,11 +54,13 @@
   };
 
   const openArtwork = (artwork: { title: string; description: string; images: string[] }): void => {
+    console.log('ArtworkGrid: openArtwork clicked', artwork);
     emit('select', artwork);
   };
 
   // Charger les œuvres au montage du composant
   onMounted(async () => {
+    console.log('ArtworkGrid mounted');
     try {
       artworks.value = await getArtworks(props.category);
     } catch (e) {

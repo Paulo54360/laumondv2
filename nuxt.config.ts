@@ -2,10 +2,11 @@
 import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
+  compatibilityDate: '2025-12-11',
   devtools: { enabled: true },
   nitro: {
     // Aligne Nitro avec les Web APIs et comportements de cette date (évite l'avertissement)
-    compatibilityDate: '2025-10-21',
+    compatibilityDate: '2025-12-11',
   },
 
   // Configuration des variables d'environnement accessibles côté client
@@ -17,6 +18,8 @@ export default defineNuxtConfig({
         process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
     },
   },
+
+
 
   // Configuration des modules
   modules: [

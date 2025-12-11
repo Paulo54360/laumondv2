@@ -16,9 +16,9 @@
         </button>
       </div>
 
-      <div class="artwork-details">
-        <h2>{{ artwork.title }}</h2>
-        <p class="description">{{ artwork.description }}</p>
+      <div class="artwork-details" v-if="showDetails && (artwork.description || artwork.title)">
+        <h2 v-if="artwork.title">{{ artwork.title }}</h2>
+        <p class="description" v-if="artwork.description">{{ artwork.description }}</p>
       </div>
     </div>
   </div>
@@ -29,6 +29,8 @@
 
   interface IProps {
     show: boolean;
+    initialIndex?: number;
+    showDetails?: boolean;
     artwork: {
       title: string;
       description: string;
@@ -36,12 +38,15 @@
     };
   }
 
-  const props = defineProps<IProps>();
+  const props = withDefaults(defineProps<IProps>(), {
+    initialIndex: 0,
+    showDetails: true,
+  });
   const emit = defineEmits<{
     (e: 'close'): void;
   }>();
 
-  const currentIndex = ref(0);
+  const currentIndex = ref(props.initialIndex);
   const currentImage = computed(() => props.artwork.images[currentIndex.value]);
 
   const close = (): void => {
@@ -65,7 +70,7 @@
   watch(
     () => props.artwork,
     () => {
-      currentIndex.value = 0;
+      currentIndex.value = props.initialIndex;
     }
   );
 </script>

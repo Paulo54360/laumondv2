@@ -12,9 +12,9 @@
       </button>
     </div>
 
-    <ArtworkGrid :category="currentCategory" @select="selectArtwork" />
+    <GalleryArtworkGrid :category="currentCategory" @select="selectArtwork" />
 
-    <ArtworkModal
+    <GalleryArtworkModal
       v-if="selectedArtwork"
       :show="!!selectedArtwork"
       :artwork="selectedArtwork"
@@ -24,6 +24,9 @@
 </template>
 
 <script setup lang="ts">
+  import GalleryArtworkGrid from '~/components/gallery/ArtworkGrid.vue';
+  import GalleryArtworkModal from '~/components/gallery/ArtworkModal.vue';
+
   definePageMeta({
     layout: 'default',
   });
@@ -45,7 +48,9 @@
     description: string;
     images: string[];
   }): void => {
+    console.log('GaleriePage: selectArtwork received', artwork);
     selectedArtwork.value = artwork;
+    console.log('GaleriePage: selectedArtwork updated', selectedArtwork.value);
   };
 
   const closeModal = (): void => {

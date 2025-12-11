@@ -1,11 +1,22 @@
 <template>
-  <GalleryContent :title="title" />
+  <div>
+    <GalleryContent :title="title" />
+    <GalleryArtworkModal
+      v-if="selectedArtwork"
+      :show="!!selectedArtwork"
+      :artwork="selectedArtwork"
+      :initial-index="initialIndex"
+      :show-details="false"
+      @close="closeModal"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { computed, provide, toRef } from 'vue';
+  import { computed, provide, ref } from 'vue';
 
   import GalleryContent from '~/components/gallery/GalleryContent.vue';
+  import GalleryArtworkModal from '~/components/gallery/ArtworkModal.vue';
 
   const props = defineProps<{
     title: string;
@@ -39,4 +50,25 @@
   });
 
   provide('imageUrls', imageUrls);
+
+  // Modal logic
+  const selectedArtwork = ref<{ title: string; description: string; images: string[] } | null>(null);
+  const initialIndex = ref(0);
+
+  const openModal = (index: number): void => {
+    initialIndex.value = index;
+    // For gallery pages (deployments, etc.), the modal should show all images
+    // allowing the user to navigate through them.
+    selectedArtwork.value = {
+      title: props.title,
+      description: '', // Description is optional/empty for these galleries
+      images: imageUrls.value
+    };
+  };
+
+  const closeModal = (): void => {
+    selectedArtwork.value = null;
+  };
+
+  provide('openModal', openModal);
 </script>
