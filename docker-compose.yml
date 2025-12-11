@@ -10,7 +10,10 @@ services:
       - "3000:3000"
     environment:
       - NUXT_PUBLIC_API_URL=${NUXT_PUBLIC_API_URL:-https://plaumondpicture.s3.eu-west-3.amazonaws.com}
-      # Add other environment variables here if needed
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - NUXT_SUPABASE_URL=${SUPABASE_URL}
+      - NUXT_SUPABASE_KEY=${SUPABASE_KEY}
     # If you need to mount volumes for persistence or config
     # volumes:
     #   - ./logs:/app/logs
