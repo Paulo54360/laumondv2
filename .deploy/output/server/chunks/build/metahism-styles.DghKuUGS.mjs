@@ -1,8 +1,0 @@
-const metahism_scss_vue_type_style_index_0_src_true_lang = ".metahism-page{color:var(--color-text);font-family:var(--font-family-base);margin:0 auto;max-width:var(--max-width-content);padding:2rem 1cm}.metahism-page .page-title-header{align-items:flex-start;display:inline-flex;flex-direction:column;gap:.4rem;margin-bottom:calc(4rem - 1cm);max-width:100%;width:-moz-max-content;width:max-content}.metahism-page .page-title-header .page-title{align-items:baseline;color:#5e6266;display:inline-block;font-size:2.2rem;font-weight:300;letter-spacing:.22em;line-height:1.2;margin:0;padding:0;text-transform:uppercase}.metahism-page .page-title-header .page-title-divider{background:var(--color-primary-dark);height:3px;margin:0;transform:scaleX(.3);transform-origin:left center;width:calc(100% - .22em)}.metahism-page .text-content{font-size:1.2em;line-height:1.7;text-align:justify;text-justify:inter-word}.metahism-page .text-content p{color:var(--color-text);margin:1.2em 0;padding:0}.metahism-page .text-content #Patrick{color:var(--color-muted-dark);font-style:normal;font-weight:700}.metahism-page .text-content #citation{font-size:1em;font-style:italic;text-align:left}.metahism-page .text-content #ps{color:var(--color-muted);font-size:.8em;font-style:italic;text-align:left}.metahism-page .text-content h1{-webkit-hyphens:auto;hyphens:auto}@media(max-width:1024px){.metahism-page{padding:2rem clamp(1.5rem,4vw,2rem)}}@media(max-width:768px){.metahism-page{padding:2rem 1rem}.metahism-page .text-content{font-size:1.1em;line-height:1.6}}";
-
-const metahismStyles_DghKuUGS = [
-  metahism_scss_vue_type_style_index_0_src_true_lang
-];
-
-export { metahismStyles_DghKuUGS as default };
-//# sourceMappingURL=metahism-styles.DghKuUGS.mjs.map
