@@ -10,6 +10,8 @@ export default defineNuxtConfig({
 
   // Configuration des variables d'environnement accessibles côté client
   runtimeConfig: {
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_KEY,
     public: {
       apiUrl:
         process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',

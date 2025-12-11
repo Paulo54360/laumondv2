@@ -12,10 +12,12 @@ export default defineEventHandler(async (event) => {
     }
 
     // Initialisation du client Supabase
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_KEY;
+    const config = useRuntimeConfig();
+    const supabaseUrl = config.supabaseUrl;
+    const supabaseKey = config.supabaseKey;
 
     if (!supabaseUrl || !supabaseKey) {
+      console.error('Configuration Supabase manquante (supabaseUrl ou supabaseKey)');
       throw new Error('Erreur de configuration Supabase');
     }
 
