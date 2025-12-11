@@ -2,7 +2,7 @@
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
 
-  // import { searchArtworks } from '../db'; // Incorrect import and usage of server-side code on client
+
 
   const { t } = useI18n();
 

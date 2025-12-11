@@ -17,8 +17,13 @@ export default defineEventHandler(async (event) => {
     const supabaseKey = config.supabaseKey;
 
     if (!supabaseUrl || !supabaseKey) {
-      console.error('Configuration Supabase manquante (supabaseUrl ou supabaseKey)');
-      throw new Error('Erreur de configuration Supabase');
+      console.error('❌ Configuration Supabase manquante :');
+      console.error('- supabaseUrl :', supabaseUrl ? 'Défini' : 'NON DÉFINI');
+      console.error('- supabaseKey :', supabaseKey ? 'Défini' : 'NON DÉFINI');
+      throw createError({
+        statusCode: 500,
+        message: 'Erreur de configuration serveur (Supabase)',
+      });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -193,11 +198,15 @@ export default defineEventHandler(async (event) => {
     return {
       artworks: formattedArtworks,
     };
-  } catch (error) {
-    console.error('Erreur de recherche:', error);
+  } catch (error: any) {
+    console.error('❌ Erreur CRITIQUE dans /api/search :', error);
+    // Log plus détaillé si disponible
+    if (error.message) console.error('Message:', error.message);
+    if (error.stack) console.error('Stack:', error.stack);
+    
     throw createError({
       statusCode: 500,
-      message: 'Erreur lors de la recherche',
+      message: 'Erreur interne lors de la recherche',
     });
   }
 });
