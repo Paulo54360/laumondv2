@@ -145,13 +145,14 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.2rem;
+    height: 2.2rem;
     background: var(--color-background);
     border: 2px solid var(--color-primary);
     color: var(--color-primary);
-    font-size: 1.2rem;
-    padding: 0;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0 2px 0; /* Slight adjustment for visual center of text characters */
     cursor: pointer;
     transition: all var(--transition-fast);
     border-radius: 0;
@@ -206,10 +207,10 @@
     }
 
     .nav-button {
-      font-size: 1rem;
-      width: 2.2rem;
-      height: 2.2rem;
-      padding: 0; /* Clean override */
+      font-size: 0.9rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      padding: 0 0 1px 0;
 
       &.prev {
         left: 0.5rem;
@@ -248,9 +249,9 @@
     }
 
     .nav-button {
-      font-size: 0.9rem;
-      width: 1.8rem;
-      height: 1.8rem;
+      font-size: 0.8rem;
+      width: 1.5rem;
+      height: 1.5rem;
       border-width: 1px; /* Thinner border for small screens */
 
       &.prev {
