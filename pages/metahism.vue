@@ -49,7 +49,11 @@
         </p>
       </div>
 
-      <p id="ps">{{ $t('MétaHisme.Texte15') }}</p>
+
+
+      <div class="metahisme-footnote">
+        <p>{{ $t('MétaHisme.Footnote') }}</p>
+      </div>
 
       <div class="article-link-container">
         <a
@@ -60,10 +64,6 @@
         >
           {{ $t('MétaHisme.ArticleLinkText') }}
         </a>
-      </div>
-
-      <div class="metahisme-footnote">
-        <p>{{ $t('MétaHisme.Footnote') }}</p>
       </div>
     </div>
   </div>
