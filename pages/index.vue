@@ -32,6 +32,7 @@
       :cta-href="metahismeContent.ctaHref"
       :show-more-alt="metahismeContent.showMoreAlt"
       :show-less-alt="metahismeContent.showLessAlt"
+      :footnote="metahismeContent.footnote"
     />
 
     <HomeArtworksSection
@@ -118,6 +119,7 @@
     ctaHref: localePath('/metahism'),
     showMoreAlt: t('analyses.show_more'),
     showLessAlt: t('analyses.show_less'),
+    footnote: t('MétaHisme.Footnote'),
   }));
 
   const featuredArtworks = computed(() => {

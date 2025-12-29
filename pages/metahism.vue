@@ -50,6 +50,21 @@
       </div>
 
       <p id="ps">{{ $t('MétaHisme.Texte15') }}</p>
+
+      <div class="article-link-container">
+        <a
+          href="https://www.champslibres.media/rencontre-avec-patrick-laumond"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="article-link"
+        >
+          {{ $t('MétaHisme.ArticleLinkText') }}
+        </a>
+      </div>
+
+      <div class="metahisme-footnote">
+        <p>{{ $t('MétaHisme.Footnote') }}</p>
+      </div>
     </div>
   </div>
 </template>

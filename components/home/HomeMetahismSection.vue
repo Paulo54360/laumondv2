@@ -36,6 +36,10 @@
               />
               <img v-else :src="upArrowIcon" :alt="showLessAlt" class="arrow-img" />
             </button>
+
+            <div v-if="footnote && !showFullMetahisme" class="metahisme-footnote">
+              {{ footnote }}
+            </div>
           </div>
         </div>
       </div>
@@ -64,6 +68,7 @@
     ctaHref: string;
     showMoreAlt: string;
     showLessAlt: string;
+    footnote?: string;
   }>();
 
   const showFullMetahisme = ref(false);
