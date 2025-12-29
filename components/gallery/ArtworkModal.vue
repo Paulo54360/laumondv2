@@ -93,6 +93,7 @@
     position: relative;
     width: 90%;
     max-width: 1200px;
+    height: 90vh; /* Fixed height to force containment */
     max-height: 90vh;
     background: var(--color-background);
     border-radius: var(--border-radius);
@@ -110,9 +111,10 @@
     color: var(--color-text);
     font-size: 2rem;
     cursor: pointer;
-    z-index: 1;
+    z-index: 2; /* Increased z-index */
     padding: var(--spacing-xs);
     line-height: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* visibility on dark bg */
 
     &:hover {
       color: var(--color-primary);
@@ -122,13 +124,20 @@
   .image-viewer {
     position: relative;
     flex: 1;
-    min-height: 0;
+    min-height: 0; /* Crucial for flex child scrolling/containment */
     background: var(--color-background-alt);
+    display: flex; /* Centering image */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 
     img {
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto; /* Allow width to shrink */
+      height: auto; /* Allow height to shrink */
       object-fit: contain;
+      display: block;
     }
   }
 
@@ -136,17 +145,25 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
+    width: 3rem;
+    height: 3rem;
+    background: var(--color-background);
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
     font-size: 1.5rem;
-    padding: var(--spacing-md);
+    padding: 0;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
-    border-radius: 50%;
+    transition: all var(--transition-fast);
+    border-radius: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: var(--color-primary);
+      color: var(--color-white);
+      transform: translateY(-50%); /* Maintaining vertical center */
     }
 
     &.prev {
@@ -160,6 +177,8 @@
 
   .artwork-details {
     padding: var(--spacing-lg);
+    background: var(--color-background); /* Ensure opaque background */
+    flex-shrink: 0; /* Don't shrink to fit image */
 
     h2 {
       margin: 0 0 var(--spacing-md);
@@ -176,6 +195,7 @@
   @media (max-width: 768px) {
     .modal-content {
       width: 95%;
+      height: 95vh;
       max-height: 95vh;
     }
 
@@ -187,7 +207,9 @@
 
     .nav-button {
       font-size: 1.2rem;
-      padding: 0.8rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0; /* Clean override */
 
       &.prev {
         left: 0.5rem;
@@ -215,6 +237,7 @@
   @media (max-width: 480px) {
     .modal-content {
       width: 98%;
+      height: 98vh;
       max-height: 98vh;
     }
 
@@ -226,12 +249,9 @@
 
     .nav-button {
       font-size: 1rem;
-      padding: 0.6rem;
-      width: 35px;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-width: 1px; /* Thinner border for small screens */
 
       &.prev {
         left: 0.3rem;
