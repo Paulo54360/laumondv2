@@ -41,6 +41,7 @@
         "dotenv": "^16.5.0",
         "node-fetch": "^3.3.2",
         "nuxt": "^3.15.2",
+        "nuxt-gtag": "^4.1.0",
         "swiper": "^11.2.1",
         "tslib": "^2.8.1",
         "vue": "latest",

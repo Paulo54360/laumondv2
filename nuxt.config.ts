@@ -19,8 +19,6 @@ export default defineNuxtConfig({
     },
   },
 
-
-
   // Configuration des modules
   modules: [
     [
@@ -47,6 +45,7 @@ export default defineNuxtConfig({
         },
       },
     ],
+    'nuxt-gtag',
   ],
 
   // Configuration CSS
@@ -69,6 +68,4 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@supabase/supabase-js', '@supabase/postgrest-js', 'tslib'],
   },
-
-
 });
