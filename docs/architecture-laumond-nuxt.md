@@ -125,6 +125,7 @@ Résultat : **les composants affichent**, **les composables orchestrent**, **les
 
 - Objectifs et périmètre du refactor : `docs/refactor-laumond-nuxt.md`
 - Plan de travail (epics/stories) : `docs/refactor-epics-stories.md`
+- Styles (tokens, où mettre quoi, comment modifier) : `docs/styles-howto.md`
 - Règles projet (stack, style, CI/CD) : `.cursorrules` à la racine
 
 ---

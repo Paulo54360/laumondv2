@@ -1,3 +1,5 @@
+// Mixins réutilisables (section-header, image-grid, section-padding, content-container).
+// Utilisés par les SCSS pages/ et components/.
 // Mixins pour patterns récurrents du design system
 // Section header avec titre et barre rouge
 @mixin section-header($animate-on-hover: true) {

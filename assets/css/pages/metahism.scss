@@ -1,10 +1,10 @@
+// Styles page MétaHisme (metahism.vue). Importé via <style src="~/assets/css/pages/metahism.scss">.
 .metahism-page {
     max-width: var(--max-width-content);
     margin: 0 auto;
     padding: 2rem 1cm;
     font-family: var(--font-family-base);
     color: var(--color-text);
-
     .page-title-header {
         display: inline-flex;
         flex-direction: column;
@@ -13,11 +13,10 @@
         width: max-content;
         max-width: 100%;
         margin-bottom: calc(4rem - 1cm);
-
         .page-title {
             font-size: 2.2rem;
             font-weight: 300;
-            color: #5e6266;
+            color: var(--color-text-light);
             letter-spacing: 0.22em;
             text-transform: uppercase;
             display: inline-block;
@@ -26,7 +25,6 @@
             margin: 0;
             padding: 0;
         }
-
         .page-title-divider {
             width: calc(100% - 0.22em);
             height: 3px;
@@ -36,54 +34,45 @@
             transform: scaleX(0.3);
         }
     }
-
     .text-content {
         font-size: 1.2em;
         line-height: 1.7;
         text-align: justify;
         text-justify: inter-word;
-
         p {
             margin: 1.2em 0;
             padding: 0;
             color: var(--color-text);
         }
-
         #Patrick {
             color: var(--color-muted-dark);
             font-style: normal;
             font-weight: bold;
         }
-
         #citation {
             font-size: 1em;
             font-style: italic;
             text-align: left;
         }
-
         #ps {
             color: var(--color-muted);
             font-size: 0.8em;
             font-style: italic;
             text-align: left;
         }
-
         .article-link-container {
             margin-top: 1rem;
             margin-bottom: 2rem;
         }
-
         .article-link {
             font-size: 1em;
             color: var(--color-text);
             text-decoration: underline;
             transition: color 0.2s ease;
-
             &:hover {
                 color: var(--color-primary);
             }
         }
-
         .metahisme-footnote {
             margin-top: 2rem;
             padding-top: 1rem;
@@ -91,12 +80,10 @@
             font-size: 0.9em;
             color: var(--color-text-light);
             font-style: italic;
-
             p {
                 margin: 0;
             }
         }
-
         h1 {
             -webkit-hyphens: auto;
             -moz-hyphens: auto;
@@ -117,11 +104,9 @@
 @media (max-width: 768px) {
     .metahism-page {
         padding: 2rem 1rem;
-
         .text-content {
             font-size: 1.1em;
             line-height: 1.6;
         }
     }
 }
-

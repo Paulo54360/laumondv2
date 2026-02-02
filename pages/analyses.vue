@@ -558,7 +558,7 @@
         border-radius: 50%;
         overflow: hidden;
         margin-right: 10px;
-        border: 1px solid #eee;
+        border: 1px solid var(--color-border);
 
         img {
           width: 100%;
@@ -622,7 +622,7 @@
       font-family: var(--font-family-heading);
       font-size: clamp(0.6rem, 1.2vw, 0.9rem);
       font-weight: 600;
-      color: #333;
+      color: var(--color-ink);
       letter-spacing: 0.22em;
       text-transform: uppercase;
       display: block;
@@ -635,7 +635,7 @@
     .paragraph-item {
       margin-bottom: 0.7em;
       line-height: 1.6;
-      color: #333;
+      color: var(--color-ink);
       text-align: justify;
 
       &:last-child {
@@ -647,7 +647,7 @@
       margin-bottom: 0;
       margin-top: 0;
       line-height: 1.2;
-      color: #333;
+      color: var(--color-ink);
       text-align: left;
       padding: 0;
 
@@ -658,7 +658,7 @@
 
     .analysis-text {
       line-height: 1.7;
-      color: #333;
+      color: var(--color-ink);
       text-align: justify;
       margin: 0;
       padding: 0;
@@ -667,7 +667,7 @@
     p {
       margin-bottom: 0.6rem;
       line-height: 1.6;
-      color: #333;
+      color: var(--color-ink);
 
       &:last-child {
         margin-bottom: 0;
@@ -685,13 +685,13 @@
       background: var(--color-background-alt);
       border-left: 4px solid var(--color-muted);
       font-style: italic;
-      color: #555;
+      color: var(--color-text-light);
       line-height: 1.6;
     }
 
     .citation {
       font-style: italic;
-      color: #555;
+      color: var(--color-text-light);
     }
 
     .emphasis-text {
@@ -737,13 +737,13 @@
 
     .footnotes-separator {
       border: none;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid var(--color-border);
       margin-bottom: 1.5rem;
     }
 
     .footnote {
       font-size: 0.9rem;
-      color: #666;
+      color: var(--color-text-light);
       line-height: 1.6;
       margin-bottom: 0.8rem;
 

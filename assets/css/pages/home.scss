@@ -1,5 +1,5 @@
+// Styles page d'accueil (index.vue). Importé via <style src="~/assets/css/pages/home.scss">.
 @use '../_mixins.scss' as *;
-
 .homepage {
     min-height: 100vh;
     width: 100%;
@@ -404,7 +404,6 @@
                         margin: 0 auto;
                     }
                 }
-
                 .metahisme-footnote {
                     margin-top: 1.5rem;
                     padding-top: 1rem;

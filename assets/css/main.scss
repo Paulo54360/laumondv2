@@ -1,4 +1,6 @@
 @use './_tokens.scss' as *;
+// Global : expose les tokens en var(--color-...), reset de base, styles body/typography.
+// Importé dans nuxt.config (css: ['~/assets/css/main.scss']).
 // CSS custom properties for the design system
 :root {
     // Palette

@@ -158,7 +158,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 400;
-      color: #333;
+      color: var(--color-ink);
     }
   }
 
@@ -167,7 +167,7 @@
     align-items: center;
     margin-bottom: 2rem;
     gap: 2rem;
-    color: #555;
+    color: var(--color-text-light);
     font-size: 0.9rem;
     flex-wrap: wrap;
     justify-content: center;
@@ -179,20 +179,20 @@
     gap: 0.5rem;
 
     label {
-      color: #666;
+      color: var(--color-text-light);
     }
 
     .items-select {
-      border: 1px solid #ddd;
+      border: 1px solid var(--color-border);
       padding: 0.3rem 0.5rem;
       border-radius: 4px;
-      color: #333;
+      color: var(--color-ink);
       background: white;
       cursor: pointer;
 
       &:focus {
         outline: none;
-        border-color: #999;
+        border-color: var(--color-muted);
       }
     }
   }
@@ -205,18 +205,18 @@
 
   .nav-btn {
     background: white;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     padding: 0.4rem 0.8rem;
     border-radius: 4px;
     cursor: pointer;
-    color: #555;
+    color: var(--color-text-light);
     transition: all 0.2s;
     font-size: 0.85rem;
 
     &:hover:not(:disabled) {
-      background: #f5f5f5;
-      color: #333;
-      border-color: #ccc;
+      background: var(--color-surface);
+      color: var(--color-ink);
+      border-color: var(--color-border);
     }
 
     &:disabled {
@@ -246,7 +246,7 @@
     width: 100%;
     aspect-ratio: 4/3; /* Adjust based on typical artwork ratio */
     overflow: hidden;
-    background: #f9f9f9;
+    background: var(--color-background-alt);
     margin-bottom: 1rem;
     border-radius: 2px;
 
@@ -263,7 +263,7 @@
   .image-title {
     font-size: 0.75rem;
     text-align: center;
-    color: #444;
+    color: var(--color-text);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     line-height: 1.4;

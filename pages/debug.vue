@@ -153,7 +153,7 @@
   }
 
   .image-test {
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
     padding: 1rem;
   }
@@ -165,7 +165,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f0f0f0;
+    background: var(--color-surface);
   }
 
   .image-box img {
@@ -182,7 +182,7 @@
   }
 
   .test-button {
-    background: #3498db;
+    background: var(--color-primary);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -214,7 +214,7 @@
   }
 
   .result-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
     padding: 1rem;
   }
@@ -229,7 +229,7 @@
   .no-image {
     width: 100%;
     height: 200px;
-    background: #f0f0f0;
+    background: var(--color-surface);
     display: flex;
     align-items: center;
     justify-content: center;

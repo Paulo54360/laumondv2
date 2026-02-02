@@ -1,3 +1,4 @@
+// Styles page biographie (biography.vue). Importé via <style src="~/assets/css/pages/biography.scss">.
 .biography-page {
     max-width: var(--max-width-content);
     margin: 0 auto;
@@ -26,7 +27,7 @@
             font-family: var(--font-family-heading);
             font-size: 2.2rem;
             font-weight: 300;
-            color: #5e6266;
+            color: var(--color-text-light);
             letter-spacing: 0.22em;
             text-transform: uppercase;
             display: block;
@@ -40,7 +41,7 @@
         .section-title-divider {
             width: calc(100% - 0.22em);
             height: 3px;
-            background: #a20101;
+            background: var(--color-primary-dark);
             margin: 0 0 20px 0;
             transform-origin: left center;
             transform: scaleX(0.3);
