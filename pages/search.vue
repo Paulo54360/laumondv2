@@ -86,6 +86,8 @@
 
   import type { SearchArtwork } from '~/types/artwork';
 
+  definePageMeta({ layout: 'default' });
+
   const route = useRoute();
   const { t } = useI18n();
   const { searchArtworks: fetchArtworks } = useSearch();

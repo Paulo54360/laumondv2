@@ -20,6 +20,8 @@
 <script setup>
   import GalleryComponent from '~/components/gallery.vue';
 
+  definePageMeta({ layout: 'default' });
+
   const config = useRuntimeConfig();
   // On force l'URL à être absolue et sans préfixe de langue
   let bucketUrl = config.public.apiUrl || '';

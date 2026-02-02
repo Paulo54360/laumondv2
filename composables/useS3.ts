@@ -1,14 +1,20 @@
 // @ts-expect-error - Provided by Nuxt auto-imports at build time
 import { useRuntimeConfig } from '#imports';
 
-interface IArtwork {
+/** Œuvre galerie (titre, description, URLs images) utilisée par ArtworkGrid / galerie. */
+export interface IGalleryArtwork {
   title: string;
   description: string;
   images: string[];
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useS3() {
+export interface IUseS3Return {
+  getArtworks: (category: string) => Promise<IGalleryArtwork[]>;
+  getArtworkImages: (category: string, folder: string) => Promise<string[]>;
+  getArtworkDescription: (category: string, folder: string) => Promise<string>;
+}
+
+export function useS3(): IUseS3Return {
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl;
 
@@ -42,8 +48,8 @@ export function useS3() {
     }
   };
 
-  const getArtworks = async (category: string): Promise<IArtwork[]> => {
-    const artworks: IArtwork[] = [];
+  const getArtworks = async (category: string): Promise<IGalleryArtwork[]> => {
+    const artworks: IGalleryArtwork[] = [];
 
     // Liste des dossiers par catégorie
     const folders = {

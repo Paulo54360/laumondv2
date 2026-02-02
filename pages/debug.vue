@@ -61,6 +61,8 @@
   import { ref, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
 
+  definePageMeta({ layout: 'default' });
+
   const { t } = useI18n();
   const connectionResults = ref(null);
   const testImages = ref([

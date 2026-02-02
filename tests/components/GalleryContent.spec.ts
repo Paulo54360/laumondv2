@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import type { VNode } from 'vue';
 import { h, provide, ref } from 'vue';
 
 import GalleryContent from '../../components/gallery/GalleryContent.vue';
@@ -42,12 +43,12 @@ const mountGallery = (opts: MountOptions = {}) => {
   const openModal = vi.fn();
 
   const ProviderWrapper = {
-    setup() {
+    setup(): () => VNode {
       provide('imageUrls', imageUrls);
       provide('openModal', openModal);
       provide('itemsPerPage', itemsPerPage);
       provide('currentPage', currentPage);
-      return () => h(GalleryContent, { title: 'My Gallery' });
+      return (): VNode => h(GalleryContent, { title: 'My Gallery' });
     },
   };
 

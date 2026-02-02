@@ -158,6 +158,8 @@
   import { ref, computed, watch } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
+
+  definePageMeta({ layout: 'default' });
   const runtimeConfig = useRuntimeConfig();
 
   const S3_BASE_URL = runtimeConfig.public.apiUrl;

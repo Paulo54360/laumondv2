@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-  // Component setup - no additional logic needed
+  definePageMeta({ layout: 'default' });
 </script>
 
 <style lang="scss" src="~/assets/css/pages/metahism.scss"></style>

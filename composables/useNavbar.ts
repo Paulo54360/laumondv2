@@ -1,11 +1,29 @@
+import type { Ref, ComputedRef } from 'vue';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // @ts-expect-error - Provided by Nuxt auto-imports at build time
 import { useLocalePath, useNuxtApp, useSwitchLocalePath } from '#imports';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useNavbar() {
+export interface IUseNavbarReturn {
+  isScrolled: Ref<boolean>;
+  isMobileMenuOpen: Ref<boolean>;
+  searchQuery: Ref<string>;
+  isCompactSearch: Ref<boolean>;
+  isSearchPanelOpen: Ref<boolean>;
+  currentLocale: ComputedRef<string>;
+  searchPlaceholder: ComputedRef<string>;
+  closeMobileMenu: () => void;
+  closeSearchPanel: () => void;
+  openSearchPanel: () => void;
+  toggleMobileMenu: () => void;
+  changeLanguage: (newLocale: string) => Promise<void>;
+  performSearch: () => void;
+  isCurrentRoute: (path: string) => boolean;
+  localePath: (path: string | { path: string; query?: Record<string, string> }) => string;
+}
+
+export function useNavbar(): IUseNavbarReturn {
   const route = useRoute();
   const router = useRouter();
   const { $i18n } = useNuxtApp();

@@ -62,6 +62,8 @@
   import HomeHero from '~/components/home/HomeHero.vue';
   import HomeMetahismSection from '~/components/home/HomeMetahismSection.vue';
 
+  definePageMeta({ layout: 'default' });
+
   const route = useRoute();
   const { locale, t } = useI18n();
 

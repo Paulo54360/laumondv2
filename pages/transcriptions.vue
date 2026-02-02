@@ -11,6 +11,8 @@
 <script setup>
   import GalleryComponent from '~/components/gallery.vue';
 
+  definePageMeta({ layout: 'default' });
+
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl;
 

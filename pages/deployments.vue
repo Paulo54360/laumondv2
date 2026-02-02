@@ -11,6 +11,8 @@
 <script setup>
   import GalleryComponent from '~/components/gallery.vue';
 
+  definePageMeta({ layout: 'default' });
+
   const config = useRuntimeConfig();
   const bucketUrl = config.public.apiUrl; // Récupération de l'URL de base depuis nuxt.config.ts
 </script>

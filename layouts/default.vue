@@ -14,7 +14,7 @@
   import ButtonUpPage from '~/components/base/ButtonUpPage.vue';
   import Navbar from '~/components/layout/Navbar.vue';
   import TheFooter from '~/components/layout/TheFooter.vue';
-  // Layout par défaut avec Navbar + Footer + Bouton remonter en haut
+  // Architecture cible : structure commune (header/nav, main, footer, sélecteur de langue dans Navbar).
 </script>
 
 <style lang="scss">

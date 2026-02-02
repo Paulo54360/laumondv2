@@ -7,4 +7,6 @@
 
 <script setup>
   import OeuvreGallery from '~/components/gallery/OeuvreGallery.vue';
+
+  definePageMeta({ layout: 'default' });
 </script>

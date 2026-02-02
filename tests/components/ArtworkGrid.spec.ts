@@ -11,7 +11,7 @@ vi.mock('vue-i18n', () => ({
 
 const mockGetArtworks = vi.fn();
 vi.mock('../../composables/useS3', () => ({
-  useS3: () => ({
+  useS3: (): { getArtworks: ReturnType<typeof vi.fn> } => ({
     getArtworks: mockGetArtworks,
   }),
 }));

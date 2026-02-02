@@ -66,6 +66,8 @@
 <script setup lang="ts">
   import { onMounted } from 'vue';
 
+  definePageMeta({ layout: 'default' });
+
   onMounted(() => {
     const links = document.querySelectorAll('.nav-menu a[href^="#"]');
 

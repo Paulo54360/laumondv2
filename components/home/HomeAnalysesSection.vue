@@ -1,12 +1,9 @@
 <template>
   <section id="analyses" class="section analyses-section">
     <div class="section-container">
-      <div class="section-header">
-        <h2 class="section-title">
-          <NuxtLink :to="ctaHref" class="heading-link">{{ sectionTitle }}</NuxtLink>
-        </h2>
-        <div class="section-divider"></div>
-      </div>
+      <BaseSectionTitle :animated="true">
+        <NuxtLink :to="ctaHref" class="heading-link">{{ sectionTitle }}</NuxtLink>
+      </BaseSectionTitle>
 
       <div class="analyses-content">
         <div
