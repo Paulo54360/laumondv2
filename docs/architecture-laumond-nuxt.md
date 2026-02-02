@@ -127,6 +127,8 @@ Résultat : **les composants affichent**, **les composables orchestrent**, **les
 - Plan de travail (epics/stories) : `docs/refactor-epics-stories.md`
 - Styles (tokens, où mettre quoi, comment modifier) : `docs/styles-howto.md`
 - CI/CD & déploiement (pipeline, Docker, VPS) : `docs/cicd-deployment.md`
+- How to ajouter une page/section : `docs/howto-add-page.md`
+- Conventions & bonnes pratiques : `docs/conventions.md`
 - Règles projet (stack, style, CI/CD) : `.cursorrules` à la racine
 
 ---
