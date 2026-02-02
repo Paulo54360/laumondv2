@@ -1,7 +1,7 @@
 <template>
   <div class="gallery-content">
     <h1>{{ title || t('gallery.default_title') }}</h1>
-    
+
     <div class="pagination-bar">
       <div class="items-per-page">
         <label>{{ t('gallery.items_per_page', 'Items per page:') }}</label>
@@ -17,18 +17,10 @@
         <span class="pagination-info">
           {{ paginationStart }} - {{ paginationEnd }} {{ t('gallery.of', 'of') }} {{ totalItems }}
         </span>
-        <button 
-          :disabled="currentPage === 1" 
-          @click="previousPage"
-          class="nav-btn"
-        >
+        <button :disabled="currentPage === 1" class="nav-btn" @click="previousPage">
           &larr; {{ t('common.previous', 'Previous') }}
         </button>
-        <button 
-          :disabled="currentPage === totalPages" 
-          @click="nextPage"
-          class="nav-btn"
-        >
+        <button :disabled="currentPage === totalPages" class="nav-btn" @click="nextPage">
           {{ t('common.next', 'Next') }} &rarr;
         </button>
       </div>
@@ -64,9 +56,11 @@
   const imageUrls = inject<Ref<string[]>>('imageUrls', ref([]));
   const openModal = inject<(index: number) => void>('openModal', () => {});
 
-  // State managed locally for the UI controls
-  const itemsPerPage = ref(10);
-  const currentPage = ref(1);
+  // Optional injected pagination (e.g. for tests); fallback to local state
+  const injectedItemsPerPage = inject<Ref<number>>('itemsPerPage');
+  const injectedCurrentPage = inject<Ref<number>>('currentPage');
+  const itemsPerPage = injectedItemsPerPage ?? ref(10);
+  const currentPage = injectedCurrentPage ?? ref(1);
   const titles = ref<Record<string, string>>({}); // Cache for titles
 
   const totalItems = computed(() => imageUrls.value.length);
@@ -78,41 +72,49 @@
   });
 
   const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value);
-  const endIndex = computed(() => Math.min(startIndex.value + itemsPerPage.value, totalItems.value));
+  const endIndex = computed(() =>
+    Math.min(startIndex.value + itemsPerPage.value, totalItems.value)
+  );
 
-  const paginationStart = computed(() => totalItems.value === 0 ? 0 : startIndex.value + 1);
+  const paginationStart = computed(() => (totalItems.value === 0 ? 0 : startIndex.value + 1));
   const paginationEnd = computed(() => endIndex.value);
 
   const displayedImages = computed(() => imageUrls.value.slice(startIndex.value, endIndex.value));
 
   // Fetch titles for displayed images
-  const fetchTitlesForImages = async (images: string[]) => {
-    await Promise.all(images.map(async (url) => {
+  const fetchTitlesForImages = async (images: string[]): Promise<void> => {
+    await Promise.all(
+      images.map(async (url) => {
         if (titles.value[url] !== undefined || !url) return; // Already fetched or invalid
-        
+
         try {
-            // Replace extension with .txt
-            const txtUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt');
-            const response = await fetch(txtUrl);
-            if (response.ok) {
-                const text = await response.text();
-                titles.value[url] = text && text.trim() ? text.trim() : '';
-            } else {
-                titles.value[url] = ''; // Mark as visited/empty
-            }
+          // Replace extension with .txt
+          const txtUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt');
+          const response = await fetch(txtUrl);
+          if (response.ok) {
+            const text = await response.text();
+            titles.value[url] = text && text.trim() ? text.trim() : '';
+          } else {
+            titles.value[url] = ''; // Mark as visited/empty
+          }
         } catch (e) {
-            console.error('Error fetching title for', url, e);
-            titles.value[url] = '';
+          console.error('Error fetching title for', url, e);
+          titles.value[url] = '';
         }
-    }));
+      })
+    );
   };
 
   // Watch for changes in displayed images to fetch their titles
-  watch(displayedImages, (newImages) => {
-    if (newImages && newImages.length > 0) {
-      fetchTitlesForImages(newImages);
-    }
-  }, { immediate: true });
+  watch(
+    displayedImages,
+    (newImages) => {
+      if (newImages && newImages.length > 0) {
+        fetchTitlesForImages(newImages);
+      }
+    },
+    { immediate: true }
+  );
 
   const previousPage = (): void => {
     if (currentPage.value > 1) {
@@ -128,17 +130,17 @@
 
   // Helper to extract a displayable title from the URL provided
   const extractTitle = (url: string): string => {
-      // Use fetched title if available
-      if (titles.value[url]) {
-         return titles.value[url].toUpperCase();
-      }
+    // Use fetched title if available
+    if (titles.value[url]) {
+      return titles.value[url].toUpperCase();
+    }
 
-      // Fallback to filename while loading or if no title
-      if (!url) return '';
-      const parts = url.split('/');
-      const filename = parts.pop() || '';
-      const name = filename.replace(/\.[^/.]+$/, ''); // remove extension
-      return `ŒUVRE ${name}`; 
+    // Fallback to filename while loading or if no title
+    if (!url) return '';
+    const parts = url.split('/');
+    const filename = parts.pop() || '';
+    const name = filename.replace(/\.[^/.]+$/, ''); // remove extension
+    return `ŒUVRE ${name}`;
   };
 </script>
 
@@ -162,37 +164,36 @@
 
   .pagination-bar {
     display: flex;
-    justify-content: flex-end; /* Align rights/center as per design? Screenshot shows aligned rightish or centered */
     align-items: center;
     margin-bottom: 2rem;
     gap: 2rem;
     color: #555;
     font-size: 0.9rem;
     flex-wrap: wrap;
-    justify-content: center; /* Centering matches the screenshot better actually */
+    justify-content: center;
   }
 
   .items-per-page {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     label {
       color: #666;
     }
 
     .items-select {
-        border: 1px solid #ddd;
-        padding: 0.3rem 0.5rem;
-        border-radius: 4px;
-        color: #333;
-        background: white;
-        cursor: pointer;
-        
-        &:focus {
-            outline: none;
-            border-color: #999;
-        }
+      border: 1px solid #ddd;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      color: #333;
+      background: white;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: #999;
+      }
     }
   }
 
@@ -248,11 +249,12 @@
     background: #f9f9f9;
     margin-bottom: 1rem;
     border-radius: 2px;
-    
+
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* or contain, depending on preference. Screenshot looks like cover/contain mix? Cover usually safer for grids */
+      /* cover usually safer for grids */
+      object-fit: cover;
       transition: transform 0.4s ease;
       display: block;
     }

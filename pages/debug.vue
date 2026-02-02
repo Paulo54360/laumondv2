@@ -70,6 +70,7 @@
     'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/01.jpg',
   ]);
 
+  const { searchArtworks } = useSearch();
   const searchQuery = ref('etude');
   const searchResults = ref([]);
   const searchError = ref(null);
@@ -96,11 +97,7 @@
     isSearching.value = true;
 
     try {
-      const response = await $fetch('/api/search', {
-        params: { q: searchQuery.value },
-      });
-
-      searchResults.value = response.artworks;
+      searchResults.value = await searchArtworks(searchQuery.value);
       // console.log('Résultats de recherche:', response);
     } catch (error) {
       console.error('Erreur de recherche:', error);

@@ -49,8 +49,6 @@
         </p>
       </div>
 
-
-
       <div class="metahisme-footnote">
         <p>{{ $t('MétaHisme.Footnote') }}</p>
       </div>

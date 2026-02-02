@@ -40,6 +40,7 @@
       <div class="translations">
         <div v-for="(translation, lang) in translations" :key="lang" class="translation">
           <h3>{{ t(`analyses.languages.${lang}`) }}</h3>
+          <!-- eslint-disable-next-line vue/no-v-html -- Contenu i18n/MD de confiance -->
           <div v-html="translation"></div>
         </div>
       </div>

@@ -37,7 +37,7 @@
           <div class="artwork-info">
             <h2>{{ artwork.title }}</h2>
             <p class="category">
-              {{ t('search.category_label', { category: artwork.category.name }) }}
+              {{ t('search.category_label', { category: artwork.category?.name ?? '' }) }}
             </p>
           </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="modal-info">
           <h2>{{ selectedArtwork.title }}</h2>
           <p class="category">
-            {{ t('search.category_label', { category: selectedArtwork.category.name }) }}
+            {{ t('search.category_label', { category: selectedArtwork.category?.name ?? '' }) }}
           </p>
           <p v-if="selectedArtwork.description" class="description">
             {{ selectedArtwork.description }}
@@ -84,36 +84,21 @@
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
 
-  interface ICategory {
-    id: number;
-    name: string;
-    path: string;
-  }
-
-  interface IArtwork {
-    id: number;
-    title: string;
-    description: string | null;
-    imageUrls: string[] | string;
-    category: ICategory;
-    subcategory: string | null;
-    folderPath: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }
+  import type { SearchArtwork } from '~/types/artwork';
 
   const route = useRoute();
   const { t } = useI18n();
+  const { searchArtworks: fetchArtworks } = useSearch();
+
   const searchQuery = ref((route.query.q as string) || '');
-  const artworks = ref<IArtwork[]>([]);
+  const artworks = ref<SearchArtwork[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
-  // État de la modal
-  const selectedArtwork = ref<IArtwork | null>(null);
+  const selectedArtwork = ref<SearchArtwork | null>(null);
   const currentImageIndex = ref(0);
 
-  function getImageUrls(artwork: IArtwork): string[] {
+  function getImageUrls(artwork: SearchArtwork): string[] {
     if (Array.isArray(artwork.imageUrls)) {
       return artwork.imageUrls;
     }
@@ -126,7 +111,7 @@
     }
   }
 
-  function getFirstImageUrl(artwork: IArtwork): string | undefined {
+  function getFirstImageUrl(artwork: SearchArtwork): string | undefined {
     const urls = getImageUrls(artwork);
     return urls[0] || undefined;
   }
@@ -137,7 +122,7 @@
     return urls[currentImageIndex.value] || undefined;
   });
 
-  function openModal(artwork: IArtwork): void {
+  function openModal(artwork: SearchArtwork): void {
     selectedArtwork.value = artwork;
     currentImageIndex.value = 0;
   }
@@ -172,13 +157,7 @@
     error.value = null;
 
     try {
-      const response = await $fetch<{ artworks: IArtwork[] }>('/api/search', {
-        params: {
-          q: searchQuery.value,
-        },
-      });
-
-      artworks.value = response.artworks;
+      artworks.value = await fetchArtworks(searchQuery.value);
       // console.log('Résultats de recherche:', artworks.value);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {

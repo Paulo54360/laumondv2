@@ -24,16 +24,24 @@
     </div>
     <div class="carousel-full-width">
       <div class="carousel-wrapper">
-        <button class="nav-button prev" @click="scrollLeft" aria-label="Previous">
-          <img src="~/assets/images/common/Down Arrow Icon.png" alt="Previous" class="arrow-icon arrow-left" />
+        <button class="nav-button prev" aria-label="Previous" @click="scrollLeft">
+          <img
+            src="~/assets/images/common/Down Arrow Icon.png"
+            alt="Previous"
+            class="arrow-icon arrow-left"
+          />
         </button>
         <div ref="carousel" class="carousel" @scroll="handleScroll">
           <div v-for="(image, index) in dynamicImages" :key="index" class="carousel-item">
             <img :src="image" class="carousel-image" :alt="`Image ${index + 1}`" />
           </div>
         </div>
-        <button class="nav-button next" @click="scrollRight" aria-label="Next">
-          <img src="~/assets/images/common/Down Arrow Icon.png" alt="Next" class="arrow-icon arrow-right" />
+        <button class="nav-button next" aria-label="Next" @click="scrollRight">
+          <img
+            src="~/assets/images/common/Down Arrow Icon.png"
+            alt="Next"
+            class="arrow-icon arrow-right"
+          />
         </button>
       </div>
     </div>
@@ -51,7 +59,7 @@
   }>();
 
   const carousel = ref<HTMLElement | null>(null);
-  
+
   // Sécuriser l'initialisation des images (éviter l'erreur "not iterable" si props.images est undefined)
   const getInitialImages = (): string[] => {
     return Array.isArray(props.images) ? props.images : [];
@@ -78,13 +86,13 @@
     }
   };
 
-  const scrollLeft = () => {
+  const scrollLeft = (): void => {
     if (carousel.value) {
       carousel.value.scrollBy({ left: -300, behavior: 'smooth' });
     }
   };
 
-  const scrollRight = () => {
+  const scrollRight = (): void => {
     if (carousel.value) {
       carousel.value.scrollBy({ left: 300, behavior: 'smooth' });
     }
@@ -193,7 +201,7 @@
     position: relative;
     box-sizing: border-box;
     /* Hide scrollbar for Firefox */
-    scrollbar-width: none; 
+    scrollbar-width: none;
   }
 
   .carousel::-webkit-scrollbar {
@@ -252,17 +260,17 @@
     .carousel-item {
       width: 400px;
     }
-    
+
     .nav-button {
-       display: none; /* On mobile/tablet, native touch scrolling is usually better/sufficient, but user asked for buttons. Keeping them visible on desktop. */
-       /* Actually, user said "souris" (mouse) doesn't work, implying desktop issue. Hiding on mobile is standard behavior. */
+      /* On mobile, touch scroll is usually better; hiding buttons is standard. */
+      display: none;
     }
-    
-    /* Re-enable if user insists on mobile buttons, but usually touch swipe works. */
+
+    /* Re-enable if user insists on mobile buttons. */
     @media (hover: none) and (pointer: coarse) {
-        .nav-button {
-             display: none;
-        }
+      .nav-button {
+        display: none;
+      }
     }
   }
 
@@ -305,9 +313,9 @@
     .carousel-header {
       margin-bottom: 1.5rem;
     }
-    
+
     .arrow-icon {
-        width: 16px;
+      width: 16px;
     }
   }
 

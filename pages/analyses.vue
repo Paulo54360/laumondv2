@@ -69,10 +69,7 @@
           <div class="text-content-wrapper">
             <div class="text-content" :class="{ collapsed: !showFullText }">
               <!-- Contenu de l'analyse avec formatage -->
-              <div
-                class="analysis-body"
-                :class="{ 'dense-spacing': currentTab.id === 'advienne' }"
-              >
+              <div class="analysis-body" :class="{ 'dense-spacing': currentTab.id === 'advienne' }">
                 <h3 class="section-title-in-text">{{ currentTab.title }}</h3>
                 <p
                   v-for="(paragraph, index) in currentTab.paragraphs"

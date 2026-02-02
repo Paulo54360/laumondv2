@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <GalleryComponent
     :title="$t('gallery.categories.drawing')"
@@ -14,11 +15,8 @@
 </template>
 
 <script setup>
-  import { useRuntimeConfig } from '#app';
-
   import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();
-  const bucketUrl = config.public.apiUrl.trim(); // Récupération de l'URL de base depuis nuxt.config.ts
-  console.log(`${bucketUrl}/Drawings+/`);
+  const bucketUrl = config.public.apiUrl.trim();
 </script>

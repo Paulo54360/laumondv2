@@ -15,13 +15,17 @@
       },
       {
         property: 'og:image',
-        content:
-          'https://plaumondpicture.s3.eu-west-3.amazonaws.com/authors/Work+of+Identity+from+ID+Laumond.jpg',
+        content: [
+          'https://plaumondpicture.s3.eu-west-3.amazonaws.com/authors/',
+          'Work+of+Identity+from+ID+Laumond.jpg',
+        ].join(''),
       },
       {
         name: 'twitter:image',
-        content:
-          'https://plaumondpicture.s3.eu-west-3.amazonaws.com/authors/Work+of+Identity+from+ID+Laumond.jpg',
+        content: [
+          'https://plaumondpicture.s3.eu-west-3.amazonaws.com/authors/',
+          'Work+of+Identity+from+ID+Laumond.jpg',
+        ].join(''),
       },
     ],
     link: [

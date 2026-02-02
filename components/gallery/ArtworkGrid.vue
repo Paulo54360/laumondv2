@@ -54,13 +54,10 @@
   };
 
   const openArtwork = (artwork: { title: string; description: string; images: string[] }): void => {
-    console.log('ArtworkGrid: openArtwork clicked', artwork);
     emit('select', artwork);
   };
 
-  // Charger les œuvres au montage du composant
   onMounted(async () => {
-    console.log('ArtworkGrid mounted');
     try {
       artworks.value = await getArtworks(props.category);
     } catch (e) {

@@ -15,8 +15,7 @@ Site web de l'artiste Patrick Laumond, développé avec Nuxt 3.
 laumond-nuxt/
 ├── assets/           # Styles SCSS (Architecture modulaire)
 ├── components/       # Composants Vue (Organisés par fonctionnalité: layout, gallery, etc.)
-├── composables/      # Logique métier (useGallery, useNavbar, etc.)
-├── db/              # Configuration base de données
+├── composables/      # Logique métier (useSearch, useS3, useNavbar)
 ├── i18n/            # Internationalisation (locales fr/en)
 ├── layouts/         # Layouts Nuxt
 ├── pages/           # Pages de l'application

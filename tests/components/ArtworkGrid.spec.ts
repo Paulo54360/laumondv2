@@ -9,15 +9,21 @@ vi.mock('vue-i18n', () => ({
   }),
 }));
 
+const mockGetArtworks = vi.fn();
 vi.mock('../../composables/useS3', () => ({
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  default: () => ({
-    getArtworks: vi.fn(),
+  useS3: () => ({
+    getArtworks: mockGetArtworks,
   }),
 }));
 
-describe('GalleryContent', (): void => {
+describe('ArtworkGrid', (): void => {
+  beforeEach((): void => {
+    mockGetArtworks.mockReset();
+  });
+
   it('affiche les images de la page courante et le statut de pagination', (): void => {
+    mockGetArtworks.mockImplementation(() => new Promise(() => {}));
+
     const wrapper = mount(ArtworkGrid, {
       props: { category: 'deployments' },
     });
@@ -27,9 +33,9 @@ describe('GalleryContent', (): void => {
   });
 
   it('gère la pagination et la mise à jour de la page', async (): Promise<void> => {
-    const { useS3 } = await import('../../composables/useS3');
-    const mockGetArtworks = vi.fn().mockRejectedValue(new Error('Failed'));
-    vi.mocked(useS3().getArtworks).mockImplementation(mockGetArtworks);
+    mockGetArtworks.mockRejectedValueOnce(new Error('Failed'));
+
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const wrapper = mount(ArtworkGrid, {
       props: { category: 'deployments' },
@@ -38,6 +44,7 @@ describe('GalleryContent', (): void => {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     expect(wrapper.find('.error').exists()).toBe(true);
+    consoleError.mockRestore();
   });
 
   it("affiche la grille d'œuvres après chargement réussi", async (): Promise<void> => {
@@ -49,9 +56,7 @@ describe('GalleryContent', (): void => {
       },
     ];
 
-    const { useS3 } = await import('../../composables/useS3');
-    const mockGetArtworks = vi.fn().mockResolvedValue(mockArtworks);
-    vi.mocked(useS3().getArtworks).mockImplementation(mockGetArtworks);
+    mockGetArtworks.mockResolvedValueOnce(mockArtworks);
 
     const wrapper = mount(ArtworkGrid, {
       props: { category: 'deployments' },
@@ -73,9 +78,7 @@ describe('GalleryContent', (): void => {
       },
     ];
 
-    const { useS3 } = await import('../../composables/useS3');
-    const mockGetArtworks = vi.fn().mockResolvedValue(mockArtworks);
-    vi.mocked(useS3().getArtworks).mockImplementation(mockGetArtworks);
+    mockGetArtworks.mockResolvedValueOnce(mockArtworks);
 
     const wrapper = mount(ArtworkGrid, {
       props: { category: 'deployments' },

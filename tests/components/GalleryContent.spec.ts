@@ -1,7 +1,14 @@
 import { mount } from '@vue/test-utils';
-import { ref } from 'vue';
+import { h, provide, ref } from 'vue';
 
 import GalleryContent from '../../components/gallery/GalleryContent.vue';
+
+beforeEach((): void => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({ ok: true, text: (): Promise<string> => Promise.resolve('') })
+  );
+});
 
 vi.mock('vue-i18n', () => ({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -26,28 +33,31 @@ type MountOptions = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const mountGallery = (opts: MountOptions = {}) => {
   const imageCount = opts.imageCount ?? 5;
-  const itemsPerPage = opts.itemsPerPage ?? 2;
-  const images = Array.from({ length: imageCount }, (_, i) => `https://img/${i + 1}.jpg`);
+  const itemsPerPageVal = opts.itemsPerPage ?? 2;
+  const images = Array.from({ length: imageCount }, (_, i) => `https://example.com/${i + 1}.jpg`);
 
   const imageUrls = ref(images);
   const currentPage = ref(opts.currentPage ?? 1);
-  const totalPages = ref(opts.totalPages ?? Math.ceil(imageCount / itemsPerPage));
+  const itemsPerPage = ref(itemsPerPageVal);
   const openModal = vi.fn();
 
-  const wrapper = mount(GalleryContent, {
-    props: { title: 'My Gallery' },
+  const ProviderWrapper = {
+    setup() {
+      provide('imageUrls', imageUrls);
+      provide('openModal', openModal);
+      provide('itemsPerPage', itemsPerPage);
+      provide('currentPage', currentPage);
+      return () => h(GalleryContent, { title: 'My Gallery' });
+    },
+  };
+
+  const wrapper = mount(ProviderWrapper, {
     global: {
-      provide: {
-        imageUrls,
-        openModal,
-        itemsPerPage,
-        currentPage,
-        totalPages,
-      },
+      components: { GalleryContent },
     },
   });
 
-  return { wrapper, imageUrls, currentPage, totalPages, openModal, itemsPerPage };
+  return { wrapper, imageUrls, currentPage, openModal, itemsPerPage };
 };
 
 describe('GalleryContent', (): void => {
@@ -59,8 +69,9 @@ describe('GalleryContent', (): void => {
       totalPages: 2,
     });
 
-    expect(wrapper.findAll('.image-container')).toHaveLength(2);
-    expect(wrapper.text()).toContain('Page 1/2');
+    expect(wrapper.findAll('.image-item')).toHaveLength(2);
+    expect(wrapper.text()).toContain('1 - 2');
+    expect(wrapper.text()).toContain('4');
   });
 
   it('gère la pagination et les boutons correctement', async (): Promise<void> => {
@@ -94,7 +105,7 @@ describe('GalleryContent', (): void => {
       totalPages: 2,
     });
 
-    await wrapper.find('.image-container').trigger('click');
+    await wrapper.find('.image-item').trigger('click');
     // Page 2, itemsPerPage 2 => startIndex = 2, donc premier item de la page a l’index global 2
     expect(openModal).toHaveBeenCalledWith(2);
   });

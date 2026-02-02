@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <GalleryComponent
     :title="$t('gallery.categories.deploiement')"
@@ -8,8 +9,6 @@
 </template>
 
 <script setup>
-  import { useRuntimeConfig } from '#app';
-
   import GalleryComponent from '~/components/gallery.vue';
 
   const config = useRuntimeConfig();

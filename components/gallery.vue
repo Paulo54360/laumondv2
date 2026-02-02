@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <GalleryContent :title="title" />
@@ -15,8 +16,8 @@
 <script setup lang="ts">
   import { computed, provide, ref } from 'vue';
 
-  import GalleryContent from '~/components/gallery/GalleryContent.vue';
   import GalleryArtworkModal from '~/components/gallery/ArtworkModal.vue';
+  import GalleryContent from '~/components/gallery/GalleryContent.vue';
 
   const props = defineProps<{
     title: string;
@@ -52,7 +53,9 @@
   provide('imageUrls', imageUrls);
 
   // Modal logic
-  const selectedArtwork = ref<{ title: string; description: string; images: string[] } | null>(null);
+  const selectedArtwork = ref<{ title: string; description: string; images: string[] } | null>(
+    null
+  );
   const initialIndex = ref(0);
 
   const openModal = (index: number): void => {
@@ -62,7 +65,7 @@
     selectedArtwork.value = {
       title: props.title,
       description: '', // Description is optional/empty for these galleries
-      images: imageUrls.value
+      images: imageUrls.value,
     };
   };
 

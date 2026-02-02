@@ -2,25 +2,13 @@
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
 
-
+  import type { SearchArtwork } from '~/types/artwork';
 
   const { t } = useI18n();
+  const { searchArtworks: fetchArtworks } = useSearch();
 
   const query = ref('');
-  const results = ref<
-    Array<{
-      id: number;
-      title: string;
-      description: string | null;
-      imageUrls: string[];
-      folderPath: string | null;
-      subcategory: string | null;
-      createdAt: string | null;
-      updatedAt: string | null;
-      categoryId: number | null;
-      category: { id: number; name: string; path: string } | null;
-    }>
-  >([]);
+  const results = ref<SearchArtwork[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -34,15 +22,7 @@
     error.value = null;
 
     try {
-      const data = await $fetch<{ artworks: any[] }>('/api/search', {
-        params: { q: query.value },
-      });
-
-      if (data && data.artworks) {
-        results.value = data.artworks;
-      } else {
-        results.value = [];
-      }
+      results.value = await fetchArtworks(query.value);
     } catch (e) {
       error.value = e instanceof Error ? e.message : t('common.error');
       console.error('Erreur lors de la recherche:', e);

@@ -16,9 +16,9 @@
         </button>
       </div>
 
-      <div class="artwork-details" v-if="showDetails && (artwork.description || artwork.title)">
+      <div v-if="showDetails && (artwork.description || artwork.title)" class="artwork-details">
         <h2 v-if="artwork.title">{{ artwork.title }}</h2>
-        <p class="description" v-if="artwork.description">{{ artwork.description }}</p>
+        <p v-if="artwork.description" class="description">{{ artwork.description }}</p>
       </div>
     </div>
   </div>

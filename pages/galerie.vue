@@ -48,9 +48,7 @@
     description: string;
     images: string[];
   }): void => {
-    console.log('GaleriePage: selectArtwork received', artwork);
     selectedArtwork.value = artwork;
-    console.log('GaleriePage: selectedArtwork updated', selectedArtwork.value);
   };
 
   const closeModal = (): void => {
