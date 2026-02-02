@@ -51,6 +51,10 @@ test-results
 # BMAD / planning outputs
 _bmad-output
 
+# Favicon source (script scripts/favicon-from-source.mjs régénère .ico)
+public/favicon-source.png
+public/.favicon-*.png
+
 # Misc
 .yarn-integrity
 .lock-wscript
