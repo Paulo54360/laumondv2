@@ -1,5 +1,4 @@
-version: '3.8'
-
+# Compose Specification (pas de clé version : obsolète depuis Compose V2)
 services:
   app:
     container_name: laumond-nuxt
