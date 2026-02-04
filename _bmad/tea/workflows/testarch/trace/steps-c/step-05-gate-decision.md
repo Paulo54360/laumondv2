@@ -121,7 +121,9 @@ const gateReport = {
     overall_status: overallCoverage >= 90 ? 'MET' : overallCoverage >= 75 ? 'PARTIAL' : 'NOT MET',
   },
 
-  uncovered_requirements: coverageMatrix.gap_analysis.critical_gaps.concat(coverageMatrix.gap_analysis.high_gaps),
+  uncovered_requirements: coverageMatrix.gap_analysis.critical_gaps.concat(
+    coverageMatrix.gap_analysis.high_gaps
+  ),
 
   recommendations: coverageMatrix.recommendations,
 };

@@ -4,7 +4,7 @@
       <button class="close-button" @click="close">&times;</button>
 
       <div class="image-viewer">
-        <img :src="currentImage" :alt="artwork.title" />
+        <img v-if="currentImage" :src="currentImage" :alt="displayTitle" />
 
         <button v-if="currentIndex > 0" class="nav-button prev" @click="previousImage">&lt;</button>
         <button
@@ -16,9 +16,9 @@
         </button>
       </div>
 
-      <div v-if="showDetails && (artwork.description || artwork.title)" class="artwork-details">
-        <h2 v-if="artwork.title">{{ artwork.title }}</h2>
-        <p v-if="artwork.description" class="description">{{ artwork.description }}</p>
+      <div v-if="showDetails && (displayTitle || displayDescription)" class="artwork-details">
+        <h2 v-if="displayTitle">{{ displayTitle }}</h2>
+        <p v-if="displayDescription" class="description">{{ displayDescription }}</p>
       </div>
     </div>
   </div>
@@ -26,16 +26,19 @@
 
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue';
+  import { useI18n } from 'vue-i18n';
+
+  import {
+    getLocalizedTitle,
+    getLocalizedDescription,
+    type ILocalizedArtwork,
+  } from '../../utils/artworkLocale';
 
   interface IProps {
     show: boolean;
     initialIndex?: number;
     showDetails?: boolean;
-    artwork: {
-      title: string;
-      description: string;
-      images: string[];
-    };
+    artwork: ILocalizedArtwork & { images: string[] };
   }
 
   const props = withDefaults(defineProps<IProps>(), {
@@ -46,8 +49,17 @@
     (e: 'close'): void;
   }>();
 
+  const { locale } = useI18n();
   const currentIndex = ref(props.initialIndex);
-  const currentImage = computed(() => props.artwork.images[currentIndex.value]);
+  const proxiedUrl = useImageProxy();
+
+  const displayTitle = computed(() => getLocalizedTitle(props.artwork, locale.value));
+  const displayDescription = computed(() => getLocalizedDescription(props.artwork, locale.value));
+
+  const currentImage = computed(() => {
+    const url = props.artwork.images[currentIndex.value];
+    return url ? proxiedUrl(url) : '';
+  });
 
   const close = (): void => {
     currentIndex.value = 0;

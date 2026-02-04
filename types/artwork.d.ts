@@ -3,8 +3,10 @@
  */
 export interface SearchArtwork {
   id: number;
-  title: string;
-  description: string | null;
+  titleFr: string;
+  titleEn: string;
+  descriptionFr: string | null;
+  descriptionEn: string | null;
   imageUrls: string[];
   folderPath: string | null;
   subcategory: string | null;

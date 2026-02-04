@@ -9,13 +9,20 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-12-11',
   },
 
-  // Configuration des variables d'environnement accessibles côté client
+  // Configuration des variables d'environnement
   runtimeConfig: {
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseKey: process.env.SUPABASE_KEY,
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    awsRegion: process.env.AWS_REGION,
+    s3Bucket: process.env.S3_BUCKET || 'plaumondpicture',
     public: {
       apiUrl:
         process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseKey: process.env.SUPABASE_KEY,
     },
   },
 
@@ -33,6 +40,9 @@ export default defineNuxtConfig({
         langDir: 'locales/',
         defaultLocale: 'fr',
         strategy: 'prefix',
+        // Laisse Nuxt i18n générer automatiquement les routes localisées
+        // à partir de la structure de `pages/` (y compris l'admin).
+        customRoutes: 'page',
         bundle: { optimizeTranslationDirective: false },
         // Options passées au moteur vue-i18n (via fichier dédié)
         vueI18n: '~/i18n/i18n.config.ts',

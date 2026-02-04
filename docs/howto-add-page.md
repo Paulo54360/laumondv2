@@ -10,6 +10,7 @@ Objectif : ajouter une nouvelle page ou une section sans casser l’architecture
    `pages/ma-page.vue` → route `/ma-page` (ou `/fr/ma-page`, `/en/ma-page` avec i18n).
 
 2. **Structure minimale** :
+
    ```vue
    <template>
      <div class="ma-page">
@@ -18,8 +19,8 @@ Objectif : ajouter une nouvelle page ou une section sans casser l’architecture
    </template>
 
    <script setup lang="ts">
-   definePageMeta({ layout: 'default' });
-   // Données : utiliser des composables (useSearch, useS3, etc.) ou props
+     definePageMeta({ layout: 'default' });
+     // Données : utiliser des composables (useSearch, useS3, etc.) ou props
    </script>
 
    <style lang="scss" src="~/assets/css/pages/ma-page.scss"></style>

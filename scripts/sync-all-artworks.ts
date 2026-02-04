@@ -83,7 +83,7 @@ async function syncCategory(config: CategoryConfig) {
 
   if (catError || !categories || categories.length === 0) {
     console.log(`⚠️ Catégorie "${config.categoryName}" non trouvée, création...`);
-    
+
     // Créer la catégorie
     const { data: newCat, error: createError } = await supabase
       .from('categories')
@@ -95,7 +95,10 @@ async function syncCategory(config: CategoryConfig) {
       .single();
 
     if (createError || !newCat) {
-      console.error(`❌ Erreur lors de la création de la catégorie "${config.categoryName}":`, createError?.message);
+      console.error(
+        `❌ Erreur lors de la création de la catégorie "${config.categoryName}":`,
+        createError?.message
+      );
       return { added: 0, updated: 0, skipped: 0 };
     }
 
@@ -154,7 +157,6 @@ async function syncCategory(config: CategoryConfig) {
       if (artworkToUpdate) {
         // L'œuvre existe, mettre à jour si nécessaire
         if (artworkToUpdate.title !== cleanTitle) {
-          
           // Essayer de mettre à jour avec gestion des doublons
           let suffix = 1;
           let uniqueTitle = cleanTitle;
@@ -162,7 +164,7 @@ async function syncCategory(config: CategoryConfig) {
           let retryCount = 0;
 
           while (!success && retryCount < 10) {
-             const { error: updateError } = await supabase
+            const { error: updateError } = await supabase
               .from('artworks')
               .update({
                 title: uniqueTitle,
@@ -172,7 +174,8 @@ async function syncCategory(config: CategoryConfig) {
               .eq('id', artworkToUpdate.id);
 
             if (updateError) {
-              if (updateError.code === '23505') { // Unique violation
+              if (updateError.code === '23505') {
+                // Unique violation
                 retryCount++;
                 suffix++;
                 uniqueTitle = `${cleanTitle} (${suffix})`;
@@ -182,34 +185,35 @@ async function syncCategory(config: CategoryConfig) {
                 break; // Erreur non gérée
               }
             } else {
-               updated++;
-               success = true;
-               if (updated % 10 === 0) console.log(`     ✅ ${updated} mis à jour...`);
+              updated++;
+              success = true;
+              if (updated % 10 === 0) console.log(`     ✅ ${updated} mis à jour...`);
             }
           }
-           
-           if (!success && retryCount >= 10) {
-             console.error(`     ⚠️  Impossible de mettre à jour "${cleanTitle}" après plusieurs tentatives (doublons)`);
-             skipped++;
-           }
 
+          if (!success && retryCount >= 10) {
+            console.error(
+              `     ⚠️  Impossible de mettre à jour "${cleanTitle}" après plusieurs tentatives (doublons)`
+            );
+            skipped++;
+          }
         } else {
           skipped++;
         }
       } else {
         // Vérifier si une œuvre avec le même titre existe déjà (pour éviter les doublons à la création)
         // ... Logique existante simplifiée pour création ...
-        
+
         let suffix = 0;
         let uniqueTitle = cleanTitle;
         let success = false;
         let retryCount = 0;
 
         while (!success && retryCount < 20) {
-           // On construit le titre unique si besoin
-           if (suffix > 0) uniqueTitle = `${cleanTitle} (${suffix})`;
-           
-           const { data: newArtwork, error: insertError } = await supabase
+          // On construit le titre unique si besoin
+          if (suffix > 0) uniqueTitle = `${cleanTitle} (${suffix})`;
+
+          const { data: newArtwork, error: insertError } = await supabase
             .from('artworks')
             .insert({
               title: uniqueTitle,
@@ -224,20 +228,20 @@ async function syncCategory(config: CategoryConfig) {
             .select('id')
             .single();
 
-           if (insertError) {
-             if (insertError.code === '23505') {
-               suffix = suffix === 0 ? 2 : suffix + 1;
-               retryCount++;
-             } else {
-               console.error(`     ❌ Erreur ajout "${uniqueTitle}":`, insertError.message);
-               skipped++;
-               break; 
-             }
-           } else if (newArtwork) {
-             added++;
-             success = true;
-             if (added % 10 === 0) console.log(`     ✅ ${added} ajouté...`);
-           }
+          if (insertError) {
+            if (insertError.code === '23505') {
+              suffix = suffix === 0 ? 2 : suffix + 1;
+              retryCount++;
+            } else {
+              console.error(`     ❌ Erreur ajout "${uniqueTitle}":`, insertError.message);
+              skipped++;
+              break;
+            }
+          } else if (newArtwork) {
+            added++;
+            success = true;
+            if (added % 10 === 0) console.log(`     ✅ ${added} ajouté...`);
+          }
         }
       }
     }

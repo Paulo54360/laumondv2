@@ -25,8 +25,8 @@
           <div class="artwork-image">
             <img
               v-if="getFirstImageUrl(artwork)"
-              :src="getFirstImageUrl(artwork)"
-              :alt="artwork.title"
+              :src="proxiedUrl(getFirstImageUrl(artwork))"
+              :alt="localizedTitle(artwork)"
               loading="lazy"
               @error="handleImageError"
             />
@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="artwork-info">
-            <h2>{{ artwork.title }}</h2>
+            <h2>{{ localizedTitle(artwork) }}</h2>
             <p class="category">
               {{ t('search.category_label', { category: artwork.category?.name ?? '' }) }}
             </p>
@@ -50,7 +50,11 @@
         <button class="close-button" @click="closeModal">&times;</button>
 
         <div class="modal-gallery">
-          <img :src="getCurrentImageUrl" :alt="selectedArtwork.title" class="modal-image" />
+          <img
+            :src="proxiedUrl(getCurrentImageUrl)"
+            :alt="localizedTitle(selectedArtwork)"
+            class="modal-image"
+          />
 
           <button v-if="currentImageIndex > 0" class="nav-button prev" @click.stop="previousImage">
             &lt;
@@ -66,12 +70,12 @@
         </div>
 
         <div class="modal-info">
-          <h2>{{ selectedArtwork.title }}</h2>
+          <h2>{{ localizedTitle(selectedArtwork) }}</h2>
           <p class="category">
             {{ t('search.category_label', { category: selectedArtwork.category?.name ?? '' }) }}
           </p>
-          <p v-if="selectedArtwork.description" class="description">
-            {{ selectedArtwork.description }}
+          <p v-if="localizedDescription(selectedArtwork)" class="description">
+            {{ localizedDescription(selectedArtwork) }}
           </p>
         </div>
       </div>
@@ -85,12 +89,19 @@
   import { useRoute } from 'vue-router';
 
   import type { SearchArtwork } from '~/types/artwork';
+  import { getLocalizedTitle, getLocalizedDescription } from '~/utils/artworkLocale';
 
   definePageMeta({ layout: 'default' });
 
   const route = useRoute();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+
+  const localizedTitle = (artwork: SearchArtwork): string =>
+    getLocalizedTitle(artwork, locale.value);
+  const localizedDescription = (artwork: SearchArtwork): string =>
+    getLocalizedDescription(artwork, locale.value);
   const { searchArtworks: fetchArtworks } = useSearch();
+  const proxiedUrl = useImageProxy();
 
   const searchQuery = ref((route.query.q as string) || '');
   const artworks = ref<SearchArtwork[]>([]);
@@ -180,11 +191,20 @@
     { immediate: true }
   );
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleImageError = (event: Event) => {
+  /** Placeholder data URL (évite CORS / DNS via.placeholder.com) */
+  const placeholderSvg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">' +
+    '<rect fill="#f0f0f0" width="300" height="200"/>' +
+    '<text fill="#999" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" ' +
+    'font-size="14" font-family="sans-serif">Image non disponible</text></svg>';
+  const PLACEHOLDER_IMAGE = 'data:image/svg+xml,' + encodeURIComponent(placeholderSvg);
+
+  const handleImageError = (event: Event): void => {
     const img = event.target as HTMLImageElement;
-    img.src = 'https://via.placeholder.com/300x200?text=Image+non+disponible';
-    img.classList.add('error');
+    if (img && img.src !== PLACEHOLDER_IMAGE) {
+      img.src = PLACEHOLDER_IMAGE;
+      img.classList.add('error');
+    }
   };
 </script>
 

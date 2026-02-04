@@ -107,14 +107,18 @@ recommendations.push({
 
 ```javascript
 const totalRequirements = traceabilityMatrix.length;
-const coveredRequirements = traceabilityMatrix.filter((r) => r.coverage === 'FULL' || r.coverage === 'PARTIAL').length;
+const coveredRequirements = traceabilityMatrix.filter(
+  (r) => r.coverage === 'FULL' || r.coverage === 'PARTIAL'
+).length;
 const fullyCovered = traceabilityMatrix.filter((r) => r.coverage === 'FULL').length;
 
 const coveragePercentage = Math.round((fullyCovered / totalRequirements) * 100);
 
 // Priority-specific coverage
 const p0Total = traceabilityMatrix.filter((r) => r.priority === 'P0').length;
-const p0Covered = traceabilityMatrix.filter((r) => r.priority === 'P0' && r.coverage === 'FULL').length;
+const p0Covered = traceabilityMatrix.filter(
+  (r) => r.priority === 'P0' && r.coverage === 'FULL'
+).length;
 const p0CoveragePercentage = Math.round((p0Covered / p0Total) * 100);
 ```
 

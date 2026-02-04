@@ -113,4 +113,3 @@
 - **Story 7.1**: Rédiger un README projet à jour (objectif, stack, comment lancer, comment déployer).
 - **Story 7.2**: Rédiger un mini “How to” pour ajouter une page/section sans casser l’archi.
 - **Story 7.3**: Ajouter une courte section “Conventions & bonnes pratiques” (pour ton futur toi).
-

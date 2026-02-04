@@ -231,6 +231,8 @@
         "error": "Error while loading artworks.",
         "image_alt": "Image {index}",
         "items_per_page": "Items per page:",
+        "all": "All",
+        "of": "of",
         "range": "{start} - {end} of {total}",
         "pagination": {
             "page_status": "Page {current} of {total}"
@@ -259,6 +261,34 @@
         "empty_without_query": "Please enter a search term",
         "image_placeholder": "Image unavailable",
         "category_label": "Category: {category}"
+    },
+    "admin": {
+        "upload": {
+            "title": "Title",
+            "description": "Description",
+            "placeholder_title": "Artwork title",
+            "placeholder_description": "Optional description",
+            "category": "Category",
+            "category_choose": "Choose a category",
+            "category_loading": "Loading…",
+            "images": "Images",
+            "images_hint": "Drag and drop your images here or click to select",
+            "images_count": "{n} image(s) selected",
+            "images_format": "JPEG/PNG, max 10 MB each",
+            "submit": "Publish artwork",
+            "submit_loading": "Uploading…"
+        },
+        "edit": {
+            "title": "Edit artwork",
+            "subtitle": "Edit metadata and images for this artwork.",
+            "loading": "Loading artwork…",
+            "images_current": "Current images",
+            "images_add": "Add images",
+            "no_images": "No images",
+            "remove_image": "Remove this image",
+            "back": "Back to list",
+            "save": "Save"
+        }
     },
     "debug": {
         "title": "Debug page",

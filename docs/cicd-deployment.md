@@ -16,11 +16,11 @@ Pas de PM2 dans ce flux : l’app tourne dans un conteneur Docker sur le VPS.
 
 ## 2. Fichiers concernés
 
-| Fichier | Rôle |
-|--------|------|
-| **Dockerfile** | Build multi-stage (node:20-alpine) : `npm ci` + `npm run build`, puis image de run avec `node .output/server/index.mjs`. |
-| **docker-compose.yml** | Définit le service `app` (image ghcr.io, port 3000, variables d’env). Utilise **Compose V2** (`docker compose`), sans clé `version` (obsolète). |
-| **.github/workflows/deploy.yml** | Workflow : checkout → Buildx → login ghcr.io → build & push → SCP du compose → SSH sur le VPS → `docker compose pull` / `up -d` + nettoyage. |
+| Fichier                          | Rôle                                                                                                                                            |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Dockerfile**                   | Build multi-stage (node:20-alpine) : `npm ci` + `npm run build`, puis image de run avec `node .output/server/index.mjs`.                        |
+| **docker-compose.yml**           | Définit le service `app` (image ghcr.io, port 3000, variables d’env). Utilise **Compose V2** (`docker compose`), sans clé `version` (obsolète). |
+| **.github/workflows/deploy.yml** | Workflow : checkout → Buildx → login ghcr.io → build & push → SCP du compose → SSH sur le VPS → `docker compose pull` / `up -d` + nettoyage.    |
 
 ---
 
@@ -40,15 +40,15 @@ Pas de PM2 dans ce flux : l’app tourne dans un conteneur Docker sur le VPS.
 
 À configurer dans **Settings → Secrets and variables → Actions** (ou Environment « Production ») :
 
-| Secret | Usage |
-|--------|--------|
-| **VPS_HOST** | Adresse IP ou hostname du VPS. |
-| **VPS_USER** | Utilisateur SSH (ex. `ubuntu` ou `root`). |
-| **VPS_SSH_KEY** | Clé privée SSH pour se connecter au VPS. |
-| **VPS_PORT** | (Optionnel) Port SSH, défaut 22. |
-| **NUXT_PUBLIC_GTAG_ID** | (Optionnel) ID Google Analytics / gtag. |
+| Secret                  | Usage                                     |
+| ----------------------- | ----------------------------------------- |
+| **VPS_HOST**            | Adresse IP ou hostname du VPS.            |
+| **VPS_USER**            | Utilisateur SSH (ex. `ubuntu` ou `root`). |
+| **VPS_SSH_KEY**         | Clé privée SSH pour se connecter au VPS.  |
+| **VPS_PORT**            | (Optionnel) Port SSH, défaut 22.          |
+| **NUXT_PUBLIC_GTAG_ID** | (Optionnel) ID Google Analytics / gtag.   |
 
-Les variables Supabase et l’URL API sont en général définies **sur le VPS** (fichier `.env` ou env du conteneur), pas forcément dans GitHub. Le `docker-compose.yml` du repo utilise `SUPABASE_URL`, `SUPABASE_KEY`, `NUXT_PUBLIC_API_URL` (avec valeur par défaut pour l’API), etc. — à fournir sur la machine (fichier `.env` à côté de `docker-compose.yml` sur le VPS).
+Les variables Supabase et l’URL API sont en général définies **sur le VPS** (fichier `.env` ou env du conteneur), pas forcément dans GitHub. Le `docker-compose.yml` du repo utilise `SUPABASE_URL`, `SUPABASE_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (requise pour les endpoints admin), `NUXT_PUBLIC_API_URL` (avec valeur par défaut pour l’API), etc. — à fournir sur la machine (fichier `.env` à côté de `docker-compose.yml` sur le VPS).
 
 ---
 

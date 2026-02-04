@@ -12,12 +12,12 @@ Mettre en avant le mouvement artistique de Patrick Laumond, avec une navigation 
 
 ## Stack
 
-| Couche | Techno |
-|--------|--------|
-| **Front** | Nuxt 3, Vue 3, TypeScript (strict) |
-| **Données** | Supabase (PostgreSQL), AWS S3 (médias) |
-| **i18n** | @nuxtjs/i18n (FR/EN) |
-| **Déploiement** | Docker, GitHub Actions, OVH VPS |
+| Couche          | Techno                                 |
+| --------------- | -------------------------------------- |
+| **Front**       | Nuxt 3, Vue 3, TypeScript (strict)     |
+| **Données**     | Supabase (PostgreSQL), AWS S3 (médias) |
+| **i18n**        | @nuxtjs/i18n (FR/EN)                   |
+| **Déploiement** | Docker, GitHub Actions, OVH VPS        |
 
 ---
 
@@ -61,7 +61,7 @@ npm run build
 npm run preview
 ```
 
-Variables d’environnement : copier `.env.example` en `.env` et renseigner `SUPABASE_URL`, `SUPABASE_KEY`, `NUXT_PUBLIC_API_URL` (et optionnellement `NUXT_PUBLIC_GTAG_ID`). Ne jamais committer `.env`.
+Variables d’environnement : copier `.env.example` en `.env` et renseigner `SUPABASE_URL`, `SUPABASE_KEY`, `NUXT_PUBLIC_API_URL` (et optionnellement `NUXT_PUBLIC_GTAG_ID`). Ne jamais committer `.env`. Pour l'admin : ajouter `SUPABASE_SERVICE_ROLE_KEY` ; voir `docs/admin-setup.md`.
 
 ---
 
@@ -90,12 +90,12 @@ Le déploiement est géré par **GitHub Actions** au push sur `main` : build Doc
 
 ## Documentation
 
-| Doc | Contenu |
-|-----|--------|
+| Doc                                                                    | Contenu                                                 |
+| ---------------------------------------------------------------------- | ------------------------------------------------------- |
 | [docs/architecture-laumond-nuxt.md](docs/architecture-laumond-nuxt.md) | Architecture cible, rôles des dossiers, flux de données |
-| [docs/styles-howto.md](docs/styles-howto.md) | Styles : tokens, où mettre quoi, comment modifier |
-| [docs/cicd-deployment.md](docs/cicd-deployment.md) | CI/CD, Docker, déploiement VPS, checklist |
-| [docs/howto-add-page.md](docs/howto-add-page.md) | Comment ajouter une page ou une section |
-| [docs/conventions.md](docs/conventions.md) | Conventions & bonnes pratiques |
+| [docs/styles-howto.md](docs/styles-howto.md)                           | Styles : tokens, où mettre quoi, comment modifier       |
+| [docs/cicd-deployment.md](docs/cicd-deployment.md)                     | CI/CD, Docker, déploiement VPS, checklist               |
+| [docs/howto-add-page.md](docs/howto-add-page.md)                       | Comment ajouter une page ou une section                 |
+| [docs/conventions.md](docs/conventions.md)                             | Conventions & bonnes pratiques                          |
 
 Règles projet (stack, style, CI/CD) : [.cursorrules](.cursorrules) à la racine.

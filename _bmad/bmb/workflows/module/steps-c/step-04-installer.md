@@ -12,7 +12,7 @@ targetLocation: '{build_tracking_targetLocation}'
 
 ## STEP GOAL:
 
-Setup the _module-installer folder and create installer.js if needed.
+Setup the \_module-installer folder and create installer.js if needed.
 
 ## MANDATORY EXECUTION RULES:
 
@@ -41,6 +41,7 @@ Load `{moduleInstallerStandardsFile}` and ask:
 "**Does your module need an installer?**"
 
 Installers are needed when:
+
 - Creating directories from config variables
 - Copying template/assets
 - IDE-specific configuration
@@ -133,6 +134,7 @@ Customize based on module requirements.
 ### 4. Platform-Specific Handlers (Optional)
 
 If IDE-specific setup needed, ask which IDEs and create:
+
 - `{targetLocation}/_module-installer/platform-specifics/claude-code.js`
 - `{targetLocation}/_module-installer/platform-specifics/windsurf.js`
 - etc.
@@ -140,6 +142,7 @@ If IDE-specific setup needed, ask which IDEs and create:
 ### 5. Update Build Tracking
 
 Update `{buildTrackingFile}`:
+
 - Add 'step-04-installer' to stepsCompleted
 - Note: installer created or skipped
 

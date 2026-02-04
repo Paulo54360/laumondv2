@@ -3,15 +3,11 @@
 // Brand palette
 $color-primary: #cc0000;
 $color-primary-dark: #a20101;
-$color-primary-rgb: 204,
-0,
-0;
+$color-primary-rgb: 204, 0, 0;
 $color-muted: #999999;
 $color-muted-light: #bfbfbf;
 $color-muted-dark: #525252;
-$color-muted-rgb: 153,
-153,
-153;
+$color-muted-rgb: 153, 153, 153;
 $color-text: #2c3e50;
 $color-text-light: #6c757d;
 $color-background: #ffffff;
@@ -23,12 +19,13 @@ $color-ink: #333333;
 $color-border: #e0e0e0;
 $color-border-strong: #d5d5d5;
 // Typography
-$font-family-base: 'Inter',
--apple-system,
-BlinkMacSystemFont,
-'Segoe UI',
-Roboto,
-sans-serif;
+$font-family-base:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  sans-serif;
 $font-family-heading: $font-family-base;
 $font-weight-regular: 400;
 $font-weight-medium: 500;
@@ -62,25 +59,25 @@ $breakpoint-lg: 1024px;
 $breakpoint-xl: 1280px;
 // Responsive mixins
 @mixin sm {
-    @media (min-width: #{$breakpoint-sm}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
 }
 
 @mixin md {
-    @media (min-width: #{$breakpoint-md}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
 }
 
 @mixin lg {
-    @media (min-width: #{$breakpoint-lg}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
 }
 
 @mixin xl {
-    @media (min-width: #{$breakpoint-xl}) {
-        @content;
-    }
+  @media (min-width: #{$breakpoint-xl}) {
+    @content;
+  }
 }

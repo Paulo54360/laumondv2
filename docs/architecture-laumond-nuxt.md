@@ -91,15 +91,15 @@ laumond-nuxt/
 
 ## 4. Flux de données (exemple : galerie + recherche)
 
-1. **Page** (`pages/galerie.vue`)  
+1. **Page** (`pages/galerie.vue`)
    - Utilise `useGallery()` et `useSearch()`.
    - Compose `<GalleryGrid :items="artworks" />`, `<SearchBar @search="handleSearch" />`, etc.
 
-2. **Composables** (`useGallery`, `useSearch`)  
+2. **Composables** (`useGallery`, `useSearch`)
    - Appellent `$fetch('/api/artworks')`, `$fetch('/api/search?q=...')`.
    - Gèrent état (chargement, erreur, liste filtrée).
 
-3. **API** (`server/api/artworks.get.ts`, `server/api/search.get.ts`)  
+3. **API** (`server/api/artworks.get.ts`, `server/api/search.get.ts`)
    - Interrogent la base (métadonnées œuvres, noms pour la recherche).
    - Retournent des données prêtes pour le front (avec URLs S3 pour les images si besoin).
 
@@ -113,10 +113,10 @@ Résultat : **les composants affichent**, **les composables orchestrent**, **les
 - **Typage** : utiliser les types dans `types/` pour les réponses API et les props importantes.
 - **i18n** : textes via `useI18n()` / clés de traduction, pas de chaînes en dur dans l’UI.
 - **Styles** : utiliser `var(--color-...)` et les tokens existants ; pas de couleurs magiques dans les composants.
-- **Nommage** :  
-  - composables : `useXxx`  
-  - composants base : `BaseXxx`  
-  - composants feature : nom métier (`GalleryGrid`, `SearchBar`, etc.)  
+- **Nommage** :
+  - composables : `useXxx`
+  - composants base : `BaseXxx`
+  - composants feature : nom métier (`GalleryGrid`, `SearchBar`, etc.)
   - endpoints : `ressource.action.ts` (ex. `artworks.get.ts`).
 
 ---
@@ -133,4 +133,4 @@ Résultat : **les composants affichent**, **les composables orchestrent**, **les
 
 ---
 
-*Document créé dans le cadre du refactor laumond-nuxt. À mettre à jour si l’architecture évolue.*
+_Document créé dans le cadre du refactor laumond-nuxt. À mettre à jour si l’architecture évolue._

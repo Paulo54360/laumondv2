@@ -5,8 +5,10 @@ const S3_BASE_URL = 'https://plaumondpicture.s3.eu-west-3.amazonaws.com';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function formatArtwork(artwork: any): {
   id: number;
-  title: string;
-  description: string | null;
+  titleFr: string;
+  titleEn: string;
+  descriptionFr: string | null;
+  descriptionEn: string | null;
   imageUrls: string[];
   folderPath: string | null;
   subcategory: string | null;
@@ -47,10 +49,13 @@ function formatArtwork(artwork: any): {
   if (urls.length === 0 && artwork.folder_path && artwork.subcategory) {
     urls = [`${S3_BASE_URL}/${artwork.folder_path}/01.jpg`];
   }
+  const fallbackTitle = artwork.title || '';
   return {
     id: artwork.id,
-    title: artwork.title,
-    description: artwork.description,
+    titleFr: artwork.title ?? fallbackTitle,
+    titleEn: artwork.title_en ?? fallbackTitle,
+    descriptionFr: artwork.description_fr ?? artwork.description ?? null,
+    descriptionEn: artwork.description_en ?? null,
     imageUrls: urls,
     folderPath: artwork.folder_path,
     subcategory: artwork.subcategory,
@@ -95,7 +100,10 @@ export default defineEventHandler(async (event) => {
     const selectFields = `
         id,
         title,
+        title_en,
         description,
+        description_fr,
+        description_en,
         image_urls,
         folder_path,
         subcategory,
@@ -115,6 +123,18 @@ export default defineEventHandler(async (event) => {
       .select(selectFields)
       .ilike('title', searchPattern)
       .limit(200);
+
+    // Recherche 1b : dans title_en
+    const { data: byTitleEn, error: errorTitleEn } = await supabase
+      .from('artworks')
+      .select(selectFields)
+      .not('title_en', 'is', null)
+      .ilike('title_en', searchPattern)
+      .limit(200);
+
+    if (errorTitleEn) {
+      console.error('❌ Erreur recherche title_en:', errorTitleEn);
+    }
 
     if (errorTitle) {
       console.error('❌ Erreur recherche title:', errorTitle);
@@ -171,6 +191,7 @@ export default defineEventHandler(async (event) => {
     // Combiner tous les résultats et supprimer les doublons
     const allResults = [
       ...(byTitle || []),
+      ...(byTitleEn || []),
       ...(byDescription || []),
       ...(bySubcategory || []),
       ...(byCategory || []),

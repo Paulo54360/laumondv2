@@ -218,7 +218,11 @@ const summary = {
 Save summary to temp file for validation step:
 
 ```javascript
-fs.writeFileSync('/tmp/tea-automate-summary-{{timestamp}}.json', JSON.stringify(summary, null, 2), 'utf8');
+fs.writeFileSync(
+  '/tmp/tea-automate-summary-{{timestamp}}.json',
+  JSON.stringify(summary, null, 2),
+  'utf8'
+);
 ```
 
 ---

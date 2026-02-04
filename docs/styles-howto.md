@@ -6,14 +6,14 @@ Référence : `docs/architecture-laumond-nuxt.md`, `.cursorrules`. Objectif : ga
 
 ## 1. Où mettre les styles
 
-| Cas | Emplacement | Exemple |
-|-----|-------------|--------|
-| **Nouvelle page** | `assets/css/pages/[page].scss` | `pages/contact.vue` → `assets/css/pages/contact.scss` |
-| **Page existante** | Même fichier `pages/[page].scss` | Modifier `home.scss` pour la homepage |
-| **Composant layout/global** | `assets/css/components/[nom].scss` | `navbar.scss` pour la Navbar |
-| **Composant léger** | `<style scoped>` dans le `.vue` | Préférer `var(--color-...)` |
-| **Tokens / variables** | `assets/css/_tokens.scss` | Couleurs, espacements, breakpoints |
-| **Patterns réutilisables** | `assets/css/_mixins.scss` | Section header, grille, etc. |
+| Cas                         | Emplacement                        | Exemple                                               |
+| --------------------------- | ---------------------------------- | ----------------------------------------------------- |
+| **Nouvelle page**           | `assets/css/pages/[page].scss`     | `pages/contact.vue` → `assets/css/pages/contact.scss` |
+| **Page existante**          | Même fichier `pages/[page].scss`   | Modifier `home.scss` pour la homepage                 |
+| **Composant layout/global** | `assets/css/components/[nom].scss` | `navbar.scss` pour la Navbar                          |
+| **Composant léger**         | `<style scoped>` dans le `.vue`    | Préférer `var(--color-...)`                           |
+| **Tokens / variables**      | `assets/css/_tokens.scss`          | Couleurs, espacements, breakpoints                    |
+| **Patterns réutilisables**  | `assets/css/_mixins.scss`          | Section header, grille, etc.                          |
 
 ---
 

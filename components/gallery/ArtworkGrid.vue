@@ -11,16 +11,16 @@
     <div v-else class="grid">
       <div
         v-for="artwork in artworks"
-        :key="artwork.title"
+        :key="artwork.images[0] || localizedTitle(artwork)"
         class="artwork-card"
         @click="openArtwork(artwork)"
       >
         <div class="artwork-image">
-          <img :src="artwork.images[0]" :alt="artwork.title" />
+          <img :src="proxiedUrl(artwork.images[0])" :alt="localizedTitle(artwork)" />
         </div>
         <div class="artwork-info">
-          <h3>{{ artwork.title }}</h3>
-          <p class="description">{{ truncateDescription(artwork.description) }}</p>
+          <h3>{{ localizedTitle(artwork) }}</h3>
+          <p class="description">{{ truncateDescription(localizedDescription(artwork)) }}</p>
         </div>
       </div>
     </div>
@@ -28,45 +28,72 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
   import { useI18n } from 'vue-i18n';
 
   import { useS3 } from '../../composables/useS3';
+  import {
+    getLocalizedTitle,
+    getLocalizedDescription,
+    type ILocalizedArtwork,
+  } from '../../utils/artworkLocale';
 
   interface IProps {
     category: string;
   }
 
+  type ArtworkItem = ILocalizedArtwork & { images: string[] };
+
   const props = defineProps<IProps>();
   const { getArtworks } = useS3();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const proxiedUrl = useImageProxy();
 
-  const artworks = ref<Array<{ title: string; description: string; images: string[] }>>([]);
+  const artworks = ref<ArtworkItem[]>([]);
   const loading = ref(true);
   const error = ref<string | null>(null);
 
   const emit = defineEmits<{
-    (e: 'select', artwork: { title: string; description: string; images: string[] }): void;
+    (e: 'select', artwork: ArtworkItem): void;
   }>();
+
+  const localizedTitle = (artwork: ILocalizedArtwork): string =>
+    getLocalizedTitle(artwork, locale.value);
+
+  const localizedDescription = (artwork: ILocalizedArtwork): string =>
+    getLocalizedDescription(artwork, locale.value);
 
   const truncateDescription = (description: string): string => {
     return description.length > 100 ? `${description.slice(0, 100)}...` : description;
   };
 
-  const openArtwork = (artwork: { title: string; description: string; images: string[] }): void => {
+  const openArtwork = (artwork: ArtworkItem): void => {
     emit('select', artwork);
   };
 
-  onMounted(async () => {
+  const fetchArtworks = async (category: string): Promise<void> => {
+    loading.value = true;
+    error.value = null;
     try {
-      artworks.value = await getArtworks(props.category);
+      artworks.value = await getArtworks(category);
     } catch (e) {
       error.value = t('gallery.error');
       console.error(e);
     } finally {
       loading.value = false;
     }
+  };
+
+  onMounted(() => {
+    fetchArtworks(props.category);
   });
+
+  watch(
+    () => props.category,
+    (newCategory) => {
+      fetchArtworks(newCategory);
+    }
+  );
 </script>
 
 <style lang="scss" scoped>

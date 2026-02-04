@@ -3,8 +3,12 @@
   import { useI18n } from 'vue-i18n';
 
   import type { SearchArtwork } from '~/types/artwork';
+  import { getLocalizedTitle } from '~/utils/artworkLocale';
 
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+
+  const localizedTitle = (artwork: SearchArtwork): string =>
+    getLocalizedTitle(artwork, locale.value);
   const { searchArtworks: fetchArtworks } = useSearch();
 
   const query = ref('');
@@ -71,7 +75,7 @@
 
     <div v-if="results.length > 0" class="results">
       <div v-for="artwork in results" :key="artwork.id" class="result-item">
-        <h3>{{ artwork.title }}</h3>
+        <h3>{{ localizedTitle(artwork) }}</h3>
         <p>{{ t('search.category_label', { category: artwork.category?.name || '' }) }}</p>
       </div>
     </div>

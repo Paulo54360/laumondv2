@@ -231,6 +231,8 @@
         "error": "Erreur lors du chargement des œuvres.",
         "image_alt": "Image {index}",
         "items_per_page": "Éléments par page :",
+        "all": "Tout",
+        "of": "sur",
         "range": "{start} - {end} sur {total}",
         "pagination": {
             "page_status": "Page {current} sur {total}"
@@ -259,6 +261,34 @@
         "empty_without_query": "Veuillez saisir un terme de recherche",
         "image_placeholder": "Image non disponible",
         "category_label": "Catégorie : {category}"
+    },
+    "admin": {
+        "upload": {
+            "title": "Titre",
+            "description": "Description",
+            "placeholder_title": "Titre de l'œuvre",
+            "placeholder_description": "Description optionnelle",
+            "category": "Catégorie",
+            "category_choose": "Choisir une catégorie",
+            "category_loading": "Chargement…",
+            "images": "Images",
+            "images_hint": "Glissez-déposez vos images ici ou cliquez pour sélectionner",
+            "images_count": "{n} image(s) sélectionnée(s)",
+            "images_format": "JPEG/PNG, max 10 Mo chacune",
+            "submit": "Publier l'œuvre",
+            "submit_loading": "Envoi en cours…"
+        },
+        "edit": {
+            "title": "Modifier l'œuvre",
+            "subtitle": "Modifiez les métadonnées et les images de l'œuvre.",
+            "loading": "Chargement de l'œuvre…",
+            "images_current": "Images actuelles",
+            "images_add": "Ajouter des images",
+            "no_images": "Aucune image",
+            "remove_image": "Supprimer cette image",
+            "back": "Retour à la liste",
+            "save": "Enregistrer"
+        }
     },
     "debug": {
         "title": "Page de débogage",

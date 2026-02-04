@@ -14,41 +14,70 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, provide, ref } from 'vue';
+  import { onMounted, provide, ref, watch } from 'vue';
 
   import GalleryArtworkModal from '~/components/gallery/ArtworkModal.vue';
   import GalleryContent from '~/components/gallery/GalleryContent.vue';
+  import { useS3 } from '~/composables/useS3';
 
   const props = defineProps<{
     title: string;
-    apiUrl: string;
-    subfolders: string[];
-    fileRanges: number[][];
+    apiUrl?: string;
+    subfolders?: string[];
+    fileRanges?: number[][];
+    categoryKey?: string;
   }>();
 
-  const imageUrls = computed(() => {
+  const imageUrls = ref<string[]>([]);
+  const { getArtworks } = useS3();
+
+  const buildStaticUrls = (): string[] => {
     const urls: string[] = [];
     const { apiUrl, subfolders, fileRanges } = props;
 
-    // Ensure apiUrl does not end with a slash
-    const baseUrl = apiUrl?.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
-
-    if (Array.isArray(subfolders) && Array.isArray(fileRanges)) {
-      subfolders.forEach((subfolder, index) => {
-        const range = fileRanges[index];
-        if (!range || !Array.isArray(range) || range.length < 2) return;
-
-        const [start, end] = range;
-        for (let i = start; i <= end; i++) {
-          // Pads with 0 to ensure 2 digits (e.g. 1 -> 01)
-          const fileNum = i.toString().padStart(2, '0');
-          urls.push(`${baseUrl}/${subfolder}/${fileNum}.jpg`);
-        }
-      });
+    if (!apiUrl || !Array.isArray(subfolders) || !Array.isArray(fileRanges)) {
+      return urls;
     }
 
+    const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+
+    subfolders.forEach((subfolder, index) => {
+      const range = fileRanges[index];
+      if (!range || range.length < 2) return;
+
+      const [start, end] = range;
+      for (let i = start; i <= end; i++) {
+        const fileNum = i.toString().padStart(2, '0');
+        urls.push(`${baseUrl}/${subfolder}/${fileNum}.jpg`);
+      }
+    });
+
     return urls;
-  });
+  };
+
+  const loadImages = async (): Promise<void> => {
+    if (props.categoryKey) {
+      try {
+        const artworks = await getArtworks(props.categoryKey);
+        if (artworks.length > 0) {
+          imageUrls.value = artworks.flatMap((artwork) => artwork.images);
+          return;
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des œuvres dynamiques', error);
+      }
+    }
+
+    imageUrls.value = buildStaticUrls();
+  };
+
+  onMounted(loadImages);
+  watch(
+    () => props.categoryKey,
+    () => {
+      loadImages();
+    }
+  );
 
   provide('imageUrls', imageUrls);
 
@@ -60,11 +89,9 @@
 
   const openModal = (index: number): void => {
     initialIndex.value = index;
-    // For gallery pages (deployments, etc.), the modal should show all images
-    // allowing the user to navigate through them.
     selectedArtwork.value = {
       title: props.title,
-      description: '', // Description is optional/empty for these galleries
+      description: '',
       images: imageUrls.value,
     };
   };

@@ -51,7 +51,10 @@ This is an **isolated subprocess** running in parallel with other quality dimens
 
 ```javascript
 const criticalGaps = violations.filter((v) => v.severity === 'HIGH').length;
-const score = criticalGaps === 0 ? Math.max(0, 100 - violations.length * 5) : Math.max(0, 50 - criticalGaps * 10); // Heavy penalty for critical gaps
+const score =
+  criticalGaps === 0
+    ? Math.max(0, 100 - violations.length * 5)
+    : Math.max(0, 50 - criticalGaps * 10); // Heavy penalty for critical gaps
 ```
 
 ---

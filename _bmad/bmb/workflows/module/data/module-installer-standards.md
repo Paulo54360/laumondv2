@@ -7,6 +7,7 @@
 ## Overview
 
 The `_module-installer` folder contains optional installation logic for your module. It runs AFTER the IDE installations and can:
+
 - Create directories specified in module.yaml
 - Copy assets or templates
 - Configure IDE-specific settings
@@ -84,12 +85,12 @@ module.exports = { install };
 
 ### What You Receive
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `projectRoot` | string | Absolute path to the user's project root |
-| `config` | object | Resolved module.yaml variables |
-| `installedIDEs` | array | List of IDE codes installed (e.g., `['claude-code', 'windsurf']`) |
-| `logger` | object | Logger with `.log()`, `.warn()`, `.error()` methods |
+| Parameter       | Type   | Description                                                       |
+| --------------- | ------ | ----------------------------------------------------------------- |
+| `projectRoot`   | string | Absolute path to the user's project root                          |
+| `config`        | object | Resolved module.yaml variables                                    |
+| `installedIDEs` | array  | List of IDE codes installed (e.g., `['claude-code', 'windsurf']`) |
+| `logger`        | object | Logger with `.log()`, `.warn()`, `.error()` methods               |
 
 The `config` object contains your module.yaml variables **after** user input:
 
@@ -99,8 +100,8 @@ The `config` object contains your module.yaml variables **after** user input:
 //   prompt: "What is your project name?"
 //   result: "{value}"
 
-config.project_name  // = user's input
-config.planning_artifacts  // = resolved path
+config.project_name; // = user's input
+config.planning_artifacts; // = resolved path
 ```
 
 ---
@@ -299,6 +300,7 @@ module.exports = { install };
 ## Best Practices
 
 ### DO:
+
 - Return `true` for success, `false` for failure
 - Use chalk for colored output
 - Log what you're doing (create, copy, configure)
@@ -306,6 +308,7 @@ module.exports = { install };
 - Validate paths before creating directories
 
 ### DON'T:
+
 - Assume paths exist — check with `fs.pathExists()`
 - Overwrite user files without asking
 - Fail silently — log errors
@@ -316,6 +319,7 @@ module.exports = { install };
 ## Available Platform Codes
 
 Common IDE codes:
+
 - `claude-code` — Anthropic's Claude Code
 - `windsurf` — Windsurf IDE
 - `cursor` — Cursor AI IDE
@@ -337,12 +341,12 @@ Use `platformCodes.isValidPlatform(ide)` to validate.
 
 ## Quick Reference
 
-| Task | Code Pattern |
-|------|--------------|
-| Create directory | `await fs.ensureDir(path)` |
-| Check if exists | `await fs.pathExists(path)` |
-| Copy files | `await fs.copy(src, dest)` |
-| Log info | `logger.log(chalk.blue('message'))` |
-| Log success | `logger.log(chalk.green('✓ message'))` |
-| Log warning | `logger.warn(chalk.yellow('warning'))` |
-| Log error | `logger.error(chalk.red('error'))` |
+| Task             | Code Pattern                           |
+| ---------------- | -------------------------------------- |
+| Create directory | `await fs.ensureDir(path)`             |
+| Check if exists  | `await fs.pathExists(path)`            |
+| Copy files       | `await fs.copy(src, dest)`             |
+| Log info         | `logger.log(chalk.blue('message'))`    |
+| Log success      | `logger.log(chalk.green('✓ message'))` |
+| Log warning      | `logger.warn(chalk.yellow('warning'))` |
+| Log error        | `logger.error(chalk.red('error'))`     |

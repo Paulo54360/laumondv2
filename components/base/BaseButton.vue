@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
   interface IProps {
-    variant?: 'primary' | 'secondary';
+    variant?: 'primary' | 'secondary' | 'outline';
     size?: 'sm' | 'md' | 'lg';
     isLoading?: boolean;
     disabled?: boolean;
@@ -63,6 +63,21 @@
 
       &:hover:not(:disabled) {
         background: var(--color-background-alt);
+      }
+    }
+
+    &--outline {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-sm);
+
+      &:hover:not(:disabled) {
+        background: var(--color-background-alt);
+        border-color: var(--color-text);
       }
     }
 

@@ -34,7 +34,7 @@
         @click="openModal(startIndex + index)"
       >
         <div class="image-wrapper">
-          <img :src="image" :alt="extractTitle(image)" />
+          <img :src="proxiedUrl(image)" :alt="extractTitle(image)" />
         </div>
         <div class="image-title">
           {{ extractTitle(image) }}
@@ -53,14 +53,13 @@
   }>();
 
   const { t } = useI18n();
+  const proxiedUrl = useImageProxy();
   const imageUrls = inject<Ref<string[]>>('imageUrls', ref([]));
   const openModal = inject<(index: number) => void>('openModal', () => {});
 
   // Optional injected pagination (e.g. for tests); fallback to local state
-  const injectedItemsPerPage = inject<Ref<number>>('itemsPerPage');
-  const injectedCurrentPage = inject<Ref<number>>('currentPage');
-  const itemsPerPage = injectedItemsPerPage ?? ref(10);
-  const currentPage = injectedCurrentPage ?? ref(1);
+  const itemsPerPage = inject<Ref<number>>('itemsPerPage', ref(10));
+  const currentPage = inject<Ref<number>>('currentPage', ref(1));
   const titles = ref<Record<string, string>>({}); // Cache for titles
 
   const totalItems = computed(() => imageUrls.value.length);

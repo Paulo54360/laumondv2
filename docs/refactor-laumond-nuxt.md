@@ -96,4 +96,3 @@ Aujourd’hui, le code est perçu comme une **“boîte noire”** : architectur
 
 - **Risque** : retomber dans le flou dans 6 mois.  
   **Garde-fou** : garder la documentation courte mais à jour, et respecter les conventions décidées.
-

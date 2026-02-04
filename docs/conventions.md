@@ -53,4 +53,4 @@ Court rappel pour garder le projet cohérent. Détails : [.cursorrules](../.curs
 
 ---
 
-*À mettre à jour si les conventions évoluent.*
+_À mettre à jour si les conventions évoluent._

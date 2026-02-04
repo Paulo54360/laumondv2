@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import { mount } from '@vue/test-utils';
 
 import ArtworkGrid from '../../components/gallery/ArtworkGrid.vue';
@@ -6,6 +7,7 @@ vi.mock('vue-i18n', () => ({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   useI18n: () => ({
     t: (key: string, _params?: Record<string, unknown>): string => key,
+    locale: ref('fr'),
   }),
 }));
 
@@ -50,8 +52,10 @@ describe('ArtworkGrid', (): void => {
   it("affiche la grille d'œuvres après chargement réussi", async (): Promise<void> => {
     const mockArtworks = [
       {
-        title: 'Test Artwork',
-        description: 'Test description',
+        titleFr: 'Test Artwork',
+        titleEn: 'Test Artwork',
+        descriptionFr: 'Test description',
+        descriptionEn: 'Test description',
         images: ['https://example.com/image.jpg'],
       },
     ];
@@ -72,8 +76,10 @@ describe('ArtworkGrid', (): void => {
   it('appelle openModal au clic sur une image', async (): Promise<void> => {
     const mockArtworks = [
       {
-        title: 'Test Artwork',
-        description: 'Test description',
+        titleFr: 'Test Artwork',
+        titleEn: 'Test Artwork',
+        descriptionFr: 'Test description',
+        descriptionEn: 'Test description',
         images: ['https://example.com/image.jpg'],
       },
     ];
@@ -89,6 +95,6 @@ describe('ArtworkGrid', (): void => {
     await wrapper.find('.artwork-card').trigger('click');
 
     expect(wrapper.emitted('select')).toBeTruthy();
-    expect(wrapper.emitted('select')?.[0]).toEqual([mockArtworks[0]]);
+    expect(wrapper.emitted('select')?.[0]?.[0]).toMatchObject(mockArtworks[0]);
   });
 });

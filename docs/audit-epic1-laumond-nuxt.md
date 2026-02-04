@@ -16,23 +16,23 @@ Rapport de cartographie produit pour le refactor. Référence : `docs/refactor-l
 
 ### Dossiers principaux
 
-| Dossier | Contenu |
-|--------|---------|
-| **pages/** | 12 pages : `index`, `galerie`, `artworks`, `search`, `biography`, `analyses`, `archetypes`, `drawings`, `transcriptions`, `metahism`, `deployments`, `debug` |
-| **layouts/** | `default.vue` uniquement |
-| **components/** | Mélange de dossiers par feature et d’un composant racine `gallery.vue` |
-| **composables/** | 6 fichiers : `useS3`, `useGallery`, `useNavbar`, `useOeuvres`, `useAnalysisData`, `useDebounce` |
-| **server/api/** | 1 endpoint : `search/index.get.ts` |
-| **server/middleware/** | `error.ts` |
-| **db/** | `index.ts` (client Supabase + `searchArtworks`) — **non utilisé par l’app** (voir 1.4) |
-| **assets/css/** | `main.scss`, `_tokens.scss`, `_mixins.scss`, `pages/` (biography, home, metahism), `components/navbar.scss` |
-| **i18n/** | `i18n.config.ts`, `locales/fr.json`, `locales/en.json` |
-| **public/** | `robots.txt`, `images/` (drapeaux) |
-| **types/** | `nuxt-app.d.ts`, `nuxt-imports.d.ts` |
-| **scripts/** | Nombreux scripts (backup, sync DB, deploy, tests de connexion) — hors runtime app |
-| **tests/** | 2 specs (ex. `ArtworkGrid.spec.ts`) |
-| **docs/** | `refactor-laumond-nuxt.md`, `refactor-epics-stories.md`, `architecture-laumond-nuxt.md` |
-| **MD/** | Doc interne (context, dev rules, CI/CD, styles) |
+| Dossier                | Contenu                                                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **pages/**             | 12 pages : `index`, `galerie`, `artworks`, `search`, `biography`, `analyses`, `archetypes`, `drawings`, `transcriptions`, `metahism`, `deployments`, `debug` |
+| **layouts/**           | `default.vue` uniquement                                                                                                                                     |
+| **components/**        | Mélange de dossiers par feature et d’un composant racine `gallery.vue`                                                                                       |
+| **composables/**       | 6 fichiers : `useS3`, `useGallery`, `useNavbar`, `useOeuvres`, `useAnalysisData`, `useDebounce`                                                              |
+| **server/api/**        | 1 endpoint : `search/index.get.ts`                                                                                                                           |
+| **server/middleware/** | `error.ts`                                                                                                                                                   |
+| **db/**                | `index.ts` (client Supabase + `searchArtworks`) — **non utilisé par l’app** (voir 1.4)                                                                       |
+| **assets/css/**        | `main.scss`, `_tokens.scss`, `_mixins.scss`, `pages/` (biography, home, metahism), `components/navbar.scss`                                                  |
+| **i18n/**              | `i18n.config.ts`, `locales/fr.json`, `locales/en.json`                                                                                                       |
+| **public/**            | `robots.txt`, `images/` (drapeaux)                                                                                                                           |
+| **types/**             | `nuxt-app.d.ts`, `nuxt-imports.d.ts`                                                                                                                         |
+| **scripts/**           | Nombreux scripts (backup, sync DB, deploy, tests de connexion) — hors runtime app                                                                            |
+| **tests/**             | 2 specs (ex. `ArtworkGrid.spec.ts`)                                                                                                                          |
+| **docs/**              | `refactor-laumond-nuxt.md`, `refactor-epics-stories.md`, `architecture-laumond-nuxt.md`                                                                      |
+| **MD/**                | Doc interne (context, dev rules, CI/CD, styles)                                                                                                              |
 
 ### Composants (détail)
 
@@ -105,13 +105,13 @@ Rapport de cartographie produit pour le refactor. Référence : `docs/refactor-l
 
 ### Fichiers / dossiers
 
-| Élément | Statut | Action suggérée |
-|--------|--------|------------------|
-| **db/index.ts** | Non importé par l’app (pages, composants, composables, server). Les scripts ont leur propre client Supabase. | Supprimer ou déprécier : déplacer la logique utile vers `server/api/` ou des scripts dédiés, puis supprimer `db/` pour l’app. |
-| **composables/useGallery.ts** | Aucun `.vue` ni autre fichier app ne l’importe. Commentaires internes indiquent “unused / not wired”. | Supprimer ou réintégrer dans un flux (ex. GalleryContent) puis documenter. |
-| **composables/useOeuvres.ts** | Aucune utilisation dans le projet (hors README/MD). | Supprimer ou documenter comme “réservé” si usage futur prévu. |
-| **composables/useAnalysisData.ts** | Aucune utilisation dans les .vue / .ts de l’app. | Idem : supprimer ou réutiliser. |
-| **composables/useDebounce.ts** | Aucune utilisation dans l’app. | Supprimer ou utiliser (ex. SearchBar). |
+| Élément                            | Statut                                                                                                       | Action suggérée                                                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| **db/index.ts**                    | Non importé par l’app (pages, composants, composables, server). Les scripts ont leur propre client Supabase. | Supprimer ou déprécier : déplacer la logique utile vers `server/api/` ou des scripts dédiés, puis supprimer `db/` pour l’app. |
+| **composables/useGallery.ts**      | Aucun `.vue` ni autre fichier app ne l’importe. Commentaires internes indiquent “unused / not wired”.        | Supprimer ou réintégrer dans un flux (ex. GalleryContent) puis documenter.                                                    |
+| **composables/useOeuvres.ts**      | Aucune utilisation dans le projet (hors README/MD).                                                          | Supprimer ou documenter comme “réservé” si usage futur prévu.                                                                 |
+| **composables/useAnalysisData.ts** | Aucune utilisation dans les .vue / .ts de l’app.                                                             | Idem : supprimer ou réutiliser.                                                                                               |
+| **composables/useDebounce.ts**     | Aucune utilisation dans l’app.                                                                               | Supprimer ou utiliser (ex. SearchBar).                                                                                        |
 
 ### Duplication / à clarifier
 

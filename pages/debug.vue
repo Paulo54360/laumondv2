@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { useI18n } from 'vue-i18n';
 
@@ -112,11 +112,19 @@
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  function handleImageError(event) {
-    const img = event.target;
-    img.src = 'https://via.placeholder.com/300x200?text=Image+non+disponible';
-    img.classList.add('error');
+  const placeholderSvg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">' +
+    '<rect fill="#f0f0f0" width="300" height="200"/>' +
+    '<text fill="#999" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" ' +
+    'font-size="14" font-family="sans-serif">Image non disponible</text></svg>';
+  const PLACEHOLDER_IMAGE = 'data:image/svg+xml,' + encodeURIComponent(placeholderSvg);
+
+  function handleImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && img.src !== PLACEHOLDER_IMAGE) {
+      img.src = PLACEHOLDER_IMAGE;
+      img.classList.add('error');
+    }
   }
 
   // Charger les résultats au chargement de la page
