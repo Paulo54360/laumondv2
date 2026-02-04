@@ -54,7 +54,5 @@ Le script appelle `signInWithPassword` et vérifie qu'un JWT valide est retourn�
 - Ne jamais committer `.env`
 - La clé `SUPABASE_SERVICE_ROLE_KEY` ne doit jamais être exposée côté client
 - Changer le mot de passe Patrick si compromission suspectée
-- Préférer `ADMIN_EMAIL` / `ADMIN_PASSWORD` dans `.env` plutôt que les arguments CLI (le mot de passe en argument apparaît dans la liste des processus)
-
-## Voir aussi- [Configuration CORS S3](s3-cors-setup.md) — pour que les images uploadées s'affichent correctement depuis le site (localhost et production).
+- Préférer `ADMIN_EMAIL` / `ADMIN_PASSWORD` dans `.env` plutôt que les arguments CLI (le mot de passe en argument apparaît dans la liste des processus)## Voir aussi- [Configuration CORS S3](s3-cors-setup.md) — pour que les images uploadées s'affichent correctement depuis le site (localhost et production).
 - [Migrations BDD](migrations.md) — migrations pour le back-office complet (corbeille, artwork_images, site_texts).
