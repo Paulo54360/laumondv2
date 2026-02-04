@@ -8,23 +8,16 @@
     </div>
 
     <nav class="admin-header__nav">
-      <NuxtLink
-        class="btn-artistic admin-header__link"
-        :to="localePath({ name: 'admin-artworks' })"
-      >
+      <NuxtLink class="btn-artistic admin-header__link" :to="localePath('/admin/artworks')">
         Liste des œuvres
       </NuxtLink>
-      <NuxtLink
-        class="btn-artistic admin-header__link"
-        :to="localePath({ name: 'admin-upload' })"
-      >
+      <NuxtLink class="btn-artistic admin-header__link" :to="localePath('/admin/upload')">
         Ajouter une œuvre
       </NuxtLink>
-      <BaseButton
-        variant="outline"
-        class="admin-header__logout"
-        @click="$emit('logout')"
-      >
+      <NuxtLink class="btn-artistic admin-header__link" :to="localePath('/admin/texts')">
+        Textes
+      </NuxtLink>
+      <BaseButton variant="outline" class="admin-header__logout" @click="$emit('logout')">
         Déconnexion
       </BaseButton>
     </nav>

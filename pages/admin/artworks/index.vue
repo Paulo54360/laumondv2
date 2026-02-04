@@ -76,7 +76,7 @@
 
       <div class="admin-artworks__filter admin-artworks__filter--align-end">
         <NuxtLink
-          :to="localePath({ name: 'admin-artworks-trash' })"
+          :to="localePath('/admin/artworks/trash')"
           class="btn-artistic admin-artworks__corbeille"
         >
           Voir la corbeille
@@ -95,56 +95,105 @@
       <div v-else-if="items.length === 0" class="admin-artworks__status">
         Aucune œuvre trouvée avec ces critères.
       </div>
-      <div v-else class="admin-artworks__grid">
-        <div class="admin-artworks__row admin-artworks__row--head">
-          <div class="admin-artworks__col admin-artworks__col--thumb">Miniature</div>
-          <div class="admin-artworks__col admin-artworks__col--title">Titre</div>
-          <div class="admin-artworks__col admin-artworks__col--cat">Catégorie</div>
-          <div class="admin-artworks__col admin-artworks__col--date">Créée le</div>
-          <div class="admin-artworks__col admin-artworks__col--actions">Actions</div>
+      <div v-else>
+        <!-- Tableau desktop -->
+        <div class="admin-artworks__table">
+          <div class="admin-artworks__row admin-artworks__row--head">
+            <div class="admin-artworks__col admin-artworks__col--thumb">Miniature</div>
+            <div class="admin-artworks__col admin-artworks__col--title">Titre</div>
+            <div class="admin-artworks__col admin-artworks__col--cat">Catégorie</div>
+            <div class="admin-artworks__col admin-artworks__col--date">Créée le</div>
+            <div class="admin-artworks__col admin-artworks__col--actions">Actions</div>
+          </div>
+          <div
+            v-for="item in items"
+            :key="item.id"
+            class="admin-artworks__row admin-artworks__row--data"
+          >
+            <div class="admin-artworks__col admin-artworks__col--thumb">
+              <img
+                v-if="item.thumbnailUrl"
+                :src="proxiedUrl(item.thumbnailUrl)"
+                alt=""
+                width="64"
+                height="64"
+                loading="lazy"
+                class="admin-artworks__thumb"
+              />
+              <span v-else class="admin-artworks__thumb-placeholder">—</span>
+            </div>
+            <div class="admin-artworks__col admin-artworks__col--title">{{ item.title }}</div>
+            <div class="admin-artworks__col admin-artworks__col--cat">
+              {{ item.categoryName || '—' }}
+            </div>
+            <div class="admin-artworks__col admin-artworks__col--date">
+              {{ formatDate(item.createdAt) }}
+            </div>
+            <div class="admin-artworks__col admin-artworks__col--actions">
+              <NuxtLink
+                :to="localePath(`/admin/artworks/${item.id}/edit`)"
+                class="btn-artistic admin-artworks__action admin-artworks__action--link"
+              >
+                Modifier
+              </NuxtLink>
+              <BaseButton
+                variant="outline"
+                size="sm"
+                :disabled="deleteLoading === item.id"
+                :is-loading="deleteLoading === item.id"
+                title="Déplacer dans la corbeille"
+                @click="confirmTrash(item)"
+              >
+                Supprimer
+              </BaseButton>
+            </div>
+          </div>
         </div>
-        <div
-          v-for="item in items"
-          :key="item.id"
-          class="admin-artworks__row admin-artworks__row--data"
-        >
-          <div class="admin-artworks__col admin-artworks__col--thumb">
-            <img
-              v-if="item.thumbnailUrl"
-              :src="proxiedUrl(item.thumbnailUrl)"
-              alt=""
-              width="64"
-              height="64"
-              loading="lazy"
-              class="admin-artworks__thumb"
-            />
-            <span v-else class="admin-artworks__thumb-placeholder">—</span>
-          </div>
-          <div class="admin-artworks__col admin-artworks__col--title">{{ item.title }}</div>
-          <div class="admin-artworks__col admin-artworks__col--cat">
-            {{ item.categoryName || '—' }}
-          </div>
-          <div class="admin-artworks__col admin-artworks__col--date">
-            {{ formatDate(item.createdAt) }}
-          </div>
-          <div class="admin-artworks__col admin-artworks__col--actions">
-            <NuxtLink
-              :to="localePath({ name: 'admin-artworks-id-edit', params: { id: item.id } })"
-              class="btn-artistic admin-artworks__action admin-artworks__action--link"
-            >
-              Modifier
-            </NuxtLink>
-            <BaseButton
-              variant="outline"
-              size="sm"
-              :disabled="deleteLoading === item.id"
-              :isLoading="deleteLoading === item.id"
-              title="Déplacer dans la corbeille"
-              @click="confirmTrash(item)"
-            >
-              Supprimer
-            </BaseButton>
-          </div>
+
+        <!-- Cartes mobile / tablette -->
+        <div class="admin-artworks__cards">
+          <article
+            v-for="item in items"
+            :key="item.id"
+            class="admin-artworks__card"
+          >
+            <div class="admin-artworks__card-thumb">
+              <img
+                v-if="item.thumbnailUrl"
+                :src="proxiedUrl(item.thumbnailUrl)"
+                alt=""
+                width="64"
+                height="64"
+                loading="lazy"
+                class="admin-artworks__thumb"
+              />
+              <span v-else class="admin-artworks__thumb-placeholder">—</span>
+            </div>
+            <div class="admin-artworks__card-body">
+              <h3 class="admin-artworks__card-title">{{ item.title }}</h3>
+              <p class="admin-artworks__card-meta">
+                {{ item.categoryName || '—' }} · {{ formatDate(item.createdAt) }}
+              </p>
+              <div class="admin-artworks__card-actions">
+                <NuxtLink
+                  :to="localePath(`/admin/artworks/${item.id}/edit`)"
+                  class="btn-artistic admin-artworks__action admin-artworks__action--link"
+                >
+                  Modifier
+                </NuxtLink>
+                <BaseButton
+                  variant="outline"
+                  size="sm"
+                  :disabled="deleteLoading === item.id"
+                  :is-loading="deleteLoading === item.id"
+                  title="Déplacer dans la corbeille"
+                  @click="confirmTrash(item)"
+                >
+                  Supprimer
+                </BaseButton>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -152,12 +201,7 @@
     <footer v-if="total > 0" class="admin-artworks__pagination">
       <span>{{ rangeLabel }}</span>
       <div class="admin-artworks__pagination-controls">
-        <BaseButton
-          variant="outline"
-          size="sm"
-          :disabled="page <= 1"
-          @click="changePage(page - 1)"
-        >
+        <BaseButton variant="outline" size="sm" :disabled="page <= 1" @click="changePage(page - 1)">
           ← Précédent
         </BaseButton>
         <BaseButton
@@ -302,7 +346,7 @@
 
   async function onLogout(): Promise<void> {
     await logout();
-    await router.replace(localePath({ name: 'admin-login' }));
+    await router.replace(localePath('/admin/login'));
   }
 
   async function confirmTrash(item: { id: string; title: string }): Promise<void> {
@@ -329,7 +373,8 @@
     } catch (err) {
       console.error('Erreur suppression', err);
       const e = err as { data?: { statusMessage?: string }; statusMessage?: string };
-      errorMessage.value = e.data?.statusMessage ?? e.statusMessage ?? 'Erreur lors de la suppression.';
+      errorMessage.value =
+        e.data?.statusMessage ?? e.statusMessage ?? 'Erreur lors de la suppression.';
     } finally {
       deleteLoading.value = null;
     }
@@ -443,9 +488,10 @@
     overflow: hidden;
   }
 
-  .admin-artworks__grid {
+  /* Tableau desktop */
+  .admin-artworks__table {
     display: grid;
-    grid-template-columns: 88px 1fr 130px 110px auto;
+    grid-template-columns: 88px minmax(120px, 1fr) 130px 110px minmax(180px, auto);
     column-gap: 0;
     row-gap: 0;
   }
@@ -458,7 +504,6 @@
     display: flex;
     align-items: center;
     padding: 0.85rem 0;
-    text-align: center;
   }
 
   .admin-artworks__row > .admin-artworks__col:first-child {
@@ -534,6 +579,55 @@
     text-decoration: none;
   }
 
+  /* Cartes mobile / tablette */
+  .admin-artworks__cards {
+    display: none;
+  }
+
+  .admin-artworks__card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border, #f0f0f0);
+  }
+
+  .admin-artworks__card:last-child {
+    border-bottom: none;
+  }
+
+  .admin-artworks__card-thumb {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-artworks__card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .admin-artworks__card-title {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .admin-artworks__card-meta {
+    margin: 0 0 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+  }
+
+  .admin-artworks__card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
   .admin-artworks__status {
     padding: 1.5rem;
     text-align: center;
@@ -560,15 +654,33 @@
     gap: 0.5rem;
   }
 
-  @media (max-width: 768px) {
-    .admin-artworks__grid {
-      grid-template-columns: 72px 1fr auto;
-      column-gap: 0.75rem;
+  @media (max-width: 1024px) {
+    .admin-artworks__table {
+      display: none;
     }
 
-    .admin-artworks__col--cat,
-    .admin-artworks__col--date {
-      display: none;
+    .admin-artworks__cards {
+      display: block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .admin-artworks {
+      padding: 1.5rem 1rem 2rem;
+    }
+
+    .admin-artworks__card {
+      padding: 0.85rem 1rem;
+      gap: 0.75rem;
+    }
+
+    .admin-artworks__thumb {
+      width: 48px;
+      height: 48px;
+    }
+
+    .admin-artworks__card-meta {
+      margin-bottom: 0.5rem;
     }
 
     .admin-artworks__pagination {

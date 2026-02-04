@@ -36,6 +36,12 @@ Fichier : `supabase/migrations/20260203000004_add_artworks_i18n.sql`
 
 - Ajoute `title_en`, `description_fr`, `description_en` pour les métadonnées FR/EN
 
+### Étape 5 : Catégorie sur `site_texts`
+
+Fichier : `supabase/migrations/20260203000005_add_site_texts_category.sql`
+
+- Ajoute la colonne `category` pour regrouper les textes dans l’admin (biography, metahism, homepage, analyses)
+
 ## 3. Migration des données existantes
 
 Après avoir exécuté les migrations SQL :
@@ -49,6 +55,25 @@ npm run migrate:artwork-images
 ```
 
 Le script copie `artworks.image_urls` vers `artwork_images` et évite les doublons.
+
+### Bootstrap des textes éditoriaux (site_texts)
+
+Pour pré-remplir `site_texts` avec le contenu actuel des fichiers i18n (Biographie, Métahisme, accueil) :
+
+```bash
+# Simulation
+npm run bootstrap:site-texts -- --dry-run
+
+# Exécution réelle
+npm run bootstrap:site-texts
+```
+
+Crée les slugs regroupés par catégorie :
+
+- **Biographie** : `biography`
+- **Métahisme** : `metahism`
+- **Accueil** : `homepage_biography`, `homepage_metahism`, `homepage_hero_*`, `homepage_artwork_*`, `homepage_analysis_*`, etc.
+- **Analyses** : `analysis_portant`, `analysis_concordance`, `analysis_aimants`, `analysis_advienne`
 
 ## 4. Vérification
 

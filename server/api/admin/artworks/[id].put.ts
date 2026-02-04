@@ -49,8 +49,7 @@ async function parseMultipart(event: H3Event): Promise<ParsedForm> {
     });
   }
 
-  const getFirst = (name: string): string =>
-    (fields.get(name)?.[0]?.data?.toString() || '').trim();
+  const getFirst = (name: string): string => (fields.get(name)?.[0]?.data?.toString() || '').trim();
 
   const title = getFirst('title');
   const description = getFirst('description');
@@ -120,8 +119,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Session invalide' });
   }
 
-  const { title, description, categoryId, deletedImageUrls, files } =
-    await parseMultipart(event);
+  const { title, description, categoryId, deletedImageUrls, files } = await parseMultipart(event);
 
   for (const file of files) {
     if (!ALLOWED_MIME.has(file.type || '')) {

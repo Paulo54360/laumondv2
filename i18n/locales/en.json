@@ -278,6 +278,27 @@
             "submit": "Publish artwork",
             "submit_loading": "Uploading…"
         },
+        "texts": {
+            "title": "Editorial texts",
+            "subtitle": "Edit the Biography, Metahism and homepage texts.",
+            "loading": "Loading texts…",
+            "section_biography": "Biography",
+            "section_metahism": "Metahism",
+            "section_homepage_biography": "Biography (homepage)",
+            "section_homepage_metahism": "Metahism (homepage)",
+            "markdown_hint": "Markdown supported: **bold**, *italic*, [link](url), ## heading",
+            "preview": "Preview",
+            "tab_fr": "French",
+            "tab_en": "English",
+            "save": "Save",
+            "save_loading": "Saving…",
+            "saved": "Changes saved.",
+            "error": "Error saving changes.",
+            "restore": "Restore previous version",
+            "restore_loading": "Restoring…",
+            "restored": "Previous version restored.",
+            "restore_error": "No previous version available."
+        },
         "edit": {
             "title": "Edit artwork",
             "subtitle": "Edit metadata and images for this artwork.",

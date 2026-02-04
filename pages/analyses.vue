@@ -68,27 +68,35 @@
         <div class="translation fr">
           <div class="text-content-wrapper">
             <div class="text-content" :class="{ collapsed: !showFullText }">
-              <!-- Contenu de l'analyse avec formatage -->
+              <!-- Contenu de l'analyse : site_texts ou i18n -->
               <div class="analysis-body" :class="{ 'dense-spacing': currentTab.id === 'advienne' }">
                 <h3 class="section-title-in-text">{{ currentTab.title }}</h3>
-                <p
-                  v-for="(paragraph, index) in currentTab.paragraphs"
-                  :key="index"
-                  :class="paragraph.type === 'poeticLine' ? 'poetic-line' : 'paragraph-item'"
-                >
-                  <template v-if="paragraph.type === 'quote'">
-                    <span class="quote-text">{{ paragraph.text }}</span>
-                  </template>
-                  <template v-else-if="paragraph.type === 'citation'">
-                    <em class="citation">{{ paragraph.text }}</em>
-                  </template>
-                  <template v-else-if="paragraph.type === 'emphasis'">
-                    <em class="emphasis-text">{{ paragraph.text }}</em>
-                  </template>
-                  <template v-else>
-                    {{ paragraph.text }}
-                  </template>
-                </p>
+                <!-- eslint-disable-next-line vue/no-v-html -- sanitized via markdownToSafeHtml -->
+                <div
+                  v-if="currentTabContentFromDb"
+                  class="analysis-body-markdown"
+                  v-html="markdownToSafeHtml(currentTabContentFromDb)"
+                />
+                <template v-else>
+                  <p
+                    v-for="(paragraph, index) in currentTab.paragraphs"
+                    :key="index"
+                    :class="paragraph.type === 'poeticLine' ? 'poetic-line' : 'paragraph-item'"
+                  >
+                    <template v-if="paragraph.type === 'quote'">
+                      <span class="quote-text">{{ paragraph.text }}</span>
+                    </template>
+                    <template v-else-if="paragraph.type === 'citation'">
+                      <em class="citation">{{ paragraph.text }}</em>
+                    </template>
+                    <template v-else-if="paragraph.type === 'emphasis'">
+                      <em class="emphasis-text">{{ paragraph.text }}</em>
+                    </template>
+                    <template v-else>
+                      {{ paragraph.text }}
+                    </template>
+                  </p>
+                </template>
               </div>
 
               <!-- Signature de l'auteur -->
@@ -159,12 +167,17 @@
   import { useI18n } from 'vue-i18n';
   import { useRoute } from 'vue-router';
 
+  import { markdownToSafeHtml } from '~/utils/markdown';
+
   definePageMeta({ layout: 'default' });
   const runtimeConfig = useRuntimeConfig();
 
   const S3_BASE_URL = runtimeConfig.public.apiUrl;
   const route = useRoute();
-  const { t } = useI18n();
+  const { locale, t } = useI18n();
+  const { fetchTexts, getContent } = useSiteTexts();
+
+  await useAsyncData('site-texts-analyses', () => fetchTexts());
 
   interface IParagraph {
     text: string;
@@ -354,6 +367,13 @@
   const currentTab = computed((): ITab | undefined =>
     tabs.find((tab) => tab.id === activeTab.value)
   );
+
+  const currentTabContentFromDb = computed((): string | null => {
+    const tab = currentTab.value;
+    if (!tab) return null;
+    const slug = `analysis_${tab.id}`;
+    return getContent(slug, locale.value);
+  });
 
   watch(
     () => route.query.tab,
@@ -662,6 +682,16 @@
       text-align: justify;
       margin: 0;
       padding: 0;
+    }
+
+    .analysis-body-markdown {
+      line-height: 1.7;
+      color: var(--color-ink);
+      text-align: justify;
+
+      p {
+        margin-bottom: 0.7em;
+      }
     }
 
     p {

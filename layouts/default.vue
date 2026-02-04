@@ -22,7 +22,7 @@
     min-height: 100vh;
 
     .main-content {
-      padding-top: 0;
+      padding-top: 2rem;
     }
   }
 </style>

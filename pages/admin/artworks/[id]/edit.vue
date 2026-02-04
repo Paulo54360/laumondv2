@@ -12,7 +12,9 @@
     </div>
     <form v-else class="admin-edit__form" @submit.prevent="onSubmit">
       <div class="admin-edit__field">
-        <label for="title">{{ t('admin.upload.title') }} <span class="admin-edit__required">*</span></label>
+        <label for="title"
+          >{{ t('admin.upload.title') }} <span class="admin-edit__required">*</span></label
+        >
         <input
           id="title"
           v-model="title"
@@ -36,7 +38,9 @@
       </div>
 
       <div class="admin-edit__field">
-        <label for="category">{{ t('admin.upload.category') }} <span class="admin-edit__required">*</span></label>
+        <label for="category"
+          >{{ t('admin.upload.category') }} <span class="admin-edit__required">*</span></label
+        >
         <select
           id="category"
           v-model="selectedCategoryId"
@@ -44,7 +48,11 @@
           :disabled="loading || categoriesLoading"
         >
           <option value="" disabled>
-            {{ categoriesLoading ? t('admin.upload.category_loading') : t('admin.upload.category_choose') }}
+            {{
+              categoriesLoading
+                ? t('admin.upload.category_loading')
+                : t('admin.upload.category_choose')
+            }}
           </option>
           <option v-for="cat in categories" :key="cat.id" :value="cat.id">
             {{ cat.name }}
@@ -59,7 +67,13 @@
         </div>
         <ul v-else class="admin-edit__image-list">
           <li v-for="img in displayedImages" :key="img.url" class="admin-edit__image-item">
-            <img :src="proxiedUrl(img.url)" alt="" class="admin-edit__thumb" width="80" height="80" />
+            <img
+              :src="proxiedUrl(img.url)"
+              alt=""
+              class="admin-edit__thumb"
+              width="80"
+              height="80"
+            />
             <button
               type="button"
               class="admin-edit__remove-img"
@@ -123,17 +137,14 @@
       <p v-if="successMessage" class="admin-edit__success">{{ successMessage }}</p>
 
       <div class="admin-edit__actions">
-        <NuxtLink
-          :to="localePath({ name: 'admin-artworks' })"
-          class="btn-artistic admin-edit__back"
-        >
+        <NuxtLink :to="localePath('/admin/artworks')" class="btn-artistic admin-edit__back">
           ← {{ t('admin.edit.back') }}
         </NuxtLink>
         <BaseButton
           variant="outline"
           type="submit"
           :disabled="loading || !canSave"
-          :isLoading="loading"
+          :is-loading="loading"
           class="admin-edit__submit"
         >
           {{ loading ? t('admin.upload.submit_loading') : t('admin.edit.save') }}
@@ -145,8 +156,9 @@
 
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n';
-  import { mapCategoriesToCanonical, type RawCategoryRow } from '~/utils/adminCategories';
+
   import { useImageProxy } from '~/composables/useImageProxy';
+  import { mapCategoriesToCanonical, type RawCategoryRow } from '~/utils/adminCategories';
 
   const { t } = useI18n();
   const route = useRoute();
@@ -201,8 +213,7 @@
   );
 
   const canSave = computed(() => {
-    const hasImages =
-      displayedImages.value.length + newFiles.value.length > 0;
+    const hasImages = displayedImages.value.length + newFiles.value.length > 0;
     return hasImages && title.value.trim();
   });
 
@@ -296,7 +307,7 @@
 
   async function onLogout(): Promise<void> {
     await logout();
-    await router.replace(localePath({ name: 'admin-login' }));
+    await router.replace(localePath('/admin/login'));
   }
 
   async function onSubmit(): Promise<void> {
@@ -331,14 +342,12 @@
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      await router.push({
-        path: localePath({ name: 'admin-artworks' }),
-        query: { updated: '1' },
-      });
+      await router.push({ path: localePath('/admin/artworks'), query: { updated: '1' } });
     } catch (err: unknown) {
       console.error('Erreur mise à jour', err);
       const e = err as { data?: { statusMessage?: string }; statusMessage?: string };
-      errorMessage.value = e.data?.statusMessage ?? e.statusMessage ?? 'Erreur lors de la mise à jour.';
+      errorMessage.value =
+        e.data?.statusMessage ?? e.statusMessage ?? 'Erreur lors de la mise à jour.';
     } finally {
       loading.value = false;
     }

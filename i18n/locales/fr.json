@@ -278,6 +278,27 @@
             "submit": "Publier l'œuvre",
             "submit_loading": "Envoi en cours…"
         },
+        "texts": {
+            "title": "Textes éditoriaux",
+            "subtitle": "Modifiez les textes de la Biographie, du Métahisme et de la page d'accueil.",
+            "loading": "Chargement des textes…",
+            "section_biography": "Biographie",
+            "section_metahism": "Métahisme",
+            "section_homepage_biography": "Biographie (accueil)",
+            "section_homepage_metahism": "Métahisme (accueil)",
+            "markdown_hint": "Markdown supporté : **gras**, *italique*, [lien](url), ## titre",
+            "preview": "Aperçu",
+            "tab_fr": "Français",
+            "tab_en": "English",
+            "save": "Enregistrer",
+            "save_loading": "Enregistrement…",
+            "saved": "Modifications enregistrées.",
+            "error": "Erreur lors de la sauvegarde.",
+            "restore": "Restaurer la version précédente",
+            "restore_loading": "Restauration…",
+            "restored": "Version précédente restaurée.",
+            "restore_error": "Aucune version précédente disponible."
+        },
         "edit": {
             "title": "Modifier l'œuvre",
             "subtitle": "Modifiez les métadonnées et les images de l'œuvre.",

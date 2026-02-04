@@ -8,7 +8,9 @@
     />
     <form class="admin-upload__form" @submit.prevent="onSubmit">
       <div class="admin-upload__field">
-        <label for="title">{{ t('admin.upload.title') }} <span class="admin-upload__required">*</span></label>
+        <label for="title"
+          >{{ t('admin.upload.title') }} <span class="admin-upload__required">*</span></label
+        >
         <input
           id="title"
           v-model="title"
@@ -32,7 +34,9 @@
       </div>
 
       <div class="admin-upload__field">
-        <label for="category">{{ t('admin.upload.category') }} <span class="admin-upload__required">*</span></label>
+        <label for="category"
+          >{{ t('admin.upload.category') }} <span class="admin-upload__required">*</span></label
+        >
         <select
           id="category"
           v-model="selectedCategoryId"
@@ -40,7 +44,11 @@
           :disabled="loading || categoriesLoading"
         >
           <option value="" disabled>
-            {{ categoriesLoading ? t('admin.upload.category_loading') : t('admin.upload.category_choose') }}
+            {{
+              categoriesLoading
+                ? t('admin.upload.category_loading')
+                : t('admin.upload.category_choose')
+            }}
           </option>
           <option v-for="cat in categories" :key="cat.id" :value="cat.id">
             {{ cat.name }}
@@ -50,8 +58,9 @@
 
       <div class="admin-upload__field">
         <label
-          >{{ t('admin.upload.images') }} <span class="admin-upload__required">*</span>
-          ({{ t('admin.upload.images_format') }})</label
+          >{{ t('admin.upload.images') }} <span class="admin-upload__required">*</span> ({{
+            t('admin.upload.images_format')
+          }})</label
         >
         <div
           class="admin-upload__dropzone"
@@ -102,7 +111,7 @@
       <BaseButton
         type="submit"
         variant="outline"
-        :isLoading="loading"
+        :is-loading="loading"
         :disabled="loading || files.length === 0"
         class="admin-upload__submit"
       >
@@ -114,6 +123,7 @@
 
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n';
+
   import { mapCategoriesToCanonical, type RawCategoryRow } from '~/utils/adminCategories';
 
   const { t } = useI18n();
@@ -241,7 +251,7 @@
 
   async function onLogout(): Promise<void> {
     await logout();
-    await router.replace(localePath({ name: 'admin-login' }));
+    await router.replace(localePath('/admin/login'));
   }
 
   async function onSubmit(): Promise<void> {
@@ -289,10 +299,7 @@
       selectedCategoryId.value = '';
       files.value = [];
 
-      await router.push({
-        path: localePath({ name: 'admin-artworks' }),
-        query: { created: '1' },
-      });
+      await router.push({ path: localePath('/admin/artworks'), query: { created: '1' } });
     } catch (err: unknown) {
       console.error('Erreur upload', err);
       const fetchErr = err as { data?: { statusMessage?: string }; statusMessage?: string };

@@ -19,10 +19,7 @@
     </div>
 
     <section class="admin-trash__nav">
-      <NuxtLink
-        :to="localePath({ name: 'admin-artworks' })"
-        class="btn-artistic admin-trash__back"
-      >
+      <NuxtLink :to="localePath('/admin/artworks')" class="btn-artistic admin-trash__back">
         ← Retour à la liste
       </NuxtLink>
     </section>
@@ -62,9 +59,7 @@
         {{ categoriesError }}
       </div>
       <div v-else-if="loading" class="admin-trash__status">Chargement…</div>
-      <div v-else-if="items.length === 0" class="admin-trash__status">
-        La corbeille est vide.
-      </div>
+      <div v-else-if="items.length === 0" class="admin-trash__status">La corbeille est vide.</div>
       <div v-else class="admin-trash__grid">
         <div class="admin-trash__row admin-trash__row--head">
           <div class="admin-trash__col admin-trash__col--thumb">Miniature</div>
@@ -73,11 +68,7 @@
           <div class="admin-trash__col admin-trash__col--date">Supprimée le</div>
           <div class="admin-trash__col admin-trash__col--actions">Actions</div>
         </div>
-        <div
-          v-for="item in items"
-          :key="item.id"
-          class="admin-trash__row admin-trash__row--data"
-        >
+        <div v-for="item in items" :key="item.id" class="admin-trash__row admin-trash__row--data">
           <div class="admin-trash__col admin-trash__col--thumb">
             <img
               v-if="item.thumbnailUrl"
@@ -102,7 +93,7 @@
               variant="outline"
               size="sm"
               :disabled="actionLoading === item.id"
-              :isLoading="actionLoading === item.id"
+              :is-loading="actionLoading === item.id"
               @click="restore(item)"
             >
               Restaurer
@@ -123,12 +114,7 @@
     <footer v-if="total > 0" class="admin-trash__pagination">
       <span>{{ rangeLabel }}</span>
       <div class="admin-trash__pagination-controls">
-        <BaseButton
-          variant="outline"
-          size="sm"
-          :disabled="page <= 1"
-          @click="changePage(page - 1)"
-        >
+        <BaseButton variant="outline" size="sm" :disabled="page <= 1" @click="changePage(page - 1)">
           ← Précédent
         </BaseButton>
         <BaseButton
@@ -146,6 +132,7 @@
 
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+
   import { useAdminArtworksList } from '~/composables/useAdminArtworksList';
   import { useAdminAuth } from '~/composables/useAdminAuth';
   import { useImageProxy } from '~/composables/useImageProxy';
@@ -201,7 +188,7 @@
       console.error('Erreur chargement catégories', err);
       const fetchErr = err as { statusMessage?: string; message?: string };
       categoriesError.value =
-        fetchErr.statusMessage || fetchErr.message || "Impossible de charger les catégories.";
+        fetchErr.statusMessage || fetchErr.message || 'Impossible de charger les catégories.';
     } finally {
       categoriesLoading.value = false;
     }
@@ -256,7 +243,7 @@
 
   async function onLogout(): Promise<void> {
     await logout();
-    await router.replace(localePath({ name: 'admin-login' }));
+    await router.replace(localePath('/admin/login'));
   }
 
   async function restore(item: { id: string }): Promise<void> {
@@ -314,10 +301,7 @@
   }
 
   onMounted(async () => {
-    await Promise.all([
-      loadCategories(),
-      fetchList({ page: 1, trash: true }),
-    ]);
+    await Promise.all([loadCategories(), fetchList({ page: 1, trash: true })]);
   });
 
   onBeforeUnmount(() => {

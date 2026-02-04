@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
   const awsSecretAccessKey = config.awsSecretAccessKey;
   const awsRegion = config.awsRegion;
   const bucket = config.s3Bucket;
-  const publicBase = (config.public.apiUrl as string)?.replace(/\/$/, '') || '';
 
   if (!supabaseUrl || !serviceRoleKey) {
     throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
@@ -84,10 +83,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const { error: deleteError } = await supabase
-    .from('artworks')
-    .delete()
-    .eq('id', artworkId);
+  const { error: deleteError } = await supabase.from('artworks').delete().eq('id', artworkId);
 
   if (deleteError) {
     console.error('Erreur suppression DB artwork', deleteError);

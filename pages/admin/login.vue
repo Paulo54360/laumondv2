@@ -30,7 +30,7 @@
         <BaseButton
           type="submit"
           variant="outline"
-          :isLoading="loading"
+          :is-loading="loading"
           class="admin-login__submit"
         >
           Se connecter
@@ -43,18 +43,18 @@
 <script setup lang="ts">
   defineOptions({ name: 'AdminLogin' });
 
-definePageMeta({
-  layout: 'default',
-  middleware: 'admin-auth',
-});
+  definePageMeta({
+    layout: 'default',
+    middleware: 'admin-auth',
+  });
 
   useHead({
     meta: [{ name: 'robots', content: 'noindex' }],
   });
 
-const { login, getSession } = useAdminAuth();
-const router = useRouter();
-const localePath = useLocalePath();
+  const { login, getSession } = useAdminAuth();
+  const router = useRouter();
+  const localePath = useLocalePath();
 
   const email = ref('');
   const password = ref('');
@@ -64,7 +64,7 @@ const localePath = useLocalePath();
   onMounted(async (): Promise<void> => {
     const session = await getSession();
     if (session?.user) {
-      await router.replace(localePath({ name: 'admin-upload' }));
+      await router.replace(localePath('/admin/upload'));
     }
   });
 
@@ -73,7 +73,7 @@ const localePath = useLocalePath();
     loading.value = true;
     try {
       await login(email.value, password.value);
-      await router.replace(localePath({ name: 'admin-upload' }));
+      await router.replace(localePath('/admin/upload'));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       errorMessage.value =

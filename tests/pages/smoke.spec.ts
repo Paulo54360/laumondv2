@@ -2,7 +2,8 @@
  * Smoke tests : les pages critiques se montent sans erreur et affichent un contenu attendu.
  * Pas de snapshots lourds, assertions ciblées.
  */
-import { mount, shallowMount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
+import { h, ref, Suspense } from 'vue';
 
 import Biography from '../../pages/biography.vue';
 import Galerie from '../../pages/galerie.vue';
@@ -42,20 +43,49 @@ vi.mock('../../composables/useS3', () => ({
   }),
 }));
 
+const mockFetchTexts = vi.fn().mockResolvedValue([]);
+const mockGetContent = vi.fn().mockReturnValue(null);
+vi.stubGlobal(
+  'useSiteTexts',
+  (): {
+    fetchTexts: ReturnType<typeof vi.fn>;
+    getContent: ReturnType<typeof vi.fn>;
+  } => ({
+    fetchTexts: mockFetchTexts,
+    getContent: mockGetContent,
+  })
+);
+
+vi.stubGlobal('useAsyncData', (_key: string, fn: () => Promise<unknown>) =>
+  Promise.resolve({ data: fn(), pending: ref(false) })
+);
+
 describe('Pages smoke', (): void => {
   describe('index (homepage)', (): void => {
-    it('se monte et affiche la zone homepage', (): void => {
-      const wrapper = shallowMount(Index, {
-        global: {
-          stubs: {
-            HomeHero: true,
-            HomeBiographySection: true,
-            HomeMetahismSection: true,
-            HomeArtworksSection: true,
-            HomeAnalysesSection: true,
+    it('se monte et affiche la zone homepage', async (): Promise<void> => {
+      const wrapper = mount(
+        {
+          render() {
+            return h(Suspense, null, {
+              default: () => h(Index),
+              fallback: () => h('div', 'loading'),
+            });
           },
         },
-      });
+        {
+          global: {
+            components: { Index, Suspense },
+            stubs: {
+              HomeHero: true,
+              HomeBiographySection: true,
+              HomeMetahismSection: true,
+              HomeArtworksSection: true,
+              HomeAnalysesSection: true,
+            },
+          },
+        }
+      );
+      await flushPromises();
       expect(wrapper.find('.homepage').exists()).toBe(true);
     });
   });
@@ -84,12 +114,24 @@ describe('Pages smoke', (): void => {
   });
 
   describe('biography', (): void => {
-    it('se monte et affiche le contenu et le menu nav', (): void => {
-      const wrapper = mount(Biography, {
-        global: {
-          mocks: { $t: (key: string): string => key },
+    it('se monte et affiche le contenu et le menu nav', async (): Promise<void> => {
+      const wrapper = mount(
+        {
+          render() {
+            return h(Suspense, null, {
+              default: () => h(Biography),
+              fallback: () => h('div', 'loading'),
+            });
+          },
         },
-      });
+        {
+          global: {
+            components: { Biography, Suspense },
+            mocks: { $t: (key: string): string => key },
+          },
+        }
+      );
+      await flushPromises();
       expect(wrapper.find('.biography-page').exists()).toBe(true);
       expect(wrapper.find('.nav-menu').exists()).toBe(true);
     });

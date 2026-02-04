@@ -2,10 +2,23 @@
 <template>
   <div class="metahism-page">
     <div class="page-title-header">
-      <h1 class="page-title">{{ $t('MétaHisme.Titre') }}</h1>
+      <h1 class="page-title">{{ pageTitle }}</h1>
       <div class="page-title-divider"></div>
     </div>
-    <div class="text-content">
+    <div v-if="useSiteContent" class="text-content">
+      <p v-for="(para, i) in paragraphs" :key="i">{{ para }}</p>
+      <div class="article-link-container">
+        <a
+          href="https://www.champslibres.media/rencontre-avec-patrick-laumond"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="article-link"
+        >
+          {{ $t('MétaHisme.ArticleLinkText') }}
+        </a>
+      </div>
+    </div>
+    <div v-else class="text-content">
       <p>{{ $t('MétaHisme.Texte') }}</p>
       <p>{{ $t('MétaHisme.Texte2') }}</p>
       <p>{{ $t('MétaHisme.Texte3') }}</p>
@@ -67,8 +80,29 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  import { computed } from 'vue';
+  import { useI18n } from 'vue-i18n';
+
   definePageMeta({ layout: 'default' });
+
+  const { locale, t } = useI18n();
+  const { fetchTexts, getContent } = useSiteTexts();
+
+  await useAsyncData('site-texts', () => fetchTexts());
+
+  const metahismRaw = computed(() => getContent('metahism', locale.value) ?? '');
+
+  const useSiteContent = computed(() => metahismRaw.value.length > 0);
+
+  const paragraphs = computed(() =>
+    metahismRaw.value
+      .split(/\n\n+/)
+      .map((p) => p.trim())
+      .filter(Boolean)
+  );
+
+  const pageTitle = computed(() => t('MétaHisme.Titre'));
 </script>
 
 <style lang="scss" src="~/assets/css/pages/metahism.scss"></style>

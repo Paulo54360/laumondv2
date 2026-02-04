@@ -63,6 +63,14 @@ npm run preview
 
 Variables d’environnement : copier `.env.example` en `.env` et renseigner `SUPABASE_URL`, `SUPABASE_KEY`, `NUXT_PUBLIC_API_URL` (et optionnellement `NUXT_PUBLIC_GTAG_ID`). Ne jamais committer `.env`. Pour l'admin : ajouter `SUPABASE_SERVICE_ROLE_KEY` ; voir `docs/admin-setup.md`.
 
+### Scripts utilitaires
+
+| Commande | Description |
+| -------- | ----------- |
+| `npm run migrate:artwork-images` | Migration des images vers `artwork_images` ([docs/migrations.md](docs/migrations.md)) |
+| `npm run bootstrap:site-texts` | Import des textes Biographie/Métahisme vers `site_texts` |
+| `npm run verify:admin-auth` | Vérifier la connexion admin (Supabase Auth) |
+
 ---
 
 ## Qualité & tests
@@ -93,6 +101,9 @@ Le déploiement est géré par **GitHub Actions** au push sur `main` : build Doc
 | Doc                                                                    | Contenu                                                 |
 | ---------------------------------------------------------------------- | ------------------------------------------------------- |
 | [docs/architecture-laumond-nuxt.md](docs/architecture-laumond-nuxt.md) | Architecture cible, rôles des dossiers, flux de données |
+| [docs/admin-setup.md](docs/admin-setup.md)                             | Configuration admin (Supabase Auth, compte Patrick)     |
+| [docs/admin-guide.md](docs/admin-guide.md)                             | Guide utilisateur admin (œuvres, textes éditoriaux)     |
+| [docs/migrations.md](docs/migrations.md)                               | Migrations BDD et scripts (artwork_images, site_texts)  |
 | [docs/styles-howto.md](docs/styles-howto.md)                           | Styles : tokens, où mettre quoi, comment modifier       |
 | [docs/cicd-deployment.md](docs/cicd-deployment.md)                     | CI/CD, Docker, déploiement VPS, checklist               |
 | [docs/howto-add-page.md](docs/howto-add-page.md)                       | Comment ajouter une page ou une section                 |
