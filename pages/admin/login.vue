@@ -27,6 +27,7 @@
           />
         </div>
         <p v-if="errorMessage" class="admin-login__error">{{ errorMessage }}</p>
+        <p v-if="errorDetail" class="admin-login__error-detail">{{ errorDetail }}</p>
         <BaseButton
           type="submit"
           variant="outline"
@@ -60,6 +61,7 @@
   const password = ref('');
   const loading = ref(false);
   const errorMessage = ref('');
+  const errorDetail = ref('');
 
   onMounted(async (): Promise<void> => {
     const session = await getSession();
@@ -70,12 +72,14 @@
 
   async function onSubmit(): Promise<void> {
     errorMessage.value = '';
+    errorDetail.value = '';
     loading.value = true;
     try {
       await login(email.value, password.value);
       await router.replace(localePath('/admin/upload'));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
+      errorDetail.value = msg;
       errorMessage.value =
         msg.toLowerCase().includes('invalid') || msg.includes('400')
           ? 'Identifiants incorrects'
@@ -139,9 +143,16 @@
   }
 
   .admin-login__error {
-    margin: var(--spacing-sm) 0;
+    margin: var(--spacing-sm) 0 0;
     font-size: 0.9rem;
     color: var(--color-primary);
+  }
+
+  .admin-login__error-detail {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    word-break: break-word;
   }
 
   .admin-login__submit {
