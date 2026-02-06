@@ -20,16 +20,39 @@ export type BrowserData = {
   percentage: number;
 };
 
+export type VisitorSegment = {
+  newUsers: number;
+  newUsersPercentage: number;
+  returningUsers: number;
+  returningUsersPercentage: number;
+};
+
+export type PageData = {
+  pagePath: string;
+  pageTitle: string;
+  views: number;
+  avgTimeOnPage: number;
+  percentage: number;
+};
+
 export type OverviewData = {
   startDate: string;
   endDate: string;
   visitors: number;
   pageViews: number;
   avgSessionDuration: number;
+  visitorSegment: VisitorSegment;
   topCountries: CountryData[];
   devices: DeviceData[];
   topBrowsers: BrowserData[];
   cachedAt: string;
+};
+
+export type PagesResponse = {
+  pages: PageData[];
+  country: string | null;
+  startDate: string;
+  endDate: string;
 };
 
 type UseAdminAnalyticsReturn = {
@@ -38,14 +61,24 @@ type UseAdminAnalyticsReturn = {
   overviewLoading: ComputedRef<boolean>;
   overviewError: ComputedRef<string | null>;
 
+  // Top pages state
+  topPages: ComputedRef<PageData[] | null>;
+  pagesLoading: ComputedRef<boolean>;
+  pagesError: ComputedRef<string | null>;
+
+  // Country filter
+  countryFilter: Ref<string | null>;
+
   // Date range
   startDate: Ref<string>;
   endDate: Ref<string>;
 
   // Methods
   fetchOverview: () => Promise<void>;
+  fetchTopPages: () => Promise<void>;
   setDateRange: (start: string, end: string) => void;
   setPreset: (preset: '7d' | '30d' | '90d' | '1y' | 'all') => void;
+  setCountryFilter: (country: string | null) => void;
 };
 
 // Helper pour formater une date en YYYY-MM-DD
@@ -67,6 +100,14 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
   const overview = ref<OverviewData | null>(null);
   const overviewLoading = ref(false);
   const overviewError = ref<string | null>(null);
+
+  // Top pages state
+  const topPages = ref<PageData[] | null>(null);
+  const pagesLoading = ref(false);
+  const pagesError = ref<string | null>(null);
+
+  // Country filter
+  const countryFilter = ref<string | null>(null);
 
   // Date range (défaut: 7 derniers jours)
   const startDate = ref<string>(getRelativeDate(7));
@@ -105,10 +146,50 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
     }
   }
 
+  async function fetchTopPages(): Promise<void> {
+    pagesLoading.value = true;
+    pagesError.value = null;
+
+    try {
+      const session = await getSession();
+      const token = session?.access_token;
+
+      if (!token) {
+        throw new Error('Session expirée. Veuillez vous reconnecter.');
+      }
+
+      const data = await $fetch<PagesResponse>('/api/admin/analytics/pages', {
+        headers: { Authorization: `Bearer ${token}` },
+        query: {
+          startDate: startDate.value,
+          endDate: endDate.value,
+          country: countryFilter.value || undefined,
+        },
+      });
+
+      topPages.value = data.pages;
+    } catch (err: unknown) {
+      console.error('Erreur fetch top pages analytics', err);
+      const fetchErr = err as { statusMessage?: string; message?: string };
+      pagesError.value =
+        fetchErr.statusMessage ||
+        fetchErr.message ||
+        'Impossible de charger les pages.';
+    } finally {
+      pagesLoading.value = false;
+    }
+  }
+
+  function setCountryFilter(country: string | null): void {
+    countryFilter.value = country;
+    fetchTopPages();
+  }
+
   function setDateRange(start: string, end: string): void {
     startDate.value = start;
     endDate.value = end;
     fetchOverview();
+    fetchTopPages();
   }
 
   function setPreset(preset: '7d' | '30d' | '90d' | '1y' | 'all'): void {
@@ -119,6 +200,7 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
       startDate.value = '2020-01-01';
       endDate.value = today;
       fetchOverview();
+      fetchTopPages();
       return;
     }
 
@@ -142,6 +224,7 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
     startDate.value = getRelativeDate(daysAgo);
     endDate.value = today;
     fetchOverview();
+    fetchTopPages();
   }
 
   return {
@@ -150,13 +233,23 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
     overviewLoading: computed(() => overviewLoading.value),
     overviewError: computed(() => overviewError.value),
 
+    // Top pages
+    topPages: computed(() => topPages.value),
+    pagesLoading: computed(() => pagesLoading.value),
+    pagesError: computed(() => pagesError.value),
+
+    // Country filter
+    countryFilter,
+
     // Date range
     startDate,
     endDate,
 
     // Methods
     fetchOverview,
+    fetchTopPages,
     setDateRange,
     setPreset,
+    setCountryFilter,
   };
 }

@@ -79,6 +79,25 @@
         </div>
       </section>
 
+      <!-- Visiteurs nouveaux vs récurrents -->
+      <section class="admin-analytics__visitor-segment">
+        <h3 class="admin-analytics__section-title">{{ t('admin.analytics.visitorTypes') }}</h3>
+        <div class="admin-analytics__segment-cards">
+          <div class="admin-analytics__segment-card admin-analytics__segment-card--new">
+            <span class="admin-analytics__segment-icon">✨</span>
+            <span class="admin-analytics__segment-value">{{ formatNumber(overview.visitorSegment.newUsers) }}</span>
+            <span class="admin-analytics__segment-label">{{ t('admin.analytics.newVisitors') }}</span>
+            <span class="admin-analytics__segment-percent">{{ overview.visitorSegment.newUsersPercentage }}%</span>
+          </div>
+          <div class="admin-analytics__segment-card admin-analytics__segment-card--returning">
+            <span class="admin-analytics__segment-icon">🔄</span>
+            <span class="admin-analytics__segment-value">{{ formatNumber(overview.visitorSegment.returningUsers) }}</span>
+            <span class="admin-analytics__segment-label">{{ t('admin.analytics.returningVisitors') }}</span>
+            <span class="admin-analytics__segment-percent">{{ overview.visitorSegment.returningUsersPercentage }}%</span>
+          </div>
+        </div>
+      </section>
+
       <!-- Carte des pays (visualisation) -->
       <section class="admin-analytics__map-section">
         <h3 class="admin-analytics__section-title">{{ t('admin.analytics.topCountries') }}</h3>
@@ -151,6 +170,56 @@
           </p>
         </div>
       </section>
+
+      <!-- Pages les plus vues -->
+      <section class="admin-analytics__pages-section">
+        <div class="admin-analytics__pages-header">
+          <h3 class="admin-analytics__section-title">{{ t('admin.analytics.topPages') }}</h3>
+          <div class="admin-analytics__country-filter">
+            <label>{{ t('admin.analytics.filterByCountry') }}</label>
+            <select v-model="selectedCountry" @change="onCountryChange">
+              <option :value="null">{{ t('admin.analytics.allCountries') }}</option>
+              <option
+                v-for="country in overview.topCountries"
+                :key="country.countryCode"
+                :value="country.country"
+              >
+                {{ getCountryFlag(country.countryCode) }} {{ country.country }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div v-if="pagesLoading" class="admin-analytics__loading">
+          {{ t('admin.analytics.loading') }}
+        </div>
+
+        <div v-else-if="topPages && topPages.length > 0" class="admin-analytics__pages-table">
+          <div class="admin-analytics__pages-row admin-analytics__pages-row--header">
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--page">{{ t('admin.analytics.page') }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{ t('admin.analytics.views') }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--time">{{ t('admin.analytics.avgTime') }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--percent">%</span>
+          </div>
+          <div
+            v-for="page in topPages"
+            :key="page.pagePath"
+            class="admin-analytics__pages-row"
+          >
+            <div class="admin-analytics__pages-cell admin-analytics__pages-cell--page">
+              <span class="admin-analytics__page-title">{{ page.pageTitle || page.pagePath }}</span>
+              <span class="admin-analytics__page-path">{{ page.pagePath }}</span>
+            </div>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{ formatNumber(page.views) }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--time">{{ formatDuration(page.avgTimeOnPage) }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--percent">{{ page.percentage }}%</span>
+          </div>
+        </div>
+
+        <p v-else class="admin-analytics__no-data">
+          {{ t('admin.analytics.noData') }}
+        </p>
+      </section>
     </template>
 
     <!-- Pas de données -->
@@ -186,12 +255,24 @@
     overview,
     overviewLoading,
     overviewError,
+    topPages,
+    pagesLoading,
+    countryFilter,
     startDate,
     endDate,
     fetchOverview,
+    fetchTopPages,
     setDateRange,
     setPreset,
+    setCountryFilter,
   } = useAdminAnalytics();
+
+  // Pays sélectionné pour le filtre
+  const selectedCountry = ref<string | null>(null);
+
+  function onCountryChange(): void {
+    setCountryFilter(selectedCountry.value);
+  }
 
   // Présets de période
   const presets = [
@@ -271,6 +352,7 @@
 
   onMounted(() => {
     fetchOverview();
+    fetchTopPages();
   });
 </script>
 
@@ -402,6 +484,61 @@
     font-size: 0.85rem;
     color: var(--color-text-light);
     margin-top: 0.25rem;
+  }
+
+  /* Visiteurs nouveaux vs récurrents */
+  .admin-analytics__visitor-segment {
+    background: #fff;
+    border: 1px solid var(--color-border, #e8e8e8);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .admin-analytics__segment-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .admin-analytics__segment-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem;
+    border-radius: 10px;
+    text-align: center;
+
+    &--new {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    }
+
+    &--returning {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    }
+  }
+
+  .admin-analytics__segment-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .admin-analytics__segment-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .admin-analytics__segment-label {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  .admin-analytics__segment-percent {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 0.5rem;
   }
 
   /* Section pays avec carte visuelle */
@@ -566,6 +703,117 @@
     text-align: right;
   }
 
+  /* Section pages les plus vues */
+  .admin-analytics__pages-section {
+    background: #fff;
+    border: 1px solid var(--color-border, #e8e8e8);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .admin-analytics__pages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .admin-analytics__section-title {
+      margin: 0;
+    }
+  }
+
+  .admin-analytics__country-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+    }
+
+    select {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--color-border, #e5e5e5);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      background: #fff;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+      }
+    }
+  }
+
+  .admin-analytics__pages-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .admin-analytics__pages-row {
+    display: grid;
+    grid-template-columns: 1fr 80px 90px 50px;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border, #e8e8e8);
+    align-items: center;
+
+    &--header {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-light);
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--color-border, #e8e8e8);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .admin-analytics__pages-cell {
+    &--page {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+    }
+
+    &--views,
+    &--time,
+    &--percent {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+
+    &--percent {
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+  }
+
+  .admin-analytics__page-title {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-analytics__page-path {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* États */
   .admin-analytics__loading {
     color: var(--color-text-light);
@@ -645,6 +893,29 @@
 
     .admin-analytics__detail-item {
       grid-template-columns: 70px 1fr 40px;
+    }
+
+    .admin-analytics__segment-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-analytics__pages-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .admin-analytics__pages-row {
+      grid-template-columns: 1fr 60px 70px 40px;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .admin-analytics__page-title {
+      font-size: 0.85rem;
+    }
+
+    .admin-analytics__page-path {
+      font-size: 0.75rem;
     }
   }
 </style>

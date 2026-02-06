@@ -23,12 +23,28 @@ export type RealtimeData = {
   timestamp: string;
 };
 
+export type VisitorSegment = {
+  newUsers: number;
+  newUsersPercentage: number;
+  returningUsers: number;
+  returningUsersPercentage: number;
+};
+
+export type PageData = {
+  pagePath: string;
+  pageTitle: string;
+  views: number;
+  avgTimeOnPage: number;
+  percentage: number;
+};
+
 export type OverviewData = {
   startDate: string;
   endDate: string;
   visitors: number;
   pageViews: number;
   avgSessionDuration: number;
+  visitorSegment: VisitorSegment;
   topCountries: CountryData[];
   devices: DeviceData[];
   topBrowsers: BrowserData[];
@@ -118,7 +134,7 @@ export async function runOverviewReport(
 
   const client = getAnalyticsClient();
 
-  // Requête principale : métriques globales
+  // Requête principale : métriques globales + nouveaux vs récurrents
   const [metricsResponse] = await client.runReport({
     property: `properties/${propertyId}`,
     dateRanges: [{ startDate, endDate }],
@@ -126,6 +142,8 @@ export async function runOverviewReport(
       { name: 'activeUsers' },
       { name: 'screenPageViews' },
       { name: 'averageSessionDuration' },
+      { name: 'newUsers' },
+      { name: 'totalUsers' },
     ],
   });
 
@@ -138,6 +156,20 @@ export async function runOverviewReport(
   const avgSessionDuration = metricsResponse.rows?.[0]?.metricValues?.[2]?.value
     ? parseFloat(metricsResponse.rows[0].metricValues[2].value)
     : 0;
+  const newUsers = metricsResponse.rows?.[0]?.metricValues?.[3]?.value
+    ? parseInt(metricsResponse.rows[0].metricValues[3].value, 10)
+    : 0;
+  const totalUsers = metricsResponse.rows?.[0]?.metricValues?.[4]?.value
+    ? parseInt(metricsResponse.rows[0].metricValues[4].value, 10)
+    : 0;
+
+  const returningUsers = Math.max(0, totalUsers - newUsers);
+  const visitorSegment: VisitorSegment = {
+    newUsers,
+    newUsersPercentage: totalUsers > 0 ? Math.round((newUsers / totalUsers) * 100) : 0,
+    returningUsers,
+    returningUsersPercentage: totalUsers > 0 ? Math.round((returningUsers / totalUsers) * 100) : 0,
+  };
 
   // Requête par pays
   const [countryResponse] = await client.runReport({
@@ -215,6 +247,7 @@ export async function runOverviewReport(
     visitors,
     pageViews,
     avgSessionDuration,
+    visitorSegment,
     topCountries,
     devices,
     topBrowsers,
@@ -228,4 +261,82 @@ export async function runOverviewReport(
   });
 
   return data;
+}
+
+/**
+ * Récupère les pages les plus vues avec temps moyen par page
+ * Avec option de filtre par pays
+ */
+export async function runTopPagesReport(
+  propertyId: string,
+  startDate: string,
+  endDate: string,
+  countryFilter?: string
+): Promise<PageData[]> {
+  const cacheKey = `pages-${propertyId}-${startDate}-${endDate}-${countryFilter || 'all'}`;
+  const now = Date.now();
+
+  // Vérifier le cache (réutilise le même cache)
+  const cached = cache.get(cacheKey);
+  if (cached && cached.expiresAt > now) {
+    return (cached.data as unknown as { pages: PageData[] }).pages;
+  }
+
+  const client = getAnalyticsClient();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const reportRequest: any = {
+    property: `properties/${propertyId}`,
+    dateRanges: [{ startDate, endDate }],
+    dimensions: [{ name: 'pagePath' }, { name: 'pageTitle' }],
+    metrics: [
+      { name: 'screenPageViews' },
+      { name: 'userEngagementDuration' },
+    ],
+    orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+    limit: 10,
+  };
+
+  // Ajouter filtre pays si spécifié
+  if (countryFilter) {
+    reportRequest.dimensionFilter = {
+      filter: {
+        fieldName: 'country',
+        stringFilter: {
+          value: countryFilter,
+          matchType: 'EXACT',
+        },
+      },
+    };
+  }
+
+  const [pagesResponse] = await client.runReport(reportRequest);
+
+  // Calculer le total des vues pour les pourcentages
+  const totalViews = pagesResponse.rows?.reduce(
+    (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
+    0
+  ) || 1;
+
+  const pages: PageData[] = (pagesResponse.rows || []).map((row) => {
+    const views = parseInt(row.metricValues?.[0]?.value || '0', 10);
+    const engagementDuration = parseFloat(row.metricValues?.[1]?.value || '0');
+    const avgTimeOnPage = views > 0 ? engagementDuration / views : 0;
+
+    return {
+      pagePath: row.dimensionValues?.[0]?.value || '/',
+      pageTitle: row.dimensionValues?.[1]?.value || 'Sans titre',
+      views,
+      avgTimeOnPage,
+      percentage: Math.round((views / totalViews) * 100),
+    };
+  });
+
+  // Mettre en cache (hack: stocker dans le même cache avec wrapper)
+  cache.set(cacheKey, {
+    data: { pages } as unknown as OverviewData,
+    expiresAt: now + CACHE_TTL_MS,
+  });
+
+  return pages;
 }
