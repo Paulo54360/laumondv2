@@ -45,7 +45,7 @@ type UseAdminAnalyticsReturn = {
   // Methods
   fetchOverview: () => Promise<void>;
   setDateRange: (start: string, end: string) => void;
-  setPreset: (preset: '7d' | '30d' | '90d' | '1y') => void;
+  setPreset: (preset: '7d' | '30d' | '90d' | '1y' | 'all') => void;
 };
 
 // Helper pour formater une date en YYYY-MM-DD
@@ -111,8 +111,17 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
     fetchOverview();
   }
 
-  function setPreset(preset: '7d' | '30d' | '90d' | '1y'): void {
+  function setPreset(preset: '7d' | '30d' | '90d' | '1y' | 'all'): void {
     const today = formatDate(new Date());
+
+    if (preset === 'all') {
+      // Depuis le début (date arbitraire lointaine, GA4 gère)
+      startDate.value = '2020-01-01';
+      endDate.value = today;
+      fetchOverview();
+      return;
+    }
+
     let daysAgo = 7;
 
     switch (preset) {
