@@ -1,120 +1,120 @@
 // Styles page biographie (biography.vue). Importé via <style src="~/assets/css/pages/biography.scss">.
 .biography-page {
-  max-width: var(--max-width-content);
-  margin: 0 auto;
-  padding: 2rem 1cm;
-  font-family: var(--font-family-base);
-  color: var(--color-text);
-  scroll-behavior: smooth;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  position: relative;
-  .text-content {
-    font-size: 1.2em;
-    line-height: 1.7;
-    padding: 20px 0 40px 0;
-    flex: 1 1 auto;
-    min-width: 0;
-    margin: 0;
-    text-justify: inter-word;
-    p {
-      margin: 1.2em 0;
-      text-align: justify;
-      color: var(--color-text);
-    }
-    h3 {
-      font-family: var(--font-family-heading);
-      font-size: 2.2rem;
-      font-weight: 300;
-      color: var(--color-text-light);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      display: block;
-      line-height: 1.2;
-      margin: 20px 0 0.4rem 0;
-      padding-top: 40px;
-      padding-bottom: 0;
-      scroll-behavior: smooth;
-      scroll-margin-top: 80px;
-    }
-    .section-title-divider {
-      width: calc(100% - 0.22em);
-      height: 3px;
-      background: var(--color-primary-dark);
-      margin: 0 0 20px 0;
-      transform-origin: left center;
-      transform: scaleX(0.3);
-    }
-  }
-  .nav-menu {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    padding: 2rem 1cm;
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    scroll-behavior: smooth;
     display: flex;
-    flex-direction: column;
-    position: sticky;
-    top: 100px;
-    right: 0;
-    align-self: flex-start;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-    min-width: max-content;
-    flex-shrink: 0;
-    margin-left: 1rem;
-    padding-right: 1cm;
-    margin-top: 20px;
-    a {
-      font-family: var(--font-family-heading);
-      color: var(--color-black);
-      font-weight: bold;
-      transition:
-        color var(--transition-medium),
-        transform var(--transition-medium);
-      padding: 4px 20px;
-      white-space: nowrap;
-      display: block;
-      width: 100%;
-      overflow: visible;
-      &:hover {
-        color: var(--color-primary);
-        transform: translateY(-5px);
-      }
+    flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+    .text-content {
+        font-size: 1.2em;
+        line-height: 1.7;
+        padding: 0 0 40px 0;
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+        text-justify: inter-word;
+        border: 1px solid rgba(0, 0, 0, 1);
+        background-color: rgba(255, 255, 255, 1);
+        p {
+            margin: 0;
+            text-align: justify;
+            color: var(--color-text);
+        }
+        h3 {
+            font-family: var(--font-family-heading);
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--color-text-light);
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            display: block;
+            line-height: 1.2;
+            margin: 20px 0 0.4rem 0;
+            padding-top: 40px;
+            padding-bottom: 0;
+            scroll-behavior: smooth;
+            scroll-margin-top: 80px;
+        }
+        .section-title-divider {
+            width: calc(100% - 0.22em);
+            height: 3px;
+            background: var(--color-primary-dark);
+            margin: 0 0 20px 0;
+            transform-origin: left center;
+            transform: scaleX(0.3);
+        }
     }
-  }
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 100px;
+        right: 0;
+        align-self: flex-start;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        min-width: max-content;
+        flex-shrink: 0;
+        margin-left: 1rem;
+        padding-right: 3px;
+        padding-top: 0;
+        a {
+            font-family: var(--font-family-heading);
+            color: var(--color-black);
+            font-weight: bold;
+            transition: color var(--transition-medium), transform var(--transition-medium);
+            padding: 4px 20px;
+            white-space: nowrap;
+            display: block;
+            width: 100%;
+            overflow: visible;
+            &:hover {
+                color: var(--color-primary);
+                transform: translateY(-5px);
+            }
+        }
+    }
 }
 
 // Responsive - Tablette
 @media (max-width: 1024px) {
-  .biography-page {
-    padding: 2rem 1.5rem;
-    flex-direction: column;
-    .text-content {
-      padding: 20px 0 40px 0;
+    .biography-page {
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        .text-content {
+            padding: 0 0 40px 0;
+        }
+        .nav-menu {
+            position: static;
+            margin-left: 0;
+            padding-right: 0;
+            margin-bottom: 2rem;
+        }
     }
-    .nav-menu {
-      position: static;
-      margin-left: 0;
-      padding-right: 0;
-      margin-bottom: 2rem;
-    }
-  }
 }
 
 // Responsive - Mobile
 @media (max-width: 768px) {
-  .biography-page {
-    padding: 2rem 1rem;
-    flex-direction: column;
-    .text-content {
-      padding: 20px 0;
-      font-size: 1.1em;
-      line-height: 1.6;
-      text-align: left;
-      h3 {
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        padding-top: 30px;
-      }
+    .biography-page {
+        padding: 2rem 1rem;
+        flex-direction: column;
+        .text-content {
+            padding: 0 0 20px 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-align: left;
+            h3 {
+                font-size: clamp(1.5rem, 3vw, 2rem);
+                padding-top: 30px;
+            }
+        }
+        .nav-menu {
+            display: none;
+        }
     }
-    .nav-menu {
-      display: none;
-    }
-  }
 }
