@@ -267,7 +267,6 @@
     overviewError,
     topPages,
     pagesLoading,
-    countryFilter,
     startDate,
     endDate,
     fetchOverview,

@@ -181,11 +181,6 @@ export async function runOverviewReport(
     limit: 5,
   });
 
-  const totalCountryVisitors = countryResponse.rows?.reduce(
-    (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
-    0
-  ) || 1;
-
   const topCountries: CountryData[] = (countryResponse.rows || []).map((row) => {
     const countryVisitors = parseInt(row.metricValues?.[0]?.value || '0', 10);
     return {
