@@ -6,21 +6,6 @@
       @logout="onLogout"
     />
 
-    <!-- Section temps réel -->
-    <section class="admin-analytics__realtime">
-      <h2 class="admin-analytics__section-title">{{ t('admin.analytics.realtime') }}</h2>
-      <div class="admin-analytics__realtime-card">
-        <div v-if="realtimeLoading" class="admin-analytics__loading">...</div>
-        <div v-else-if="realtimeError" class="admin-analytics__error">
-          {{ realtimeError }}
-        </div>
-        <template v-else>
-          <span class="admin-analytics__realtime-value">{{ realtimeActiveUsers }}</span>
-          <span class="admin-analytics__realtime-label">{{ t('admin.analytics.activeUsers') }}</span>
-        </template>
-      </div>
-    </section>
-
     <!-- Toggle période -->
     <div class="admin-analytics__period-toggle">
       <button
@@ -69,39 +54,49 @@
         </div>
       </section>
 
-      <!-- Grille détails -->
-      <section class="admin-analytics__details">
-        <!-- Top pays -->
-        <div class="admin-analytics__detail-card">
-          <h3 class="admin-analytics__detail-title">{{ t('admin.analytics.topCountries') }}</h3>
-          <ul class="admin-analytics__detail-list">
-            <li
-              v-for="country in overview.topCountries"
-              :key="country.countryCode"
-              class="admin-analytics__detail-item"
-            >
-              <span class="admin-analytics__detail-name">{{ country.country }}</span>
-              <span class="admin-analytics__detail-value">{{ country.percentage }}%</span>
-            </li>
-          </ul>
+      <!-- Carte des pays (visualisation) -->
+      <section class="admin-analytics__map-section">
+        <h3 class="admin-analytics__section-title">{{ t('admin.analytics.topCountries') }}</h3>
+        <div class="admin-analytics__countries-map">
+          <div
+            v-for="country in overview.topCountries"
+            :key="country.countryCode"
+            class="admin-analytics__country-row"
+          >
+            <div class="admin-analytics__country-info">
+              <span class="admin-analytics__country-flag">{{ getCountryFlag(country.countryCode) }}</span>
+              <span class="admin-analytics__country-name">{{ country.country }}</span>
+            </div>
+            <div class="admin-analytics__country-bar-container">
+              <div
+                class="admin-analytics__country-bar"
+                :style="{ width: `${country.percentage}%` }"
+              />
+            </div>
+            <span class="admin-analytics__country-percent">{{ country.percentage }}%</span>
+          </div>
           <p v-if="overview.topCountries.length === 0" class="admin-analytics__no-data">
             {{ t('admin.analytics.noData') }}
           </p>
         </div>
+      </section>
 
+      <!-- Grille détails (appareils + navigateurs) -->
+      <section class="admin-analytics__details">
         <!-- Appareils -->
         <div class="admin-analytics__detail-card">
           <h3 class="admin-analytics__detail-title">{{ t('admin.analytics.devices') }}</h3>
-          <ul class="admin-analytics__detail-list">
-            <li
+          <div class="admin-analytics__device-grid">
+            <div
               v-for="device in overview.devices"
               :key="device.device"
-              class="admin-analytics__detail-item"
+              class="admin-analytics__device-item"
             >
-              <span class="admin-analytics__detail-name">{{ getDeviceLabel(device.device) }}</span>
-              <span class="admin-analytics__detail-value">{{ device.percentage }}%</span>
-            </li>
-          </ul>
+              <span class="admin-analytics__device-icon">{{ getDeviceIcon(device.device) }}</span>
+              <span class="admin-analytics__device-label">{{ getDeviceLabel(device.device) }}</span>
+              <span class="admin-analytics__device-value">{{ device.percentage }}%</span>
+            </div>
+          </div>
           <p v-if="overview.devices.length === 0" class="admin-analytics__no-data">
             {{ t('admin.analytics.noData') }}
           </p>
@@ -117,6 +112,12 @@
               class="admin-analytics__detail-item"
             >
               <span class="admin-analytics__detail-name">{{ browser.browser }}</span>
+              <div class="admin-analytics__browser-bar-container">
+                <div
+                  class="admin-analytics__browser-bar"
+                  :style="{ width: `${browser.percentage}%` }"
+                />
+              </div>
               <span class="admin-analytics__detail-value">{{ browser.percentage }}%</span>
             </li>
           </ul>
@@ -135,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeUnmount, onMounted } from 'vue';
+  import { onMounted } from 'vue';
 
   import { useAdminAnalytics } from '~/composables/useAdminAnalytics';
   import { useAdminAuth } from '~/composables/useAdminAuth';
@@ -157,17 +158,12 @@
   const { logout } = useAdminAuth();
 
   const {
-    realtimeActiveUsers,
-    realtimeLoading,
-    realtimeError,
     overview,
     overviewLoading,
     overviewError,
     period,
     fetchOverview,
     setPeriod,
-    startRealtimePolling,
-    stopRealtimePolling,
   } = useAdminAnalytics();
 
   async function onLogout(): Promise<void> {
@@ -194,13 +190,27 @@
     return labels[device] || device;
   }
 
-  onMounted(() => {
-    startRealtimePolling();
-    fetchOverview();
-  });
+  function getDeviceIcon(device: 'desktop' | 'mobile' | 'tablet'): string {
+    const icons: Record<string, string> = {
+      desktop: '💻',
+      mobile: '📱',
+      tablet: '📟',
+    };
+    return icons[device] || '📱';
+  }
 
-  onBeforeUnmount(() => {
-    stopRealtimePolling();
+  // Convertit le code pays ISO en emoji drapeau
+  function getCountryFlag(countryCode: string): string {
+    if (!countryCode || countryCode.length !== 2) return '🌍';
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map((char) => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  }
+
+  onMounted(() => {
+    fetchOverview();
   });
 </script>
 
@@ -219,32 +229,7 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-text-light);
-    margin: 0 0 0.75rem;
-  }
-
-  /* Temps réel */
-  .admin-analytics__realtime-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #a20101 100%);
-    color: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    min-height: 120px;
-  }
-
-  .admin-analytics__realtime-value {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  .admin-analytics__realtime-label {
-    font-size: 1rem;
-    margin-top: 0.5rem;
-    opacity: 0.9;
+    margin: 0 0 1rem;
   }
 
   /* Toggle période */
@@ -277,7 +262,7 @@
   /* Métriques principales */
   .admin-analytics__metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
@@ -305,10 +290,70 @@
     margin-top: 0.25rem;
   }
 
-  /* Détails (pays, appareils, navigateurs) */
+  /* Section pays avec carte visuelle */
+  .admin-analytics__map-section {
+    background: #fff;
+    border: 1px solid var(--color-border, #e8e8e8);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .admin-analytics__countries-map {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .admin-analytics__country-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 50px;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .admin-analytics__country-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .admin-analytics__country-flag {
+    font-size: 1.25rem;
+  }
+
+  .admin-analytics__country-name {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-analytics__country-bar-container {
+    height: 8px;
+    background: var(--color-border, #e8e8e8);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .admin-analytics__country-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, #a20101 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .admin-analytics__country-percent {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: right;
+  }
+
+  /* Détails (appareils, navigateurs) */
   .admin-analytics__details {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 
@@ -327,36 +372,84 @@
     margin: 0 0 1rem;
   }
 
+  /* Appareils en grille */
+  .admin-analytics__device-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .admin-analytics__device-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    background: var(--color-bg-light, #f8f9fa);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .admin-analytics__device-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .admin-analytics__device-label {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+  }
+
+  .admin-analytics__device-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-top: 0.25rem;
+  }
+
+  /* Liste navigateurs avec barres */
   .admin-analytics__detail-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
 
   .admin-analytics__detail-item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 80px 1fr 45px;
     align-items: center;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid var(--color-border, #f0f0f0);
-
-    &:last-child {
-      border-bottom: none;
-    }
+    gap: 0.75rem;
   }
 
   .admin-analytics__detail-name {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-analytics__browser-bar-container {
+    height: 6px;
+    background: var(--color-border, #e8e8e8);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .admin-analytics__browser-bar {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 3px;
+    transition: width 0.3s ease;
   }
 
   .admin-analytics__detail-value {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-primary);
+    text-align: right;
   }
 
   /* États */
@@ -399,16 +492,25 @@
       padding: 1.5rem 1rem 2rem;
     }
 
-    .admin-analytics__realtime-value {
-      font-size: 2.5rem;
-    }
-
     .admin-analytics__metrics {
       grid-template-columns: 1fr;
     }
 
+    .admin-analytics__country-row {
+      grid-template-columns: 100px 1fr 40px;
+      gap: 0.5rem;
+    }
+
     .admin-analytics__details {
       grid-template-columns: 1fr;
+    }
+
+    .admin-analytics__device-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .admin-analytics__detail-item {
+      grid-template-columns: 70px 1fr 40px;
     }
   }
 </style>
