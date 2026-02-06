@@ -8,16 +8,47 @@
 
     <!-- Sélecteur de période -->
     <div class="admin-analytics__period-selector">
-      <button
-        v-for="preset in presets"
-        :key="preset.value"
-        type="button"
-        class="admin-analytics__preset-btn"
-        :class="{ 'admin-analytics__preset-btn--active': isPresetActive(preset.value) }"
-        @click="setPreset(preset.value)"
-      >
-        {{ preset.label }}
-      </button>
+      <!-- Présets rapides -->
+      <div class="admin-analytics__presets">
+        <button
+          v-for="preset in presets"
+          :key="preset.value"
+          type="button"
+          class="admin-analytics__preset-btn"
+          :class="{ 'admin-analytics__preset-btn--active': isPresetActive(preset.value) }"
+          @click="setPreset(preset.value)"
+        >
+          {{ preset.label }}
+        </button>
+      </div>
+
+      <!-- Séparateur -->
+      <span class="admin-analytics__separator">|</span>
+
+      <!-- Dates personnalisées -->
+      <div class="admin-analytics__custom-dates">
+        <input
+          v-model="localStartDate"
+          type="date"
+          class="admin-analytics__date-input"
+          :max="localEndDate"
+        />
+        <span class="admin-analytics__date-arrow">→</span>
+        <input
+          v-model="localEndDate"
+          type="date"
+          class="admin-analytics__date-input"
+          :min="localStartDate"
+          :max="today"
+        />
+        <button
+          type="button"
+          class="admin-analytics__apply-btn"
+          @click="applyCustomDates"
+        >
+          {{ t('admin.analytics.apply') }}
+        </button>
+      </div>
     </div>
 
     <!-- Erreur overview -->
@@ -158,6 +189,7 @@
     startDate,
     endDate,
     fetchOverview,
+    setDateRange,
     setPreset,
   } = useAdminAnalytics();
 
@@ -173,6 +205,10 @@
   // Date d'aujourd'hui
   const today = new Date().toISOString().split('T')[0];
 
+  // Local state pour les date pickers
+  const localStartDate = ref(startDate.value);
+  const localEndDate = ref(endDate.value);
+
   // Vérifie si un préset est actif
   function isPresetActive(preset: '7d' | '30d' | '90d' | '1y' | 'all'): boolean {
     if (preset === 'all') {
@@ -183,6 +219,11 @@
     expectedStart.setDate(expectedStart.getDate() - daysMap[preset]);
     const expectedStartStr = expectedStart.toISOString().split('T')[0];
     return startDate.value === expectedStartStr && endDate.value === today;
+  }
+
+  // Applique les dates personnalisées
+  function applyCustomDates(): void {
+    setDateRange(localStartDate.value, localEndDate.value);
   }
 
   async function onLogout(): Promise<void> {
@@ -254,17 +295,27 @@
   /* Sélecteur de période */
   .admin-analytics__period-selector {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
     justify-content: center;
+    gap: 1rem;
     flex-wrap: wrap;
+    background: #fff;
+    border: 1px solid var(--color-border, #e8e8e8);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+  }
+
+  .admin-analytics__presets {
+    display: flex;
+    gap: 0.5rem;
   }
 
   .admin-analytics__preset-btn {
-    padding: 0.6rem 1.25rem;
+    padding: 0.5rem 1rem;
     border: 1px solid var(--color-border, #e5e5e5);
     border-radius: 6px;
     background: #fff;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -276,6 +327,49 @@
       background: var(--color-primary);
       color: #fff;
       border-color: var(--color-primary);
+    }
+  }
+
+  .admin-analytics__separator {
+    color: var(--color-border, #e5e5e5);
+    font-size: 1.25rem;
+  }
+
+  .admin-analytics__custom-dates {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .admin-analytics__date-input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border, #e5e5e5);
+    border-radius: 6px;
+    font-size: 0.85rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+  }
+
+  .admin-analytics__date-arrow {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .admin-analytics__apply-btn {
+    padding: 0.5rem 1rem;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #a20101;
     }
   }
 
@@ -512,21 +606,28 @@
       padding: 1.5rem 1rem 2rem;
     }
 
-    .admin-analytics__metrics {
-      grid-template-columns: 1fr;
-    }
-
-    .admin-analytics__custom-dates {
+    .admin-analytics__period-selector {
       flex-direction: column;
-      align-items: stretch;
+      gap: 0.75rem;
+      padding: 1rem;
     }
 
-    .admin-analytics__date-separator {
+    .admin-analytics__presets {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .admin-analytics__separator {
       display: none;
     }
 
-    .admin-analytics__date-input {
-      width: 100%;
+    .admin-analytics__custom-dates {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .admin-analytics__metrics {
+      grid-template-columns: 1fr;
     }
 
     .admin-analytics__country-row {
