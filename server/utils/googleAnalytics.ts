@@ -24,7 +24,8 @@ export type RealtimeData = {
 };
 
 export type OverviewData = {
-  period: '7d' | '30d';
+  startDate: string;
+  endDate: string;
   visitors: number;
   pageViews: number;
   avgSessionDuration: number;
@@ -103,9 +104,10 @@ export async function runRealtimeReport(propertyId: string): Promise<RealtimeDat
  */
 export async function runOverviewReport(
   propertyId: string,
-  period: '7d' | '30d'
+  startDate: string,
+  endDate: string
 ): Promise<OverviewData> {
-  const cacheKey = `${propertyId}-${period}`;
+  const cacheKey = `${propertyId}-${startDate}-${endDate}`;
   const now = Date.now();
 
   // Vérifier le cache
@@ -115,8 +117,6 @@ export async function runOverviewReport(
   }
 
   const client = getAnalyticsClient();
-  const startDate = period === '7d' ? '7daysAgo' : '30daysAgo';
-  const endDate = 'today';
 
   // Requête principale : métriques globales
   const [metricsResponse] = await client.runReport({
@@ -210,7 +210,8 @@ export async function runOverviewReport(
   });
 
   const data: OverviewData = {
-    period,
+    startDate,
+    endDate,
     visitors,
     pageViews,
     avgSessionDuration,

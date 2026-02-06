@@ -313,10 +313,6 @@
         "analytics": {
             "title": "Analytics",
             "subtitle": "Site statistics",
-            "realtime": "Real-time",
-            "activeUsers": "Active visitors",
-            "period7d": "7 days",
-            "period30d": "30 days",
             "visitors": "Visitors",
             "pageViews": "Page views",
             "avgDuration": "Avg. duration",
@@ -328,7 +324,10 @@
             "tablet": "Tablet",
             "loading": "Loading statistics…",
             "error": "Unable to load statistics",
-            "noData": "No data available"
+            "noData": "No data available",
+            "from": "From",
+            "to": "To",
+            "apply": "Apply"
         }
     },
     "debug": {

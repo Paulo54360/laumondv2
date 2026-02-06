@@ -6,24 +6,52 @@
       @logout="onLogout"
     />
 
-    <!-- Toggle période -->
-    <div class="admin-analytics__period-toggle">
-      <button
-        type="button"
-        class="admin-analytics__period-btn"
-        :class="{ 'admin-analytics__period-btn--active': period === '7d' }"
-        @click="setPeriod('7d')"
-      >
-        {{ t('admin.analytics.period7d') }}
-      </button>
-      <button
-        type="button"
-        class="admin-analytics__period-btn"
-        :class="{ 'admin-analytics__period-btn--active': period === '30d' }"
-        @click="setPeriod('30d')"
-      >
-        {{ t('admin.analytics.period30d') }}
-      </button>
+    <!-- Sélecteur de période -->
+    <div class="admin-analytics__date-selector">
+      <!-- Présets rapides -->
+      <div class="admin-analytics__presets">
+        <button
+          v-for="preset in presets"
+          :key="preset.value"
+          type="button"
+          class="admin-analytics__preset-btn"
+          :class="{ 'admin-analytics__preset-btn--active': isPresetActive(preset.value) }"
+          @click="setPreset(preset.value)"
+        >
+          {{ preset.label }}
+        </button>
+      </div>
+
+      <!-- Sélecteur de dates personnalisées -->
+      <div class="admin-analytics__custom-dates">
+        <div class="admin-analytics__date-field">
+          <label class="admin-analytics__date-label">{{ t('admin.analytics.from') }}</label>
+          <input
+            v-model="localStartDate"
+            type="date"
+            class="admin-analytics__date-input"
+            :max="localEndDate"
+          />
+        </div>
+        <span class="admin-analytics__date-separator">→</span>
+        <div class="admin-analytics__date-field">
+          <label class="admin-analytics__date-label">{{ t('admin.analytics.to') }}</label>
+          <input
+            v-model="localEndDate"
+            type="date"
+            class="admin-analytics__date-input"
+            :min="localStartDate"
+            :max="today"
+          />
+        </div>
+        <button
+          type="button"
+          class="admin-analytics__apply-btn"
+          @click="applyCustomDates"
+        >
+          {{ t('admin.analytics.apply') }}
+        </button>
+      </div>
     </div>
 
     <!-- Erreur overview -->
@@ -136,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
 
   import { useAdminAnalytics } from '~/composables/useAdminAnalytics';
   import { useAdminAuth } from '~/composables/useAdminAuth';
@@ -161,10 +189,41 @@
     overview,
     overviewLoading,
     overviewError,
-    period,
+    startDate,
+    endDate,
     fetchOverview,
-    setPeriod,
+    setDateRange,
+    setPreset,
   } = useAdminAnalytics();
+
+  // Présets de période
+  const presets = [
+    { value: '7d' as const, label: '7j' },
+    { value: '30d' as const, label: '30j' },
+    { value: '90d' as const, label: '90j' },
+    { value: '1y' as const, label: '1 an' },
+  ];
+
+  // Date d'aujourd'hui pour le max du date picker
+  const today = new Date().toISOString().split('T')[0];
+
+  // Local state pour les date pickers
+  const localStartDate = ref(startDate.value);
+  const localEndDate = ref(endDate.value);
+
+  // Vérifie si un préset est actif
+  function isPresetActive(preset: '7d' | '30d' | '90d' | '1y'): boolean {
+    const daysMap = { '7d': 7, '30d': 30, '90d': 90, '1y': 365 };
+    const expectedStart = new Date();
+    expectedStart.setDate(expectedStart.getDate() - daysMap[preset]);
+    const expectedStartStr = expectedStart.toISOString().split('T')[0];
+    return startDate.value === expectedStartStr && endDate.value === today;
+  }
+
+  // Applique les dates personnalisées
+  function applyCustomDates(): void {
+    setDateRange(localStartDate.value, localEndDate.value);
+  }
 
   async function onLogout(): Promise<void> {
     await logout();
@@ -232,19 +291,29 @@
     margin: 0 0 1rem;
   }
 
-  /* Toggle période */
-  .admin-analytics__period-toggle {
+  /* Sélecteur de dates */
+  .admin-analytics__date-selector {
     display: flex;
-    gap: 0.5rem;
-    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--color-border, #e8e8e8);
+    border-radius: 12px;
+    padding: 1.25rem;
   }
 
-  .admin-analytics__period-btn {
-    padding: 0.6rem 1.25rem;
+  .admin-analytics__presets {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .admin-analytics__preset-btn {
+    padding: 0.5rem 1rem;
     border: 1px solid var(--color-border, #e5e5e5);
     border-radius: 6px;
     background: #fff;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -256,6 +325,59 @@
       background: var(--color-primary);
       color: #fff;
       border-color: var(--color-primary);
+    }
+  }
+
+  .admin-analytics__custom-dates {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .admin-analytics__date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .admin-analytics__date-label {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .admin-analytics__date-input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border, #e5e5e5);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    min-width: 140px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+  }
+
+  .admin-analytics__date-separator {
+    color: var(--color-text-light);
+    padding-bottom: 0.5rem;
+  }
+
+  .admin-analytics__apply-btn {
+    padding: 0.5rem 1.25rem;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #a20101;
     }
   }
 
@@ -494,6 +616,19 @@
 
     .admin-analytics__metrics {
       grid-template-columns: 1fr;
+    }
+
+    .admin-analytics__custom-dates {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .admin-analytics__date-separator {
+      display: none;
+    }
+
+    .admin-analytics__date-input {
+      width: 100%;
     }
 
     .admin-analytics__country-row {

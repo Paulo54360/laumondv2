@@ -26,9 +26,18 @@ export default defineEventHandler(async (event): Promise<OverviewData> => {
     throw createError({ statusCode: 401, statusMessage: 'Session invalide' });
   }
 
-  // Récupérer le paramètre de période
-  const { period: rawPeriod } = getQuery(event);
-  const period: '7d' | '30d' = rawPeriod === '30d' ? '30d' : '7d';
+  // Récupérer les paramètres de période
+  const { startDate: rawStartDate, endDate: rawEndDate } = getQuery(event);
+  
+  // Par défaut : 7 derniers jours
+  const today = new Date();
+  const defaultEndDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
+  const defaultStartDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0];
+  
+  const startDate = typeof rawStartDate === 'string' && rawStartDate ? rawStartDate : defaultStartDate;
+  const endDate = typeof rawEndDate === 'string' && rawEndDate ? rawEndDate : defaultEndDate;
 
   // Vérifier la configuration GA
   const propertyId = config.ga4PropertyId;
@@ -40,7 +49,7 @@ export default defineEventHandler(async (event): Promise<OverviewData> => {
   }
 
   try {
-    const data = await runOverviewReport(propertyId, period);
+    const data = await runOverviewReport(propertyId, startDate, endDate);
     return data;
   } catch (error) {
     console.error('Erreur API Google Analytics (overview):', error);
