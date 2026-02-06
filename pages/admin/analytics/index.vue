@@ -175,18 +175,28 @@
       <section class="admin-analytics__pages-section">
         <div class="admin-analytics__pages-header">
           <h3 class="admin-analytics__section-title">{{ t('admin.analytics.topPages') }}</h3>
-          <div class="admin-analytics__country-filter">
-            <label>{{ t('admin.analytics.filterByCountry') }}</label>
-            <select v-model="selectedCountry" @change="onCountryChange">
-              <option :value="null">{{ t('admin.analytics.allCountries') }}</option>
-              <option
-                v-for="country in overview.topCountries"
-                :key="country.countryCode"
-                :value="country.country"
-              >
-                {{ getCountryFlag(country.countryCode) }} {{ country.country }}
-              </option>
-            </select>
+          <div class="admin-analytics__pages-controls">
+            <div class="admin-analytics__sort-control">
+              <label>{{ t('admin.analytics.sortBy') }}</label>
+              <select v-model="sortBy" @change="sortPages">
+                <option value="views">{{ t('admin.analytics.views') }}</option>
+                <option value="title">{{ t('admin.analytics.alphabetical') }}</option>
+                <option value="time">{{ t('admin.analytics.avgTime') }}</option>
+              </select>
+            </div>
+            <div class="admin-analytics__country-filter">
+              <label>{{ t('admin.analytics.filterByCountry') }}</label>
+              <select v-model="selectedCountry" @change="onCountryChange">
+                <option :value="null">{{ t('admin.analytics.allCountries') }}</option>
+                <option
+                  v-for="country in overview.topCountries"
+                  :key="country.countryCode"
+                  :value="country.country"
+                >
+                  {{ getCountryFlag(country.countryCode) }} {{ country.country }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -194,7 +204,7 @@
           {{ t('admin.analytics.loading') }}
         </div>
 
-        <div v-else-if="topPages && topPages.length > 0" class="admin-analytics__pages-table">
+        <div v-else-if="sortedPages && sortedPages.length > 0" class="admin-analytics__pages-table">
           <div class="admin-analytics__pages-row admin-analytics__pages-row--header">
             <span class="admin-analytics__pages-cell admin-analytics__pages-cell--page">{{ t('admin.analytics.page') }}</span>
             <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{ t('admin.analytics.views') }}</span>
@@ -202,7 +212,7 @@
             <span class="admin-analytics__pages-cell admin-analytics__pages-cell--percent">%</span>
           </div>
           <div
-            v-for="page in topPages"
+            v-for="page in sortedPages"
             :key="page.pagePath"
             class="admin-analytics__pages-row"
           >
@@ -269,6 +279,34 @@
 
   // Pays sélectionné pour le filtre
   const selectedCountry = ref<string | null>(null);
+
+  // Tri des pages
+  type SortOption = 'views' | 'title' | 'time';
+  const sortBy = ref<SortOption>('views');
+
+  const sortedPages = computed(() => {
+    if (!topPages.value) return null;
+    const pages = [...topPages.value];
+
+    switch (sortBy.value) {
+      case 'views':
+        return pages.sort((a, b) => b.views - a.views);
+      case 'title':
+        return pages.sort((a, b) => {
+          const titleA = a.pageTitle || a.pagePath;
+          const titleB = b.pageTitle || b.pagePath;
+          return titleA.localeCompare(titleB);
+        });
+      case 'time':
+        return pages.sort((a, b) => b.avgTimeOnPage - a.avgTimeOnPage);
+      default:
+        return pages;
+    }
+  });
+
+  function sortPages(): void {
+    // La réactivité gère le tri via computed
+  }
 
   function onCountryChange(): void {
     setCountryFilter(selectedCountry.value);
@@ -505,39 +543,44 @@
     flex-direction: column;
     align-items: center;
     padding: 1.25rem;
-    border-radius: 10px;
+    border: 1px solid var(--color-border, #e8e8e8);
+    border-radius: 8px;
     text-align: center;
+    background: #fafafa;
 
     &--new {
-      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border-left: 3px solid var(--color-primary, #cc0000);
     }
 
     &--returning {
-      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-left: 3px solid #4a6fa5;
     }
   }
 
   .admin-analytics__segment-icon {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
+    opacity: 0.7;
   }
 
   .admin-analytics__segment-value {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--color-text, #333);
   }
 
   .admin-analytics__segment-label {
     font-size: 0.85rem;
-    color: var(--color-text-light);
+    color: var(--color-text-light, #666);
     margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .admin-analytics__segment-percent {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--color-text-light, #666);
     margin-top: 0.5rem;
   }
 
@@ -724,20 +767,29 @@
     }
   }
 
+  .admin-analytics__pages-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .admin-analytics__sort-control,
   .admin-analytics__country-filter {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 
     label {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     select {
       padding: 0.4rem 0.75rem;
       border: 1px solid var(--color-border, #e5e5e5);
-      border-radius: 6px;
+      border-radius: 4px;
       font-size: 0.85rem;
       background: #fff;
       cursor: pointer;

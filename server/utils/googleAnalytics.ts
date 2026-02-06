@@ -291,7 +291,7 @@ export async function runTopPagesReport(
     dimensions: [{ name: 'pagePath' }, { name: 'pageTitle' }],
     metrics: [
       { name: 'screenPageViews' },
-      { name: 'userEngagementDuration' },
+      { name: 'averageSessionDuration' },
     ],
     orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
     limit: 10,
@@ -320,8 +320,7 @@ export async function runTopPagesReport(
 
   const pages: PageData[] = (pagesResponse.rows || []).map((row) => {
     const views = parseInt(row.metricValues?.[0]?.value || '0', 10);
-    const engagementDuration = parseFloat(row.metricValues?.[1]?.value || '0');
-    const avgTimeOnPage = views > 0 ? engagementDuration / views : 0;
+    const avgTimeOnPage = parseFloat(row.metricValues?.[1]?.value || '0');
 
     return {
       pagePath: row.dimensionValues?.[0]?.value || '/',
