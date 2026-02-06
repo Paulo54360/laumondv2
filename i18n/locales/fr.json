@@ -263,6 +263,8 @@
         "category_label": "Catégorie : {category}"
     },
     "admin": {
+        "goToDashboard": "Accéder au dashboard admin",
+        "viewSite": "Voir le site",
         "upload": {
             "title": "Titre",
             "description": "Description",
