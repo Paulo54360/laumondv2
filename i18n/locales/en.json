@@ -309,6 +309,26 @@
             "remove_image": "Remove this image",
             "back": "Back to list",
             "save": "Save"
+        },
+        "analytics": {
+            "title": "Analytics",
+            "subtitle": "Site statistics",
+            "realtime": "Real-time",
+            "activeUsers": "Active visitors",
+            "period7d": "7 days",
+            "period30d": "30 days",
+            "visitors": "Visitors",
+            "pageViews": "Page views",
+            "avgDuration": "Avg. duration",
+            "topCountries": "Top countries",
+            "devices": "Devices",
+            "browsers": "Browsers",
+            "desktop": "Desktop",
+            "mobile": "Mobile",
+            "tablet": "Tablet",
+            "loading": "Loading statistics…",
+            "error": "Unable to load statistics",
+            "noData": "No data available"
         }
     },
     "debug": {

@@ -17,6 +17,9 @@
       <NuxtLink class="btn-artistic admin-header__link" :to="localePath('/admin/texts')">
         Textes
       </NuxtLink>
+      <NuxtLink class="btn-artistic admin-header__link" :to="localePath('/admin/analytics')">
+        Analytics
+      </NuxtLink>
       <BaseButton variant="outline" class="admin-header__logout" @click="$emit('logout')">
         Déconnexion
       </BaseButton>

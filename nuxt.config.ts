@@ -18,6 +18,9 @@ export default defineNuxtConfig({
     awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     awsRegion: process.env.AWS_REGION,
     s3Bucket: process.env.S3_BUCKET || 'plaumondpicture',
+    // Google Analytics 4 (Dashboard Admin)
+    ga4PropertyId: process.env.GA4_PROPERTY_ID,
+    googleCredentialsJson: process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON,
     public: {
       apiUrl:
         process.env.NUXT_PUBLIC_API_URL || 'https://plaumondpicture.s3.eu-west-3.amazonaws.com',
