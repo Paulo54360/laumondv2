@@ -297,14 +297,72 @@ export async function runTopPagesReport(
     limit: 10,
   };
 
-  // Ajouter filtre pays si spécifié
+  // Construire les filtres
+  const filters: Array<{ filter: object }> = [];
+
+  // Exclure les pages admin
+  filters.push({
+    filter: {
+      fieldName: 'pagePath',
+      stringFilter: {
+        value: '/admin',
+        matchType: 'BEGINS_WITH',
+        caseSensitive: false,
+      },
+    },
+  });
+  filters.push({
+    filter: {
+      fieldName: 'pagePath',
+      stringFilter: {
+        value: '/fr/admin',
+        matchType: 'BEGINS_WITH',
+        caseSensitive: false,
+      },
+    },
+  });
+  filters.push({
+    filter: {
+      fieldName: 'pagePath',
+      stringFilter: {
+        value: '/en/admin',
+        matchType: 'BEGINS_WITH',
+        caseSensitive: false,
+      },
+    },
+  });
+
+  // Filtre pays si spécifié
   if (countryFilter) {
+    // Combiner exclusion admin + filtre pays
     reportRequest.dimensionFilter = {
-      filter: {
-        fieldName: 'country',
-        stringFilter: {
-          value: countryFilter,
-          matchType: 'EXACT',
+      andGroup: {
+        expressions: [
+          {
+            notExpression: {
+              orGroup: {
+                expressions: filters,
+              },
+            },
+          },
+          {
+            filter: {
+              fieldName: 'country',
+              stringFilter: {
+                value: countryFilter,
+                matchType: 'EXACT',
+              },
+            },
+          },
+        ],
+      },
+    };
+  } else {
+    // Seulement exclure les pages admin
+    reportRequest.dimensionFilter = {
+      notExpression: {
+        orGroup: {
+          expressions: filters,
         },
       },
     };
@@ -321,10 +379,24 @@ export async function runTopPagesReport(
   const pages: PageData[] = (pagesResponse.rows || []).map((row) => {
     const views = parseInt(row.metricValues?.[0]?.value || '0', 10);
     const avgTimeOnPage = parseFloat(row.metricValues?.[1]?.value || '0');
+    const pagePath = row.dimensionValues?.[0]?.value || '/';
+    let pageTitle = row.dimensionValues?.[1]?.value || '';
+
+    // Remplacer "(not set)" par un titre basé sur le chemin
+    if (!pageTitle || pageTitle === '(not set)') {
+      // Générer un titre lisible depuis le chemin
+      const pathParts = pagePath.replace(/^\/(?:fr|en)?/, '').split('/').filter(Boolean);
+      if (pathParts.length === 0) {
+        pageTitle = 'Accueil';
+      } else {
+        // Capitaliser le premier segment
+        pageTitle = pathParts[0].charAt(0).toUpperCase() + pathParts[0].slice(1);
+      }
+    }
 
     return {
-      pagePath: row.dimensionValues?.[0]?.value || '/',
-      pageTitle: row.dimensionValues?.[1]?.value || 'Sans titre',
+      pagePath,
+      pageTitle,
       views,
       avgTimeOnPage,
       percentage: Math.round((views / totalViews) * 100),
