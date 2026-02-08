@@ -81,14 +81,23 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
 
   try {
     // Supporte le JSON brut (dev) ou base64 (production Docker)
-    const rawJson = credentialsBase64
+    let rawJson = credentialsBase64
       ? Buffer.from(credentialsBase64, 'base64').toString('utf-8')
       : credentialsJson;
+
+    // Sanitize : remplace les vrais retours à la ligne par l'escape sequence \n
+    // (corrige les cas où l'encodage shell a injecté de vrais newlines dans le JSON)
+    rawJson = rawJson.replace(/\r?\n/g, '\\n');
+
     const credentials = JSON.parse(rawJson);
+
+    // S'assurer que private_key a de vrais newlines (nécessaire pour le PEM)
+    const privateKey = (credentials.private_key || '').replace(/\\n/g, '\n');
+
     analyticsClient = new BetaAnalyticsDataClient({
       credentials: {
         client_email: credentials.client_email,
-        private_key: credentials.private_key,
+        private_key: privateKey,
       },
       projectId: credentials.project_id,
     });
