@@ -92,9 +92,12 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
     const privateKeyMatch = rawString.match(/"private_key"\s*:\s*"(-----BEGIN[^"]*-----END PRIVATE KEY-----(?:\\n)?)"/s);
 
     if (!clientEmail || !projectId || !privateKeyMatch) {
-      throw new Error(
-        `Champs manquants dans credentials: email=${!!clientEmail}, project=${!!projectId}, key=${!!privateKeyMatch}`
-      );
+      const missing = [
+        !clientEmail && 'email',
+        !projectId && 'project',
+        !privateKeyMatch && 'key',
+      ].filter(Boolean).join(', ');
+      throw new Error(`Champs manquants: ${missing}`);
     }
 
     // Convertir les \n échappés en vrais newlines pour le format PEM
