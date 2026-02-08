@@ -81,29 +81,37 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
 
   try {
     // Supporte le JSON brut (dev) ou base64 (production Docker)
-    let rawJson = credentialsBase64
+    const rawString = credentialsBase64
       ? Buffer.from(credentialsBase64, 'base64').toString('utf-8')
       : credentialsJson;
 
-    // Sanitize : remplace les vrais retours à la ligne par l'escape sequence \n
-    // (corrige les cas où l'encodage shell a injecté de vrais newlines dans le JSON)
-    rawJson = rawJson.replace(/\r?\n/g, '\\n');
+    // Extraction robuste via regex (contourne les problèmes de JSON.parse
+    // avec les caractères de contrôle injectés par différents shells)
+    const clientEmail = rawString.match(/"client_email"\s*:\s*"([^"]+)"/)?.[1];
+    const projectId = rawString.match(/"project_id"\s*:\s*"([^"]+)"/)?.[1];
+    const privateKeyMatch = rawString.match(/"private_key"\s*:\s*"(-----BEGIN[^"]*-----END PRIVATE KEY-----(?:\\n)?)"/s);
 
-    const credentials = JSON.parse(rawJson);
+    if (!clientEmail || !projectId || !privateKeyMatch) {
+      throw new Error(
+        `Champs manquants dans credentials: email=${!!clientEmail}, project=${!!projectId}, key=${!!privateKeyMatch}`
+      );
+    }
 
-    // S'assurer que private_key a de vrais newlines (nécessaire pour le PEM)
-    const privateKey = (credentials.private_key || '').replace(/\\n/g, '\n');
+    // Convertir les \n échappés en vrais newlines pour le format PEM
+    const privateKey = privateKeyMatch[1]
+      .replace(/\\n/g, '\n')
+      .replace(/[\r\n]+/g, '\n');
 
     analyticsClient = new BetaAnalyticsDataClient({
       credentials: {
-        client_email: credentials.client_email,
+        client_email: clientEmail,
         private_key: privateKey,
       },
-      projectId: credentials.project_id,
+      projectId,
     });
     return analyticsClient;
   } catch (error) {
-    throw new Error(`Erreur parsing credentials GA: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(`Erreur credentials GA: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
