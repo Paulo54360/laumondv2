@@ -76,7 +76,9 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
   const credentialsBase64 = config.googleCredentialsBase64;
 
   if (!credentialsJson && !credentialsBase64) {
-    throw new Error('GOOGLE_APPLICATION_CREDENTIALS_JSON ou GOOGLE_CREDENTIALS_BASE64 non configuré');
+    throw new Error(
+      'GOOGLE_APPLICATION_CREDENTIALS_JSON ou GOOGLE_CREDENTIALS_BASE64 non configuré'
+    );
   }
 
   try {
@@ -85,25 +87,29 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
       ? Buffer.from(credentialsBase64, 'base64').toString('utf-8')
       : credentialsJson;
 
-    // Extraction robuste via regex (contourne les problèmes de JSON.parse
-    // avec les caractères de contrôle injectés par différents shells)
-    const clientEmail = rawString.match(/"client_email"\s*:\s*"([^"]+)"/)?.[1];
-    const projectId = rawString.match(/"project_id"\s*:\s*"([^"]+)"/)?.[1];
-    const privateKeyMatch = rawString.match(/"private_key"\s*:\s*"(-----BEGIN[^"]*-----END PRIVATE KEY-----(?:\\n)?)"/s);
+    // Extraction robuste : regex ultra-permissives pour
+    // gérer les newlines/contrôles injectés par les shells
+    const emailMatch = rawString.match(/client_email[\s\S]*?"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+)/);
+    const projectMatch = rawString.match(/project_id[\s\S]*?"([a-zA-Z0-9_-]+)/);
+    // Extraire le contenu PEM entre les marqueurs BEGIN/END
+    const keyMatch = rawString.match(/BEGIN PRIVATE KEY-----([\s\S]*?)-----END PRIVATE KEY/);
 
-    if (!clientEmail || !projectId || !privateKeyMatch) {
-      const missing = [
-        !clientEmail && 'email',
-        !projectId && 'project',
-        !privateKeyMatch && 'key',
-      ].filter(Boolean).join(', ');
+    const clientEmail = emailMatch?.[1];
+    const projectId = projectMatch?.[1];
+
+    if (!clientEmail || !projectId || !keyMatch) {
+      const missing = [!clientEmail && 'email', !projectId && 'project', !keyMatch && 'key']
+        .filter(Boolean)
+        .join(', ');
       throw new Error(`Champs manquants: ${missing}`);
     }
 
-    // Convertir les \n échappés en vrais newlines pour le format PEM
-    const privateKey = privateKeyMatch[1]
+    // Reconstruire la clé PEM proprement
+    const keyBody = keyMatch[1]
       .replace(/\\n/g, '\n')
-      .replace(/[\r\n]+/g, '\n');
+      .replace(/[^\w+/=\n]/g, '')
+      .trim();
+    const privateKey = '-----BEGIN PRIVATE KEY-----\n' + keyBody + '\n-----END PRIVATE KEY-----\n';
 
     analyticsClient = new BetaAnalyticsDataClient({
       credentials: {
@@ -114,7 +120,9 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
     });
     return analyticsClient;
   } catch (error) {
-    throw new Error(`Erreur credentials GA: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(
+      `Erreur credentials GA: ${error instanceof Error ? error.message : 'Unknown error'}`
+    );
   }
 }
 
@@ -224,10 +232,11 @@ export async function runOverviewReport(
     metrics: [{ name: 'activeUsers' }],
   });
 
-  const totalDeviceVisitors = deviceResponse.rows?.reduce(
-    (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
-    0
-  ) || 1;
+  const totalDeviceVisitors =
+    deviceResponse.rows?.reduce(
+      (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
+      0
+    ) || 1;
 
   const devices: DeviceData[] = (deviceResponse.rows || []).map((row) => {
     const deviceVisitors = parseInt(row.metricValues?.[0]?.value || '0', 10);
@@ -248,10 +257,11 @@ export async function runOverviewReport(
     limit: 5,
   });
 
-  const totalBrowserVisitors = browserResponse.rows?.reduce(
-    (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
-    0
-  ) || 1;
+  const totalBrowserVisitors =
+    browserResponse.rows?.reduce(
+      (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
+      0
+    ) || 1;
 
   const topBrowsers: BrowserData[] = (browserResponse.rows || []).map((row) => {
     const browserVisitors = parseInt(row.metricValues?.[0]?.value || '0', 10);
@@ -309,10 +319,7 @@ export async function runTopPagesReport(
     property: `properties/${propertyId}`,
     dateRanges: [{ startDate, endDate }],
     dimensions: [{ name: 'pagePath' }, { name: 'pageTitle' }],
-    metrics: [
-      { name: 'screenPageViews' },
-      { name: 'averageSessionDuration' },
-    ],
+    metrics: [{ name: 'screenPageViews' }, { name: 'averageSessionDuration' }],
     orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
     limit: 10,
   };
@@ -391,10 +398,11 @@ export async function runTopPagesReport(
   const [pagesResponse] = await client.runReport(reportRequest);
 
   // Calculer le total des vues pour les pourcentages
-  const totalViews = pagesResponse.rows?.reduce(
-    (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
-    0
-  ) || 1;
+  const totalViews =
+    pagesResponse.rows?.reduce(
+      (sum, row) => sum + parseInt(row.metricValues?.[0]?.value || '0', 10),
+      0
+    ) || 1;
 
   const pages: PageData[] = (pagesResponse.rows || []).map((row) => {
     const views = parseInt(row.metricValues?.[0]?.value || '0', 10);
@@ -405,7 +413,10 @@ export async function runTopPagesReport(
     // Remplacer "(not set)" par un titre basé sur le chemin
     if (!pageTitle || pageTitle === '(not set)') {
       // Générer un titre lisible depuis le chemin
-      const pathParts = pagePath.replace(/^\/(?:fr|en)?/, '').split('/').filter(Boolean);
+      const pathParts = pagePath
+        .replace(/^\/(?:fr|en)?/, '')
+        .split('/')
+        .filter(Boolean);
       if (pathParts.length === 0) {
         pageTitle = 'Accueil';
       } else {
