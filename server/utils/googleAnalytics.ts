@@ -83,16 +83,32 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
 
   try {
     // Supporte le JSON brut (dev) ou base64 (production Docker)
-    const rawString = credentialsBase64
-      ? Buffer.from(credentialsBase64, 'base64').toString('utf-8')
-      : credentialsJson;
+    const source = credentialsBase64 ? 'base64' : 'json';
+    const rawValue = credentialsBase64 || credentialsJson;
 
-    // Extraction robuste : regex ultra-permissives pour
-    // gérer les newlines/contrôles injectés par les shells
+    // Debug logging (temporaire)
+    console.log('[GA Debug] source:', source);
+    console.log('[GA Debug] rawValue type:', typeof rawValue);
+    console.log('[GA Debug] rawValue length:', rawValue?.length);
+    console.log('[GA Debug] rawValue start:', rawValue?.substring(0, 50));
+
+    const rawString =
+      source === 'base64' ? Buffer.from(rawValue, 'base64').toString('utf-8') : rawValue;
+
+    console.log('[GA Debug] decoded length:', rawString?.length);
+    console.log('[GA Debug] decoded start:', rawString?.substring(0, 80));
+    console.log('[GA Debug] decoded end:', rawString?.substring(rawString.length - 80));
+    console.log('[GA Debug] has client_email:', rawString?.includes('client_email'));
+    console.log('[GA Debug] has BEGIN KEY:', rawString?.includes('BEGIN PRIVATE KEY'));
+
+    // Extraction robuste : regex ultra-permissives
     const emailMatch = rawString.match(/client_email[\s\S]*?"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+)/);
     const projectMatch = rawString.match(/project_id[\s\S]*?"([a-zA-Z0-9_-]+)/);
-    // Extraire le contenu PEM entre les marqueurs BEGIN/END
     const keyMatch = rawString.match(/BEGIN PRIVATE KEY-----([\s\S]*?)-----END PRIVATE KEY/);
+
+    console.log('[GA Debug] emailMatch:', !!emailMatch);
+    console.log('[GA Debug] projectMatch:', !!projectMatch);
+    console.log('[GA Debug] keyMatch:', !!keyMatch);
 
     const clientEmail = emailMatch?.[1];
     const projectId = projectMatch?.[1];
