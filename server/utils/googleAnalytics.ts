@@ -73,13 +73,18 @@ export function getAnalyticsClient(): BetaAnalyticsDataClient {
 
   const config = useRuntimeConfig();
   const credentialsJson = config.googleCredentialsJson;
+  const credentialsBase64 = config.googleCredentialsBase64;
 
-  if (!credentialsJson) {
-    throw new Error('GOOGLE_APPLICATION_CREDENTIALS_JSON non configuré');
+  if (!credentialsJson && !credentialsBase64) {
+    throw new Error('GOOGLE_APPLICATION_CREDENTIALS_JSON ou GOOGLE_CREDENTIALS_BASE64 non configuré');
   }
 
   try {
-    const credentials = JSON.parse(credentialsJson);
+    // Supporte le JSON brut (dev) ou base64 (production Docker)
+    const rawJson = credentialsBase64
+      ? Buffer.from(credentialsBase64, 'base64').toString('utf-8')
+      : credentialsJson;
+    const credentials = JSON.parse(rawJson);
     analyticsClient = new BetaAnalyticsDataClient({
       credentials: {
         client_email: credentials.client_email,

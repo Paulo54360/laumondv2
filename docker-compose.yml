@@ -23,7 +23,7 @@ services:
       - NUXT_AWS_REGION=${AWS_REGION}
       - NUXT_S3_BUCKET=${S3_BUCKET}
       - GA4_PROPERTY_ID=${GA4_PROPERTY_ID}
-      - GOOGLE_APPLICATION_CREDENTIALS_JSON=${GOOGLE_APPLICATION_CREDENTIALS_JSON}
+      - GOOGLE_CREDENTIALS_BASE64=${GOOGLE_CREDENTIALS_BASE64}
     # If you need to mount volumes for persistence or config
     # volumes:
     #   - ./logs:/app/logs
