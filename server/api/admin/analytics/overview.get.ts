@@ -52,10 +52,11 @@ export default defineEventHandler(async (event): Promise<OverviewData> => {
     const data = await runOverviewReport(propertyId, startDate, endDate);
     return data;
   } catch (error) {
-    console.error('Erreur API Google Analytics (overview):', error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error('Erreur API Google Analytics (overview):', errMsg, error);
     throw createError({
       statusCode: 500,
-      statusMessage: 'Impossible de récupérer les statistiques',
+      statusMessage: `Impossible de récupérer les statistiques: ${errMsg}`,
     });
   }
 });

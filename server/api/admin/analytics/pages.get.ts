@@ -65,10 +65,11 @@ export default defineEventHandler(async (event): Promise<PagesResponse> => {
       endDate,
     };
   } catch (error) {
-    console.error('Erreur API Google Analytics (pages):', error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error('Erreur API Google Analytics (pages):', errMsg, error);
     throw createError({
       statusCode: 500,
-      statusMessage: 'Impossible de récupérer les pages les plus vues',
+      statusMessage: `Impossible de récupérer les pages les plus vues: ${errMsg}`,
     });
   }
 });
