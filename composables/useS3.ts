@@ -1,6 +1,8 @@
 // @ts-expect-error - provided by Nuxt auto-imports
 import { useRuntimeConfig } from '#imports';
 
+import { proxyUrlForPublicS3Asset } from '~/composables/useImageProxy';
+
 interface IGalleryApiItem {
   id: number;
   titleFr: string;
@@ -137,11 +139,13 @@ const LEGACY_ALIASES: Record<string, keyof typeof LEGACY_CONFIG> = {
 };
 
 async function fetchTextMetadata(
-  textUrl: string | null
+  textUrl: string | null,
+  publicBaseUrl: string
 ): Promise<{ title?: string; description?: string }> {
   if (!textUrl) return {};
+  const fetchUrl = proxyUrlForPublicS3Asset(textUrl, publicBaseUrl) || textUrl;
   try {
-    const response = await fetch(textUrl);
+    const response = await fetch(fetchUrl);
     if (!response.ok) return {};
     const raw = await response.text();
     const lines = raw
@@ -164,11 +168,13 @@ async function fetchTextMetadata(
   }
 }
 
-async function isImageReachable(url?: string): Promise<boolean> {
+async function isImageReachable(url?: string, publicBaseUrl?: string): Promise<boolean> {
   if (!url) return false;
+  const fetchUrl =
+    publicBaseUrl && url ? proxyUrlForPublicS3Asset(url, publicBaseUrl) || url : url;
 
   try {
-    const response = await fetch(url, { method: 'HEAD' });
+    const response = await fetch(fetchUrl, { method: 'HEAD' });
     return response.ok;
   } catch (error) {
     console.warn("Impossible de vérifier la disponibilité de l'image", url, error);
@@ -201,7 +207,7 @@ export function useS3(): IUseS3Return {
 
       const firstImage = images[0];
       const textUrl = firstImage?.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt') ?? null;
-      const textData = await fetchTextMetadata(textUrl);
+      const textData = await fetchTextMetadata(textUrl, bucketUrl);
 
       const legacyTitle = textData.title || `Œuvre ${folder}`;
       artworks.push({
@@ -229,12 +235,12 @@ export function useS3(): IUseS3Return {
       await Promise.all(
         response.items.map(async (item) => {
           const firstImage = item.images?.[0];
-          const imageAvailable = await isImageReachable(firstImage);
+          const imageAvailable = await isImageReachable(firstImage, bucketUrl);
           if (!imageAvailable) {
             return;
           }
 
-          const textData = await fetchTextMetadata(item.textUrl);
+          const textData = await fetchTextMetadata(item.textUrl, bucketUrl);
           const artwork: IGalleryArtwork = {
             titleFr: textData.title || item.titleFr || '',
             titleEn: item.titleEn || textData.title || item.titleFr || '',

@@ -34,7 +34,7 @@
         @click="openModal(startIndex + index)"
       >
         <div class="image-wrapper">
-          <img :src="proxiedUrl(image)" :alt="extractTitle(image)" />
+          <img :src="toProxyUrl(image)" :alt="extractTitle(image)" />
         </div>
         <div class="image-title">
           {{ extractTitle(image) }}
@@ -53,7 +53,7 @@
   }>();
 
   const { t } = useI18n();
-  const proxiedUrl = useImageProxy();
+  const toProxyUrl = useImageProxy();
   const imageUrls = inject<Ref<string[]>>('imageUrls', ref([]));
   const openModal = inject<(index: number) => void>('openModal', () => {});
 
@@ -89,7 +89,8 @@
         try {
           // Replace extension with .txt
           const txtUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt');
-          const response = await fetch(txtUrl);
+          const fetchUrl = toProxyUrl(txtUrl) || txtUrl;
+          const response = await fetch(fetchUrl);
           if (response.ok) {
             const text = await response.text();
             titles.value[url] = text && text.trim() ? text.trim() : '';

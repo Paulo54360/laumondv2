@@ -1,0 +1,34 @@
+name: TLS Expiry Check
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-certificate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check certificate expiration (www + apex)
+        run: |
+          set -euo pipefail
+
+          check_domain () {
+            domain="$1"
+            threshold_days="$2"
+
+            end_date=$(echo | openssl s_client -connect "${domain}:443" -servername "${domain}" 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
+            end_ts=$(date -d "$end_date" +%s)
+            now_ts=$(date +%s)
+            days_left=$(( (end_ts - now_ts) / 86400 ))
+
+            echo "${domain}: ${days_left} days remaining (expires ${end_date})"
+
+            if [ "$days_left" -le "$threshold_days" ]; then
+              echo "Certificate for ${domain} expires in <= ${threshold_days} days"
+              return 1
+            fi
+          }
+
+          check_domain "laumond.com" 30
+          check_domain "www.laumond.com" 30
