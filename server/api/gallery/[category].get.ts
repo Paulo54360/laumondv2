@@ -1,3 +1,4 @@
+// Handler API galerie pour récupérer les œuvres par catégorie
 import { createClient } from '@supabase/supabase-js';
 
 type CategoryRow = {

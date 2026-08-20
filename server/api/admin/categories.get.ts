@@ -1,3 +1,4 @@
+// Handler API admin pour les catégories
 import { createClient } from '@supabase/supabase-js';
 
 type CategoryRow = {

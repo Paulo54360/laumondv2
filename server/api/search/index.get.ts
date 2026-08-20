@@ -1,3 +1,4 @@
+// Handler API recherche d'œuvres
 import { createClient } from '@supabase/supabase-js';
 
 const S3_BASE_URL = 'https://plaumondpicture.s3.eu-west-3.amazonaws.com';
