@@ -24,7 +24,9 @@ describe('ArtworkGrid', (): void => {
   });
 
   it('affiche les images de la page courante et le statut de pagination', (): void => {
-    mockGetArtworks.mockImplementation(() => new Promise(() => {}));
+    mockGetArtworks.mockImplementation(
+      () => new Promise((resolve) => setTimeout(resolve, 5000))
+    );
 
     const wrapper = mount(ArtworkGrid, {
       props: { category: 'deployments' },
