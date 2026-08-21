@@ -41,11 +41,7 @@
           :min="localStartDate"
           :max="today"
         />
-        <button
-          type="button"
-          class="admin-analytics__apply-btn"
-          @click="applyCustomDates"
-        >
+        <button type="button" class="admin-analytics__apply-btn" @click="applyCustomDates">
           {{ t('admin.analytics.apply') }}
         </button>
       </div>
@@ -57,7 +53,10 @@
     </div>
 
     <!-- Loading overview -->
-    <div v-else-if="overviewLoading" class="admin-analytics__loading admin-analytics__loading--block">
+    <div
+      v-else-if="overviewLoading"
+      class="admin-analytics__loading admin-analytics__loading--block"
+    >
       {{ t('admin.analytics.loading') }}
     </div>
 
@@ -74,7 +73,9 @@
           <span class="admin-analytics__card-label">{{ t('admin.analytics.pageViews') }}</span>
         </div>
         <div class="admin-analytics__card">
-          <span class="admin-analytics__card-value">{{ formatDuration(overview.avgSessionDuration) }}</span>
+          <span class="admin-analytics__card-value">{{
+            formatDuration(overview.avgSessionDuration)
+          }}</span>
           <span class="admin-analytics__card-label">{{ t('admin.analytics.avgDuration') }}</span>
         </div>
       </section>
@@ -85,15 +86,27 @@
         <div class="admin-analytics__segment-cards">
           <div class="admin-analytics__segment-card admin-analytics__segment-card--new">
             <span class="admin-analytics__segment-icon">✨</span>
-            <span class="admin-analytics__segment-value">{{ formatNumber(overview.visitorSegment.newUsers) }}</span>
-            <span class="admin-analytics__segment-label">{{ t('admin.analytics.newVisitors') }}</span>
-            <span class="admin-analytics__segment-percent">{{ overview.visitorSegment.newUsersPercentage }}%</span>
+            <span class="admin-analytics__segment-value">{{
+              formatNumber(overview.visitorSegment.newUsers)
+            }}</span>
+            <span class="admin-analytics__segment-label">{{
+              t('admin.analytics.newVisitors')
+            }}</span>
+            <span class="admin-analytics__segment-percent"
+              >{{ overview.visitorSegment.newUsersPercentage }}%</span
+            >
           </div>
           <div class="admin-analytics__segment-card admin-analytics__segment-card--returning">
             <span class="admin-analytics__segment-icon">🔄</span>
-            <span class="admin-analytics__segment-value">{{ formatNumber(overview.visitorSegment.returningUsers) }}</span>
-            <span class="admin-analytics__segment-label">{{ t('admin.analytics.returningVisitors') }}</span>
-            <span class="admin-analytics__segment-percent">{{ overview.visitorSegment.returningUsersPercentage }}%</span>
+            <span class="admin-analytics__segment-value">{{
+              formatNumber(overview.visitorSegment.returningUsers)
+            }}</span>
+            <span class="admin-analytics__segment-label">{{
+              t('admin.analytics.returningVisitors')
+            }}</span>
+            <span class="admin-analytics__segment-percent"
+              >{{ overview.visitorSegment.returningUsersPercentage }}%</span
+            >
           </div>
         </div>
       </section>
@@ -108,7 +121,9 @@
             class="admin-analytics__country-row"
           >
             <div class="admin-analytics__country-info">
-              <span class="admin-analytics__country-flag">{{ getCountryFlag(country.countryCode) }}</span>
+              <span class="admin-analytics__country-flag">{{
+                getCountryFlag(country.countryCode)
+              }}</span>
               <span class="admin-analytics__country-name">{{ country.country }}</span>
             </div>
             <div class="admin-analytics__country-bar-container">
@@ -206,23 +221,31 @@
 
         <div v-else-if="sortedPages && sortedPages.length > 0" class="admin-analytics__pages-table">
           <div class="admin-analytics__pages-row admin-analytics__pages-row--header">
-            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--page">{{ t('admin.analytics.page') }}</span>
-            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{ t('admin.analytics.views') }}</span>
-            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--time">{{ t('admin.analytics.avgTime') }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--page">{{
+              t('admin.analytics.page')
+            }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{
+              t('admin.analytics.views')
+            }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--time">{{
+              t('admin.analytics.avgTime')
+            }}</span>
             <span class="admin-analytics__pages-cell admin-analytics__pages-cell--percent">%</span>
           </div>
-          <div
-            v-for="page in sortedPages"
-            :key="page.pagePath"
-            class="admin-analytics__pages-row"
-          >
+          <div v-for="page in sortedPages" :key="page.pagePath" class="admin-analytics__pages-row">
             <div class="admin-analytics__pages-cell admin-analytics__pages-cell--page">
               <span class="admin-analytics__page-title">{{ page.pageTitle || page.pagePath }}</span>
               <span class="admin-analytics__page-path">{{ page.pagePath }}</span>
             </div>
-            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{ formatNumber(page.views) }}</span>
-            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--time">{{ formatDuration(page.avgTimeOnPage) }}</span>
-            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--percent">{{ page.percentage }}%</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--views">{{
+              formatNumber(page.views)
+            }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--time">{{
+              formatDuration(page.avgTimeOnPage)
+            }}</span>
+            <span class="admin-analytics__pages-cell admin-analytics__pages-cell--percent"
+              >{{ page.percentage }}%</span
+            >
           </div>
         </div>
 

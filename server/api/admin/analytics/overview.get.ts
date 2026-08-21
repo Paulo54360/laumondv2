@@ -28,15 +28,16 @@ export default defineEventHandler(async (event): Promise<OverviewData> => {
 
   // Récupérer les paramètres de période
   const { startDate: rawStartDate, endDate: rawEndDate } = getQuery(event);
-  
+
   // Par défaut : 7 derniers jours
   const today = new Date();
   const defaultEndDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
   const defaultStartDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
     .toISOString()
     .split('T')[0];
-  
-  const startDate = typeof rawStartDate === 'string' && rawStartDate ? rawStartDate : defaultStartDate;
+
+  const startDate =
+    typeof rawStartDate === 'string' && rawStartDate ? rawStartDate : defaultStartDate;
   const endDate = typeof rawEndDate === 'string' && rawEndDate ? rawEndDate : defaultEndDate;
 
   // Vérifier la configuration GA

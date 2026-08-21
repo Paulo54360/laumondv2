@@ -8,7 +8,10 @@
     </div>
 
     <nav class="admin-header__nav">
-      <NuxtLink class="btn-artistic admin-header__link admin-header__link--site" :to="localePath('/')">
+      <NuxtLink
+        class="btn-artistic admin-header__link admin-header__link--site"
+        :to="localePath('/')"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

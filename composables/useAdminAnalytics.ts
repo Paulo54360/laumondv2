@@ -138,9 +138,7 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
       console.error('Erreur fetch overview analytics', err);
       const fetchErr = err as { statusMessage?: string; message?: string };
       overviewError.value =
-        fetchErr.statusMessage ||
-        fetchErr.message ||
-        'Impossible de charger les statistiques.';
+        fetchErr.statusMessage || fetchErr.message || 'Impossible de charger les statistiques.';
     } finally {
       overviewLoading.value = false;
     }
@@ -172,9 +170,7 @@ export function useAdminAnalytics(): UseAdminAnalyticsReturn {
       console.error('Erreur fetch top pages analytics', err);
       const fetchErr = err as { statusMessage?: string; message?: string };
       pagesError.value =
-        fetchErr.statusMessage ||
-        fetchErr.message ||
-        'Impossible de charger les pages.';
+        fetchErr.statusMessage || fetchErr.message || 'Impossible de charger les pages.';
     } finally {
       pagesLoading.value = false;
     }

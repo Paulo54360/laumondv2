@@ -170,8 +170,7 @@ async function fetchTextMetadata(
 
 async function isImageReachable(url?: string, publicBaseUrl?: string): Promise<boolean> {
   if (!url) return false;
-  const fetchUrl =
-    publicBaseUrl && url ? proxyUrlForPublicS3Asset(url, publicBaseUrl) || url : url;
+  const fetchUrl = publicBaseUrl && url ? proxyUrlForPublicS3Asset(url, publicBaseUrl) || url : url;
 
   try {
     const response = await fetch(fetchUrl, { method: 'HEAD' });

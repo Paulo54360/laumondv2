@@ -43,7 +43,8 @@ export default defineEventHandler(async (event): Promise<PagesResponse> => {
     .toISOString()
     .split('T')[0];
 
-  const startDate = typeof rawStartDate === 'string' && rawStartDate ? rawStartDate : defaultStartDate;
+  const startDate =
+    typeof rawStartDate === 'string' && rawStartDate ? rawStartDate : defaultStartDate;
   const endDate = typeof rawEndDate === 'string' && rawEndDate ? rawEndDate : defaultEndDate;
   const country = typeof rawCountry === 'string' && rawCountry ? rawCountry : null;
 

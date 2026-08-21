@@ -93,8 +93,7 @@ export default defineEventHandler(async (event) => {
       const e = err as { name?: string; $metadata?: { httpStatusCode?: number } };
       const name = e.name ? String(e.name) : '';
       const http404 = e.$metadata?.httpStatusCode === 404;
-      const code =
-        name === 'NotFound' || name === 'NoSuchKey' || http404 ? 404 : 502;
+      const code = name === 'NotFound' || name === 'NoSuchKey' || http404 ? 404 : 502;
       throw createError({
         statusCode: code,
         statusMessage: code === 404 ? 'Image introuvable' : "Erreur lors du chargement de l'image",

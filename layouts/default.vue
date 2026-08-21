@@ -15,10 +15,10 @@
 </template>
 
 <script setup lang="ts">
+  import AdminFloatingButton from '~/components/admin/AdminFloatingButton.vue';
   import ButtonUpPage from '~/components/base/ButtonUpPage.vue';
   import Navbar from '~/components/layout/Navbar.vue';
   import TheFooter from '~/components/layout/TheFooter.vue';
-  import AdminFloatingButton from '~/components/admin/AdminFloatingButton.vue';
 
   const route = useRoute();
   const isAdminPage = computed(() => route.path.startsWith('/admin'));
