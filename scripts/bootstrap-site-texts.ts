@@ -17,13 +17,10 @@ config();
 const DRY_RUN = process.argv.includes('--dry-run');
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_KEY ?? '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_KEY ?? '';
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error(
-    '❌ Variables SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY requises dans .env'
-  );
+  console.error('❌ Variables SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY requises dans .env');
   process.exit(1);
 }
 
@@ -70,11 +67,34 @@ function buildMetahismPageContent(i18n: I18nNode): string {
   const meta = i18n['MétaHisme'] as I18nNode | undefined;
   if (!meta || typeof meta !== 'object') return '';
   const keys = [
-    'Texte', 'Texte2', 'Texte3', 'Texte4,1', 'Texte4,2', 'Texte4,3', 'Texte5',
-    'Texte6,1', 'Texte6,2', 'Texte7', 'Texte8,1', 'Texte8,2', 'Texte8,3',
-    'Texte9', 'Texte10,1', 'Texte10,2', 'Texte10,3', 'Texte11',
-    'Texte12,1', 'Texte12,2', 'Texte12,3', 'Texte12,4', 'Texte12,5', 'Texte12,6',
-    'Texte16', 'Texte13', 'Texte14', 'Footnote',
+    'Texte',
+    'Texte2',
+    'Texte3',
+    'Texte4,1',
+    'Texte4,2',
+    'Texte4,3',
+    'Texte5',
+    'Texte6,1',
+    'Texte6,2',
+    'Texte7',
+    'Texte8,1',
+    'Texte8,2',
+    'Texte8,3',
+    'Texte9',
+    'Texte10,1',
+    'Texte10,2',
+    'Texte10,3',
+    'Texte11',
+    'Texte12,1',
+    'Texte12,2',
+    'Texte12,3',
+    'Texte12,4',
+    'Texte12,5',
+    'Texte12,6',
+    'Texte16',
+    'Texte13',
+    'Texte14',
+    'Footnote',
   ];
   const parts: string[] = [];
   for (const k of keys) {
@@ -118,18 +138,57 @@ async function main(): Promise<void> {
   const en = JSON.parse(readFileSync(enPath, 'utf-8')) as I18nNode;
 
   const laecKeys = [
-    'Texte1LAEC', 'Texte2LAEC', 'Texte3LAEC', 'Texte4LAEC', 'Texte5LAEC',
-    'Texte6LAEC', 'Texte10LAEC', 'Texte12LAEC', 'Texte13LAEC', 'Texte14LAEC',
-    'Texte15LAEC', 'Texte16LAEC', 'Texte17LAEC', 'Texte18LAEC', 'Texte19LAEC',
+    'Texte1LAEC',
+    'Texte2LAEC',
+    'Texte3LAEC',
+    'Texte4LAEC',
+    'Texte5LAEC',
+    'Texte6LAEC',
+    'Texte10LAEC',
+    'Texte12LAEC',
+    'Texte13LAEC',
+    'Texte14LAEC',
+    'Texte15LAEC',
+    'Texte16LAEC',
+    'Texte17LAEC',
+    'Texte18LAEC',
+    'Texte19LAEC',
   ];
   const aqjaKeys = [
-    'Texte1AQJA', 'Texte2AQJA', 'Texte3AQJA', 'Texte4AQJA', 'Texte5AQJA',
-    'Texte6AQJA', 'Texte7AQJA', 'Texte8AQJA', 'Texte9AQJA', 'Texte10AQJA',
-    'Texte11AQJA', 'Texte12AQJA', 'Texte13AQJA', 'Texte14AQJA', 'Texte15AQJA',
-    'Texte16AQJA', 'Texte17AQJA', 'Texte18AQJA', 'Texte19AQJA', 'Texte20AQJA',
-    'Texte21AQJA', 'Texte22AQJA', 'Texte23AQJA', 'Texte24AQJA', 'Texte25AQJA',
-    'Texte26AQJA', 'Texte27AQJA', 'Texte28AQJA', 'Texte29AQJA', 'Texte30AQJA',
-    'Texte31AQJA', 'Texte32AQJA', 'Texte33AQJA', 'Texte34AQJA',
+    'Texte1AQJA',
+    'Texte2AQJA',
+    'Texte3AQJA',
+    'Texte4AQJA',
+    'Texte5AQJA',
+    'Texte6AQJA',
+    'Texte7AQJA',
+    'Texte8AQJA',
+    'Texte9AQJA',
+    'Texte10AQJA',
+    'Texte11AQJA',
+    'Texte12AQJA',
+    'Texte13AQJA',
+    'Texte14AQJA',
+    'Texte15AQJA',
+    'Texte16AQJA',
+    'Texte17AQJA',
+    'Texte18AQJA',
+    'Texte19AQJA',
+    'Texte20AQJA',
+    'Texte21AQJA',
+    'Texte22AQJA',
+    'Texte23AQJA',
+    'Texte24AQJA',
+    'Texte25AQJA',
+    'Texte26AQJA',
+    'Texte27AQJA',
+    'Texte28AQJA',
+    'Texte29AQJA',
+    'Texte30AQJA',
+    'Texte31AQJA',
+    'Texte32AQJA',
+    'Texte33AQJA',
+    'Texte34AQJA',
   ];
 
   type Entry = { slug: string; category: string; content_fr: string; content_en: string };
@@ -181,12 +240,16 @@ async function main(): Promise<void> {
         getNested(fr, 'homepage.hero_description_1'),
         getNested(fr, 'homepage.hero_description_2'),
         getNested(fr, 'homepage.hero_description_3'),
-      ].filter(Boolean).join('\n'),
+      ]
+        .filter(Boolean)
+        .join('\n'),
       content_en: [
         getNested(en, 'homepage.hero_description_1'),
         getNested(en, 'homepage.hero_description_2'),
         getNested(en, 'homepage.hero_description_3'),
-      ].filter(Boolean).join('\n'),
+      ]
+        .filter(Boolean)
+        .join('\n'),
     },
     {
       slug: 'homepage_biography_title',
@@ -330,14 +393,30 @@ async function main(): Promise<void> {
     {
       slug: 'analysis_aimants',
       category: 'analyses',
-      content_fr: buildAnalysisFromKeys(fr, 'CDA', ['Texte1CDA', 'Texte2CDA', 'Texte3CDA'], 'AuteurCDA'),
-      content_en: buildAnalysisFromKeys(en, 'CDA', ['Texte1CDA', 'Texte2CDA', 'Texte3CDA'], 'AuteurCDA'),
+      content_fr: buildAnalysisFromKeys(
+        fr,
+        'CDA',
+        ['Texte1CDA', 'Texte2CDA', 'Texte3CDA'],
+        'AuteurCDA'
+      ),
+      content_en: buildAnalysisFromKeys(
+        en,
+        'CDA',
+        ['Texte1CDA', 'Texte2CDA', 'Texte3CDA'],
+        'AuteurCDA'
+      ),
     },
     {
       slug: 'analysis_advienne',
       category: 'analyses',
-      content_fr: buildAnalysisFromKeys(fr, 'AQJA', aqjaKeys, undefined, ['Legende1AQJA', 'Legende2AQJA']),
-      content_en: buildAnalysisFromKeys(en, 'AQJA', aqjaKeys, undefined, ['Legende1AQJA', 'Legende2AQJA']),
+      content_fr: buildAnalysisFromKeys(fr, 'AQJA', aqjaKeys, undefined, [
+        'Legende1AQJA',
+        'Legende2AQJA',
+      ]),
+      content_en: buildAnalysisFromKeys(en, 'AQJA', aqjaKeys, undefined, [
+        'Legende1AQJA',
+        'Legende2AQJA',
+      ]),
     },
   ];
 
@@ -350,7 +429,9 @@ async function main(): Promise<void> {
     for (const [cat, items] of Object.entries(byCat)) {
       console.log(`\n  [${cat}]`);
       for (const e of items) {
-        console.log(`    - ${e.slug}: FR ${e.content_fr?.length ?? 0} chars, EN ${e.content_en?.length ?? 0} chars`);
+        console.log(
+          `    - ${e.slug}: FR ${e.content_fr?.length ?? 0} chars, EN ${e.content_en?.length ?? 0} chars`
+        );
       }
     }
     return;

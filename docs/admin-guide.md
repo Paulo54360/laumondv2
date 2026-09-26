@@ -57,12 +57,12 @@ Guide d’utilisation du back-office pour Patrick (édition des œuvres et des t
 
 ### Markdown supporté
 
-| Syntaxe      | Effet          | Exemple              |
-| ------------ | -------------- | -------------------- |
-| `**texte**`  | Gras           | **gras**             |
-| `*texte*`    | Italique       | *italique*           |
-| `[lien](url)`| Lien cliquable | [exemple](https://…) |
-| `## Titre`   | Titre niveau 2 | ## Section           |
+| Syntaxe       | Effet          | Exemple              |
+| ------------- | -------------- | -------------------- |
+| `**texte**`   | Gras           | **gras**             |
+| `*texte*`     | Italique       | _italique_           |
+| `[lien](url)` | Lien cliquable | [exemple](https://…) |
+| `## Titre`    | Titre niveau 2 | ## Section           |
 
 ### Enregistrer
 

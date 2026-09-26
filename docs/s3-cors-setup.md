@@ -1,6 +1,6 @@
 # Configuration CORS du bucket S3
 
-Sans CORS, le navigateur bloque l’affichage des images S3 quand le site est servi depuis une autre origine (ex. `http://localhost:3000` ou ton domaine de prod). Les requêtes vers `https://plaumondpicture.s3.eu-west-3.amazonaws.com/...` échouent avec : *"blocked by CORS policy: No 'Access-Control-Allow-Origin' header"*.
+Sans CORS, le navigateur bloque l’affichage des images S3 quand le site est servi depuis une autre origine (ex. `http://localhost:3000` ou ton domaine de prod). Les requêtes vers `https://plaumondpicture.s3.eu-west-3.amazonaws.com/...` échouent avec : _"blocked by CORS policy: No 'Access-Control-Allow-Origin' header"_.
 
 ## Étapes dans la console AWS
 

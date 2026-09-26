@@ -65,11 +65,11 @@ Variables d’environnement : copier `.env.example` en `.env` et renseigner `SUP
 
 ### Scripts utilitaires
 
-| Commande | Description |
-| -------- | ----------- |
+| Commande                         | Description                                                                           |
+| -------------------------------- | ------------------------------------------------------------------------------------- |
 | `npm run migrate:artwork-images` | Migration des images vers `artwork_images` ([docs/migrations.md](docs/migrations.md)) |
-| `npm run bootstrap:site-texts` | Import des textes Biographie/Métahisme vers `site_texts` |
-| `npm run verify:admin-auth` | Vérifier la connexion admin (Supabase Auth) |
+| `npm run bootstrap:site-texts`   | Import des textes Biographie/Métahisme vers `site_texts`                              |
+| `npm run verify:admin-auth`      | Vérifier la connexion admin (Supabase Auth)                                           |
 
 ---
 
