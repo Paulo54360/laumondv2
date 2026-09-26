@@ -175,21 +175,23 @@ async function isImageReachable(url?: string, publicBaseUrl?: string): Promise<b
   try {
     const response = await fetch(fetchUrl, { method: 'HEAD' });
     if (response.ok) return true;
+    if (response.status === 404) return false;
   } catch (error) {
     console.warn("Impossible de vérifier la disponibilité de l'image via proxy", url, error);
   }
 
-  // Si le proxy échoue ou renvoie une erreur (ex: 404 API), tester l'URL directe S3 si différente
+  // Si le proxy échoue ou renvoie une erreur, tester l'URL directe S3 si différente
   if (fetchUrl !== url) {
     try {
       const response = await fetch(url, { method: 'HEAD' });
       if (response.ok) return true;
+      if (response.status === 404) return false;
     } catch {
       // Ignorer l'erreur CORS éventuelle sur le HEAD direct
     }
   }
 
-  // Par défaut, ne pas masquer une image si seule la vérification HEAD échoue
+  // Par défaut, ne pas masquer une image si seule la vérification HEAD échoue pour d'autres raisons
   return true;
 }
 

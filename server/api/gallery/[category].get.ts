@@ -139,16 +139,26 @@ export default defineEventHandler(async (event): Promise<GalleryResponse> => {
   }
 
   const aliases = CATEGORY_ALIASES[aliasKey].map((value) => normalize(value));
-  const category =
-    categories?.find((row) => {
+  const matchingCategories =
+    categories?.filter((row) => {
       const normalizedName = normalize(row.name);
       const normalizedPath = normalize(row.path);
       return aliases.includes(normalizedName) || aliases.includes(normalizedPath);
-    }) ?? null;
+    }) ?? [];
 
-  if (!category) {
+  if (matchingCategories.length === 0) {
     throw createError({ statusCode: 404, statusMessage: 'Catégorie indisponible' });
   }
+
+  const category =
+    matchingCategories.slice().sort((a, b) => {
+      const aExact = normalize(a.path) === aliasKey || normalize(a.name) === aliasKey ? 1 : 0;
+      const bExact = normalize(b.path) === aliasKey || normalize(b.name) === aliasKey ? 1 : 0;
+      if (aExact !== bExact) return bExact - aExact;
+      return b.id - a.id;
+    })[0] || matchingCategories[0];
+
+  const categoryIds = matchingCategories.map((c) => c.id);
 
   const selectCols =
     'id, title, title_en, description, description_fr, description_en, ' +
@@ -156,7 +166,7 @@ export default defineEventHandler(async (event): Promise<GalleryResponse> => {
   const { data: artworks, error: artworksError } = await supabase
     .from('artworks')
     .select(selectCols)
-    .eq('category_id', category.id)
+    .in('category_id', categoryIds)
     .is('deleted_at', null)
     .order('created_at', { ascending: false });
 
