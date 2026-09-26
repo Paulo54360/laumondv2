@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 import { runTopPagesReport, type PageData } from '~/server/utils/googleAnalytics';
 
 type PagesResponse = {
@@ -18,15 +16,7 @@ export default defineEventHandler(async (event): Promise<PagesResponse> => {
     throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
   }
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser(token);
   if (userError || !userData.user) {
@@ -49,6 +39,7 @@ export default defineEventHandler(async (event): Promise<PagesResponse> => {
   const country = typeof rawCountry === 'string' && rawCountry ? rawCountry : null;
 
   // Vérifier la configuration GA
+  const config = useRuntimeConfig();
   const propertyId = config.ga4PropertyId;
   if (!propertyId) {
     throw createError({

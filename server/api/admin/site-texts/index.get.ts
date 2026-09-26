@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 const SLUG_TO_CATEGORY: Record<string, string> = {
   biography: 'biography',
   metahism: 'metahism',
@@ -62,15 +60,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
   }
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: userData, error: authError } = await supabase.auth.getUser(token);
   if (authError || !userData.user) {

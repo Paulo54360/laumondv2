@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 type ArtworkRow = {
   id: string;
   title: string | null;
@@ -50,15 +48,7 @@ export default defineEventHandler(async (event) => {
     typeof category === 'string' && category.trim().length > 0 ? category : null;
   const includeTrash = trash === 'true';
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser(token);
   if (userError || !userData.user) {

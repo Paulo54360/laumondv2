@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 export default defineEventHandler(async (event) => {
   const authHeader = getHeader(event, 'authorization') || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
@@ -13,15 +11,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Slug manquant' });
   }
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: userData, error: authError } = await supabase.auth.getUser(token);
   if (authError || !userData.user) {

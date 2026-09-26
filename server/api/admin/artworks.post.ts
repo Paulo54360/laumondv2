@@ -1,5 +1,4 @@
 import { S3Client, ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3';
-import { createClient } from '@supabase/supabase-js';
 
 type CategoryRow = {
   id: number;
@@ -132,21 +131,16 @@ export default defineEventHandler(async (event) => {
   }
 
   const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
   const awsAccessKeyId = config.awsAccessKeyId;
   const awsSecretAccessKey = config.awsSecretAccessKey;
   const awsRegion = config.awsRegion;
   const bucket = config.s3Bucket;
 
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
   if (!awsAccessKeyId || !awsSecretAccessKey || !awsRegion || !bucket) {
     throw createError({ statusCode: 500, statusMessage: 'Configuration AWS manquante' });
   }
 
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
   const { data: userData, error: userError } = await supabase.auth.getUser(token);
   if (userError || !userData.user) {
     throw createError({ statusCode: 401, statusMessage: 'Session invalide' });

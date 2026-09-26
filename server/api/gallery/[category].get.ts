@@ -1,5 +1,4 @@
 // Handler API galerie pour récupérer les œuvres par catégorie
-import { createClient } from '@supabase/supabase-js';
 
 type CategoryRow = {
   id: number;
@@ -97,11 +96,6 @@ function ensureArray(value: unknown): string[] {
   return [];
 }
 
-function sanitizeBaseUrl(url?: string): string | null {
-  if (!url || typeof url !== 'string') return null;
-  return url.endsWith('/') ? url.slice(0, -1) : url;
-}
-
 function buildTextUrl(imageUrl?: string, fallback?: string | null): string | null {
   if (imageUrl) {
     return imageUrl.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt');
@@ -119,16 +113,7 @@ export default defineEventHandler(async (event): Promise<GalleryResponse> => {
     throw createError({ statusCode: 404, statusMessage: 'Catégorie inconnue' });
   }
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey || config.supabaseKey;
-  const publicBaseUrl = sanitizeBaseUrl(config.public.apiUrl);
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: categories, error: categoriesError } = await supabase
     .from('categories')

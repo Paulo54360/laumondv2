@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 import { runOverviewReport, type OverviewData } from '~/server/utils/googleAnalytics';
 
 export default defineEventHandler(async (event): Promise<OverviewData> => {
@@ -11,15 +9,7 @@ export default defineEventHandler(async (event): Promise<OverviewData> => {
     throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
   }
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser(token);
   if (userError || !userData.user) {
@@ -41,6 +31,7 @@ export default defineEventHandler(async (event): Promise<OverviewData> => {
   const endDate = typeof rawEndDate === 'string' && rawEndDate ? rawEndDate : defaultEndDate;
 
   // Vérifier la configuration GA
+  const config = useRuntimeConfig();
   const propertyId = config.ga4PropertyId;
   if (!propertyId) {
     throw createError({

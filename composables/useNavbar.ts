@@ -11,6 +11,7 @@ export interface IUseNavbarReturn {
   searchQuery: Ref<string>;
   isCompactSearch: Ref<boolean>;
   isSearchPanelOpen: Ref<boolean>;
+  countdown: Ref<string>;
   currentLocale: ComputedRef<string>;
   searchPlaceholder: ComputedRef<string>;
   closeMobileMenu: () => void;
@@ -36,6 +37,8 @@ export function useNavbar(): IUseNavbarReturn {
   const searchQuery = ref('');
   const isCompactSearch = ref(false);
   const isSearchPanelOpen = ref(false);
+  const countdown = ref('');
+  let countdownTimer: ReturnType<typeof setInterval> | null = null;
 
   // Computeds
   const currentLocale = computed(() => {
@@ -130,6 +133,29 @@ export function useNavbar(): IUseNavbarReturn {
     }
   };
 
+  const updateCountdown = (): void => {
+    // 1 février 2027
+    const target = new Date('2027-02-01T00:00:00').getTime();
+    const now = new Date().getTime();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      countdown.value = '00:00:00:00';
+      if (countdownTimer) clearInterval(countdownTimer);
+      return;
+    }
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const hh = h.toString().padStart(2, '0');
+    const mm = m.toString().padStart(2, '0');
+    const ss = s.toString().padStart(2, '0');
+    countdown.value = `${d}j ${hh}:${mm}:${ss}`;
+  };
+
   // Lifecycle
   onMounted(() => {
     if (process.client) {
@@ -138,6 +164,9 @@ export function useNavbar(): IUseNavbarReturn {
       window.addEventListener('keydown', handleKeydown);
       document.addEventListener('click', handleClickOutside);
       updateSearchMode();
+
+      updateCountdown();
+      countdownTimer = setInterval(updateCountdown, 1000);
     }
   });
 
@@ -148,6 +177,7 @@ export function useNavbar(): IUseNavbarReturn {
       window.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('click', handleClickOutside);
       document.body.style.overflow = '';
+      if (countdownTimer) clearInterval(countdownTimer);
     }
   });
 
@@ -165,6 +195,7 @@ export function useNavbar(): IUseNavbarReturn {
     searchQuery,
     isCompactSearch,
     isSearchPanelOpen,
+    countdown,
     currentLocale,
     searchPlaceholder,
     closeMobileMenu,

@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 type SiteTextRow = {
   slug: string;
   content_fr: string | null;
@@ -13,15 +11,7 @@ type SiteTextPublic = {
 };
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { slug } = getQuery(event);
 

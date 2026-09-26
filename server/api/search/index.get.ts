@@ -1,5 +1,4 @@
 // Handler API recherche d'œuvres
-import { createClient } from '@supabase/supabase-js';
 
 const S3_BASE_URL = 'https://plaumondpicture.s3.eu-west-3.amazonaws.com';
 
@@ -78,7 +77,6 @@ export default defineEventHandler(async (event) => {
 
     // Initialisation du client Supabase
     const config = useRuntimeConfig();
-    const supabaseUrl = config.supabaseUrl;
     const supabaseKey = config.supabaseKey;
 
     if (!supabaseUrl || !supabaseKey) {
@@ -91,7 +89,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = getSupabaseAdminClient();
 
     // Recherche simple et fiable : faire des requêtes séparées pour chaque champ
     const searchPattern = `%${searchTerm.trim()}%`;

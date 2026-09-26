@@ -98,6 +98,16 @@
         <ul class="nav-list">
           <li class="nav-item">
             <NuxtLink
+              :to="localePath('#')"
+              class="nav-link nav-link--symbol"
+              :class="{ active: isCurrentRoute('/symbol') }"
+              @click="closeMobileMenu"
+            >
+              {{ countdown || '(*)' }}
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink
               :to="localePath('/metahism')"
               class="nav-link"
               :class="{ active: isCurrentRoute('/metahism') }"
@@ -201,6 +211,7 @@
     searchQuery,
     isCompactSearch,
     isSearchPanelOpen,
+    countdown,
     currentLocale,
     searchPlaceholder,
     closeMobileMenu,

@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
 import { sanitizeMarkdownInput } from '~/utils/markdown';
 
 type Body = {
@@ -28,15 +26,7 @@ export default defineEventHandler(async (event) => {
   const contentEn =
     rawEn !== undefined ? (rawEn == null ? null : sanitizeMarkdownInput(rawEn) || null) : undefined;
 
-  const config = useRuntimeConfig();
-  const supabaseUrl = config.supabaseUrl;
-  const serviceRoleKey = config.supabaseServiceRoleKey;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw createError({ statusCode: 500, statusMessage: 'Configuration Supabase manquante' });
-  }
-
-  const supabase = createClient(supabaseUrl, serviceRoleKey);
+  const supabase = getSupabaseAdminClient();
 
   const { data: userData, error: authError } = await supabase.auth.getUser(token);
   if (authError || !userData.user) {

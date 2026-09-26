@@ -173,6 +173,23 @@
               width: 100%;
             }
           }
+          &.nav-link--symbol {
+            font-weight: 700;
+
+            &::after {
+              background: #094629;
+            }
+
+            &:hover,
+            &.active {
+              color: #094629;
+
+              &::after {
+                background: #094629;
+                width: 100%;
+              }
+            }
+          }
         }
       }
     }
