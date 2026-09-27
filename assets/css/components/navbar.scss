@@ -13,11 +13,12 @@
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   }
   .navbar-container {
-    max-width: var(--max-width-content);
-    margin: 0 auto;
-    padding: 1rem 1cm;
+    max-width: 100%;
+    margin: 0;
+    padding: 1rem 2rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: clamp(1rem, 2vw, 1.5rem);
     min-height: var(--header-height, 80px);
     font-family: var(--font-family-base);
