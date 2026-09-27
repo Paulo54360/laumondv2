@@ -175,18 +175,44 @@
           }
           &.nav-link--symbol {
             font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
 
+            .nav-countdown {
+              color: var(--color-primary) !important;
+            }
+
+            // Désactive le soulignement sur tout le lien
             &::after {
-              background: #094629;
+              display: none;
+            }
+
+            .symbol-text {
+              position: relative;
+              color: inherit;
+
+              &::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: #094629;
+                transition: width 0.3s ease;
+              }
             }
 
             &:hover,
             &.active {
-              color: #094629;
+              color: inherit;
 
-              &::after {
-                background: #094629;
-                width: 100%;
+              .symbol-text {
+                color: #094629;
+                &::after {
+                  width: 100%;
+                }
               }
             }
           }

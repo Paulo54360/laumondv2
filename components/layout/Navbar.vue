@@ -103,7 +103,8 @@
               :class="{ active: isCurrentRoute('/symbol') }"
               @click="closeMobileMenu"
             >
-              {{ countdown || '(*)' }}
+              <span v-if="countdown" class="nav-countdown">{{ countdown }}</span>
+              <span class="symbol-text">(*)</span>
             </NuxtLink>
           </li>
           <li class="nav-item">
