@@ -1,58 +1,56 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="grand-mikado-page">
-    <header class="page-overlay-header">
-      <p class="page-eyebrow">{{ workTitle }}</p>
-      <h1 class="page-title">{{ pageTitle }}</h1>
-    </header>
-
     <section class="page-gallery" aria-label="Revue de presse en plein écran">
       <figure v-for="image in images" :key="image.src" class="gallery-figure">
         <img :src="image.src" :alt="image.alt" class="gallery-image" />
-        <figcaption class="gallery-caption">{{ image.caption }}</figcaption>
       </figure>
     </section>
-
-    <div class="back-link-row">
-      <NuxtLink :to="analysesLink" class="back-link">
-        {{ backToAnalyses }}
-      </NuxtLink>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import presseMikado1 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-2027.jpg';
+  import presseMikado2 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20272.jpg';
+  import presseMikado3 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20273.jpg';
+  import presseMikado4 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20274.jpg';
+  import presseVerre1 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAVERRE-byYMG122-2027.jpg';
+  import presseVerre2 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAVERRE-byYMG122-20272.jpg';
 
   definePageMeta({ layout: 'default' });
 
-  const runtimeConfig = useRuntimeConfig();
-  const localePath = useLocalePath();
   const { t } = useI18n();
 
-  const S3_BASE_URL = runtimeConfig.public.apiUrl;
-
   const pageTitle = computed(() => t('grandMikado.pageTitle'));
-  const workTitle = computed(() => t('grandMikado.workTitle'));
-  const backToAnalyses = computed(() => t('grandMikado.backToAnalyses'));
 
   const images = computed(() => [
     {
-      src: `${S3_BASE_URL}/Archetypes/02/09.jpg`,
+      src: presseMikado1,
       alt: pageTitle.value,
-      caption: workTitle.value,
     },
     {
-      src: `${S3_BASE_URL}/Archetypes/02/10.jpg`,
+      src: presseMikado2,
       alt: pageTitle.value,
-      caption: workTitle.value,
+    },
+    {
+      src: presseMikado3,
+      alt: pageTitle.value,
+    },
+    {
+      src: presseMikado4,
+      alt: pageTitle.value,
+    },
+    {
+      src: presseVerre1,
+      alt: pageTitle.value,
+    },
+    {
+      src: presseVerre2,
+      alt: pageTitle.value,
     },
   ]);
-
-  const analysesLink = computed(() =>
-    localePath({ path: '/analyses', query: { tab: 'advienne' } })
-  );
 
   useHead({
     title: pageTitle,
