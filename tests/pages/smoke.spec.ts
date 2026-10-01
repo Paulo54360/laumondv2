@@ -5,6 +5,7 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { h, ref, Suspense } from 'vue';
 
+import Navbar from '../../components/layout/Navbar.vue';
 import Biography from '../../pages/biography.vue';
 import Galerie from '../../pages/galerie.vue';
 import Index from '../../pages/index.vue';
@@ -26,6 +27,44 @@ vi.mock('vue-router', () => ({
   }),
   useRouter: (): { push: ReturnType<typeof vi.fn> } => ({
     push: vi.fn(),
+  }),
+}));
+
+vi.mock('../../composables/useNavbar', () => ({
+  useNavbar: (): {
+    isScrolled: ReturnType<typeof ref<boolean>>;
+    isMobileMenuOpen: ReturnType<typeof ref<boolean>>;
+    searchQuery: ReturnType<typeof ref<string>>;
+    isCompactSearch: ReturnType<typeof ref<boolean>>;
+    isSearchPanelOpen: ReturnType<typeof ref<boolean>>;
+    countdown: ReturnType<typeof ref<string>>;
+    currentLocale: ReturnType<typeof ref<string>>;
+    searchPlaceholder: ReturnType<typeof ref<string>>;
+    closeMobileMenu: ReturnType<typeof vi.fn>;
+    closeSearchPanel: ReturnType<typeof vi.fn>;
+    openSearchPanel: ReturnType<typeof vi.fn>;
+    toggleMobileMenu: ReturnType<typeof vi.fn>;
+    changeLanguage: ReturnType<typeof vi.fn>;
+    performSearch: ReturnType<typeof vi.fn>;
+    isCurrentRoute: ReturnType<typeof vi.fn>;
+    localePath: (path: string) => string;
+  } => ({
+    isScrolled: ref(false),
+    isMobileMenuOpen: ref(false),
+    searchQuery: ref(''),
+    isCompactSearch: ref(false),
+    isSearchPanelOpen: ref(false),
+    countdown: ref(''),
+    currentLocale: ref('fr'),
+    searchPlaceholder: ref('Rechercher'),
+    closeMobileMenu: vi.fn(),
+    closeSearchPanel: vi.fn(),
+    openSearchPanel: vi.fn(),
+    toggleMobileMenu: vi.fn(),
+    changeLanguage: vi.fn(),
+    performSearch: vi.fn(),
+    isCurrentRoute: vi.fn(() => false),
+    localePath: (path: string): string => `/fr${path === '#' ? '#' : path}`,
   }),
 }));
 
@@ -134,6 +173,30 @@ describe('Pages smoke', (): void => {
       await flushPromises();
       expect(wrapper.find('.biography-page').exists()).toBe(true);
       expect(wrapper.find('.nav-menu').exists()).toBe(true);
+    });
+  });
+
+  describe('navbar', (): void => {
+    it('le bouton (*) pointe vers la page du grand mikado', (): void => {
+      const NuxtLinkStub = {
+        props: ['to'],
+        template: '<a :href="to"><slot /></a>',
+      };
+
+      const wrapper = mount(Navbar, {
+        global: {
+          stubs: {
+            NuxtLink: NuxtLinkStub,
+          },
+          mocks: {
+            $t: (key: string): string => key,
+          },
+        },
+      });
+
+      const symbolLink = wrapper.find('.nav-link--symbol');
+      expect(symbolLink.exists()).toBe(true);
+      expect(symbolLink.attributes('href')).toContain('le-grand-mikado-de-la-pensee-humaine');
     });
   });
 });

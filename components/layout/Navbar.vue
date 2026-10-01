@@ -98,9 +98,9 @@
         <ul class="nav-list">
           <li class="nav-item">
             <NuxtLink
-              :to="localePath('#')"
+              :to="localePath('/le-grand-mikado-de-la-pensee-humaine')"
               class="nav-link nav-link--symbol"
-              :class="{ active: isCurrentRoute('/symbol') }"
+              :class="{ active: isCurrentRoute('/le-grand-mikado-de-la-pensee-humaine') }"
               @click="closeMobileMenu"
             >
               <span v-if="countdown" class="nav-countdown">{{ countdown }}</span>
