@@ -30,42 +30,23 @@ vi.mock('vue-router', () => ({
   }),
 }));
 
-vi.mock('../../composables/useNavbar', () => ({
-  useNavbar: (): {
-    isScrolled: ReturnType<typeof ref<boolean>>;
-    isMobileMenuOpen: ReturnType<typeof ref<boolean>>;
-    searchQuery: ReturnType<typeof ref<string>>;
-    isCompactSearch: ReturnType<typeof ref<boolean>>;
-    isSearchPanelOpen: ReturnType<typeof ref<boolean>>;
-    countdown: ReturnType<typeof ref<string>>;
-    currentLocale: ReturnType<typeof ref<string>>;
-    searchPlaceholder: ReturnType<typeof ref<string>>;
-    closeMobileMenu: ReturnType<typeof vi.fn>;
-    closeSearchPanel: ReturnType<typeof vi.fn>;
-    openSearchPanel: ReturnType<typeof vi.fn>;
-    toggleMobileMenu: ReturnType<typeof vi.fn>;
-    changeLanguage: ReturnType<typeof vi.fn>;
-    performSearch: ReturnType<typeof vi.fn>;
-    isCurrentRoute: ReturnType<typeof vi.fn>;
-    localePath: (path: string) => string;
-  } => ({
-    isScrolled: ref(false),
-    isMobileMenuOpen: ref(false),
-    searchQuery: ref(''),
-    isCompactSearch: ref(false),
-    isSearchPanelOpen: ref(false),
-    countdown: ref(''),
-    currentLocale: ref('fr'),
-    searchPlaceholder: ref('Rechercher'),
-    closeMobileMenu: vi.fn(),
-    closeSearchPanel: vi.fn(),
-    openSearchPanel: vi.fn(),
-    toggleMobileMenu: vi.fn(),
-    changeLanguage: vi.fn(),
-    performSearch: vi.fn(),
-    isCurrentRoute: vi.fn(() => false),
-    localePath: (path: string): string => `/fr${path === '#' ? '#' : path}`,
-  }),
+vi.stubGlobal('useNavbar', () => ({
+  isScrolled: ref(false),
+  isMobileMenuOpen: ref(false),
+  searchQuery: ref(''),
+  isCompactSearch: ref(false),
+  isSearchPanelOpen: ref(false),
+  countdown: ref(''),
+  currentLocale: ref('fr'),
+  searchPlaceholder: ref('Rechercher'),
+  closeMobileMenu: vi.fn(),
+  closeSearchPanel: vi.fn(),
+  openSearchPanel: vi.fn(),
+  toggleMobileMenu: vi.fn(),
+  changeLanguage: vi.fn(),
+  performSearch: vi.fn(),
+  isCurrentRoute: vi.fn(() => false),
+  localePath: (path: string): string => `/fr${path === '#' ? '#' : path}`,
 }));
 
 const mockSearchArtworks = vi.fn().mockResolvedValue([]);
