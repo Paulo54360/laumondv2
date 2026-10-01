@@ -12,16 +12,36 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import { useI18n } from 'vue-i18n';
-  import presseMikado1 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-2027.jpg';
-  import presseMikado2 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20272.jpg';
-  import presseMikado3 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20273.jpg';
-  import presseMikado4 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20274.jpg';
-  import presseVerre1 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAVERRE-byYMG122-2027.jpg';
-  import presseVerre2 from '~/assets/images/common/presse/AFFICHE-PATRICK LAUMOND-METHAVERRE-byYMG122-20272.jpg';
 
   definePageMeta({ layout: 'default' });
 
   const { t } = useI18n();
+  const presseDir = '../assets/images/common/presse';
+
+  const presseMikado1 = new URL(
+    `${presseDir}/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-2027.jpg`,
+    import.meta.url
+  ).href;
+  const presseMikado2 = new URL(
+    `${presseDir}/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20272.jpg`,
+    import.meta.url
+  ).href;
+  const presseMikado3 = new URL(
+    `${presseDir}/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20273.jpg`,
+    import.meta.url
+  ).href;
+  const presseMikado4 = new URL(
+    `${presseDir}/AFFICHE-PATRICK LAUMOND-METHAMIKADO-byYMG122-20274.jpg`,
+    import.meta.url
+  ).href;
+  const presseVerre1 = new URL(
+    `${presseDir}/AFFICHE-PATRICK LAUMOND-METHAVERRE-byYMG122-2027.jpg`,
+    import.meta.url
+  ).href;
+  const presseVerre2 = new URL(
+    `${presseDir}/AFFICHE-PATRICK LAUMOND-METHAVERRE-byYMG122-20272.jpg`,
+    import.meta.url
+  ).href;
 
   const pageTitle = computed(() => t('grandMikado.pageTitle'));
 
@@ -57,4 +77,7 @@
   });
 </script>
 
-<style lang="scss" src="~/assets/css/pages/le-grand-mikado-de-la-pensee-humaine.scss"></style>
+<style
+  lang="scss"
+  src="~/assets/css/pages/le-grand-mikado-de-la-pensee-humaine.scss"
+></style>
