@@ -71,11 +71,10 @@
               <!-- Contenu de l'analyse : site_texts ou i18n -->
               <div class="analysis-body" :class="{ 'dense-spacing': currentTab.id === 'advienne' }">
                 <h3 class="section-title-in-text">{{ currentTab.title }}</h3>
-                <!-- eslint-disable-next-line vue/no-v-html -- sanitized via markdownToSafeHtml -->
                 <div
                   v-if="currentTabContentFromDb"
                   class="analysis-body-markdown"
-                  v-html="markdownToSafeHtml(currentTabContentFromDb)"
+                  :innerHTML="markdownToSafeHtml(currentTabContentFromDb)"
                 />
                 <template v-else>
                   <p

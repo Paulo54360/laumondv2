@@ -35,7 +35,6 @@
 
   const pageTitle = computed(() => t('grandMikado.pageTitle'));
   const workTitle = computed(() => t('grandMikado.workTitle'));
-  const summary = computed(() => t('grandMikado.summary'));
   const backToAnalyses = computed(() => t('grandMikado.backToAnalyses'));
 
   const images = computed(() => [
