@@ -5,7 +5,12 @@
       <figure v-for="image in images" :key="image.src" class="gallery-figure">
         <picture class="gallery-picture">
           <source media="(max-width: 768px)" :srcset="image.mobileSrc" />
-          <img :src="image.src" :alt="image.alt" class="gallery-image" />
+          <img
+            :src="image.src"
+            :alt="image.alt"
+            class="gallery-image"
+            :class="{ 'gallery-image--mobile-rotated': image.mobileSrc !== image.src }"
+          />
         </picture>
       </figure>
     </section>
