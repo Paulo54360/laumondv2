@@ -3,15 +3,18 @@
   min-height: 100vh;
   background: #f7f7f4;
   scroll-snap-type: y mandatory;
+  margin-top: -2rem;
 
   .page-gallery {
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
 
   .gallery-figure {
     position: relative;
     margin: 0;
+    width: 100%;
     min-height: 100vh;
     height: 100vh;
     scroll-snap-align: start;
@@ -19,11 +22,17 @@
     background: #fbfbf8;
   }
 
+  .gallery-picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   .gallery-image {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center center;
   }
 }

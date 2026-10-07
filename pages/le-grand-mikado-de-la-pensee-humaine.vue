@@ -3,7 +3,10 @@
   <div class="grand-mikado-page">
     <section class="page-gallery" aria-label="Revue de presse en plein écran">
       <figure v-for="image in images" :key="image.src" class="gallery-figure">
-        <img :src="image.src" :alt="image.alt" class="gallery-image" />
+        <picture class="gallery-picture">
+          <source media="(max-width: 768px)" :srcset="image.mobileSrc" />
+          <img :src="image.src" :alt="image.alt" class="gallery-image" />
+        </picture>
       </figure>
     </section>
   </div>
@@ -20,14 +23,19 @@
     eager: true,
     import: 'default',
   }) as Record<string, string>;
+  const presseImagesMobile = import.meta.glob('../assets/images/common/presse vertical/*.jpg', {
+    eager: true,
+    import: 'default',
+  }) as Record<string, string>;
 
   const pageTitle = computed(() => t('grandMikado.pageTitle'));
 
   const images = computed(() =>
     Object.entries(presseImages)
       .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
-      .map(([, src]) => ({
+      .map(([path, src]) => ({
         src,
+        mobileSrc: presseImagesMobile[path.replace('/presse/', '/presse vertical/')] ?? src,
         alt: pageTitle.value,
       }))
   );
@@ -37,7 +45,4 @@
   });
 </script>
 
-<style
-  lang="scss"
-  src="~/assets/css/pages/le-grand-mikado-de-la-pensee-humaine.scss"
-></style>
+<style lang="scss" src="~/assets/css/pages/le-grand-mikado-de-la-pensee-humaine.scss"></style>
