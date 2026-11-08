@@ -113,6 +113,10 @@ export default defineEventHandler(async (event): Promise<GalleryResponse> => {
     throw createError({ statusCode: 404, statusMessage: 'Catégorie inconnue' });
   }
 
+  const config = useRuntimeConfig();
+  const rawBaseUrl = config.public.apiUrl as string | undefined;
+  const publicBaseUrl = rawBaseUrl ? rawBaseUrl.replace(/\/$/, '') : null;
+
   const supabase = getSupabaseAdminClient();
 
   const { data: categories, error: categoriesError } = await supabase

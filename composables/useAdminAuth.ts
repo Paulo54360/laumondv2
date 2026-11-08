@@ -2,7 +2,13 @@
  * Composable admin auth — Supabase Auth pour Patrick (back-office).
  * Expose login, logout, session, user, isAuthenticated.
  */
-import { createClient, type AuthResponse, type Session, type User } from '@supabase/supabase-js';
+import {
+  createClient,
+  type AuthResponse,
+  type Session,
+  type SupabaseClient,
+  type User,
+} from '@supabase/supabase-js';
 
 type AdminAuthComposable = {
   user: Ref<User | null>;
@@ -12,17 +18,25 @@ type AdminAuthComposable = {
   logout: () => Promise<void>;
 };
 
+// Singleton navigateur : une seule instance Supabase pour éviter les conflits
+// de verrou "Navigator LockManager" sur le token d'authentification.
+let browserClient: SupabaseClient | null = null;
+
+function getClient(url?: string, key?: string): SupabaseClient | null {
+  if (!url || !key) return null;
+  if (import.meta.server) return createClient(url, key, { auth: { persistSession: false } });
+  if (!browserClient) browserClient = createClient(url, key);
+  return browserClient;
+}
+
 export function useAdminAuth(): AdminAuthComposable {
   const config = useRuntimeConfig().public;
   const user = useState<User | null>('adminUser', () => null);
   const isAuthenticated = computed(() => !!user.value);
 
-  const supabase = computed(() => {
-    const url = config.supabaseUrl as string | undefined;
-    const key = config.supabaseKey as string | undefined;
-    if (!url || !key) return null;
-    return createClient(url, key);
-  });
+  const supabase = computed(() =>
+    getClient(config.supabaseUrl as string | undefined, config.supabaseKey as string | undefined)
+  );
 
   async function getSession(): Promise<Session | null> {
     const client = supabase.value;

@@ -77,6 +77,7 @@ export default defineEventHandler(async (event) => {
 
     // Initialisation du client Supabase
     const config = useRuntimeConfig();
+    const supabaseUrl = config.supabaseUrl;
     const supabaseKey = config.supabaseKey;
 
     if (!supabaseUrl || !supabaseKey) {
