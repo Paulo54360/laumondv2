@@ -15,10 +15,7 @@
     "lint": "eslint --ext .js,.ts,.vue .",
     "lint:fix": "eslint --ext .js,.ts,.vue . --fix",
     "format": "prettier --write .",
-    "test:anthropocene": "tsx scripts/test-anthropocene.ts",
-    "sync:transcriptions": "tsx scripts/sync-transcriptions-to-db.ts",
     "sync:all": "tsx scripts/sync-all-artworks.ts",
-    "migrate:artwork-images": "tsx scripts/migrate-artwork-images.ts",
     "bootstrap:site-texts": "tsx scripts/bootstrap-site-texts.ts",
     "verify:admin-auth": "tsx scripts/verify-admin-auth.ts"
   },
