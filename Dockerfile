@@ -23,10 +23,13 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
-# Copy necessary files from builder
-COPY --from=builder /app/.output ./.output
+# Copy necessary files from builder with correct ownership
+COPY --chown=node:node --from=builder /app/.output ./.output
 # Optional: Copy public folder if you have static assets not handled by Nuxt build
 # COPY --from=builder /app/public ./public
+
+# Use non-root user for security
+USER node
 
 # Expose the listening port
 EXPOSE 3000

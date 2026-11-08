@@ -30,7 +30,9 @@ function getNested(obj: I18nNode, path: string): string | undefined {
   const parts = path.split('.');
   let current: unknown = obj;
   for (const p of parts) {
+    if (p === '__proto__' || p === 'constructor' || p === 'prototype') return undefined;
     if (current == null || typeof current !== 'object') return undefined;
+    if (!Object.prototype.hasOwnProperty.call(current, p)) return undefined;
     current = (current as I18nNode)[p];
   }
   return typeof current === 'string' ? current : undefined;

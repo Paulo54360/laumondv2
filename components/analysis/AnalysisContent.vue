@@ -40,8 +40,8 @@
       <div class="translations">
         <div v-for="(translation, lang) in translations" :key="lang" class="translation">
           <h3>{{ t(`analyses.languages.${lang}`) }}</h3>
-          <!-- eslint-disable-next-line vue/no-v-html -- Contenu i18n/MD de confiance -->
-          <div v-html="translation"></div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="markdownToSafeHtml(translation)"></div>
         </div>
       </div>
     </div>
@@ -51,6 +51,8 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
+
+  import { markdownToSafeHtml } from '~/utils/markdown';
 
   const { t } = useI18n();
 
