@@ -75,7 +75,7 @@
           <input
             ref="fileInputRef"
             type="file"
-            accept="image/jpeg,image/png"
+            accept="image/jpeg,image/png,image/webp"
             multiple
             :disabled="loading"
             class="admin-upload__file-input"
@@ -125,6 +125,7 @@
   import { useI18n } from 'vue-i18n';
 
   import { mapCategoriesToCanonical, type RawCategoryRow } from '~/utils/adminCategories';
+  import { compressImageClient } from '~/utils/clientImageCompressor';
 
   const { t } = useI18n();
   const localePath = useLocalePath();
@@ -282,7 +283,8 @@
       formData.append('description', description.value);
       formData.append('categoryId', String(selectedCategoryId.value));
       for (const file of files.value) {
-        formData.append('files', file);
+        const fileToSend = await compressImageClient(file);
+        formData.append('files', fileToSend);
       }
 
       await $fetch('/api/admin/artworks', {

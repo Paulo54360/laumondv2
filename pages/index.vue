@@ -70,11 +70,9 @@
 
   await useAsyncData('site-texts', () => fetchTexts());
 
-  const biographyPortraitUrl =
-    // eslint-disable-next-line max-len
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/authors/Work+of+Identity+from+ID+Laumond.jpg';
+  const biographyPortraitUrl = '/api/media/autres/Work of Identity from ID Laumond.jpg';
   const mobileOuvertureImageUrl =
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/06.jpg';
+    '/api/media/Deployments/le-mobile-d-ouverture-des-univers-pa.webp';
 
   const localePath = (path: string): string => {
     const localeFromPath = route.path?.match(/^\/(fr|en)/)?.[1] || locale.value || 'fr';

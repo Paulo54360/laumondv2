@@ -1,4 +1,7 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import sharp from 'sharp';
+
+import { slugify } from '../../../utils/slugify';
 
 type FilePart = {
   filename?: string;
@@ -15,7 +18,7 @@ type ParsedForm = {
 };
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_MIME = new Set(['image/jpeg', 'image/png']);
+const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 function parseDeletedUrls(raw: string): string[] {
   if (!raw || !raw.trim()) return [];
@@ -202,15 +205,21 @@ export default defineEventHandler(async (event) => {
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const pos = maxPos + 1 + i;
-    const num = String(pos + 1).padStart(2, '0');
-    const imageKey = `${folderPath}/${num}.jpg`;
+    const catPrefix = folderPath.split('/')[0] || 'Archetypes';
+    const baseSlug = slugify(title).slice(0, 36) || `art-${artworkId}`;
+    const imageKey =
+      files.length === 1 && keptImages.length === 0
+        ? `${catPrefix}/${baseSlug}.webp`
+        : `${catPrefix}/${baseSlug}-${pos + 1}.webp`;
+
+    const webpBuffer = await sharp(file.data).rotate().webp({ quality: 85 }).toBuffer();
 
     await s3Client.send(
       new PutObjectCommand({
         Bucket: bucket,
         Key: imageKey,
-        Body: file.data,
-        ContentType: file.type || 'image/jpeg',
+        Body: webpBuffer,
+        ContentType: 'image/webp',
       })
     );
 
@@ -218,7 +227,7 @@ export default defineEventHandler(async (event) => {
     newUrls.push(imageUrl);
 
     const segments = imageUrl.split('/');
-    const filename = segments[segments.length - 1] ?? 'image.jpg';
+    const filename = segments[segments.length - 1] ?? 'image.webp';
     await supabase.from('artwork_images').insert({
       artwork_id: artworkId,
       url: imageUrl,

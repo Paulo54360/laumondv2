@@ -103,7 +103,7 @@
           <input
             ref="fileInputRef"
             type="file"
-            accept="image/jpeg,image/png"
+            accept="image/jpeg,image/png,image/webp"
             multiple
             :disabled="loading"
             class="admin-edit__file-input"
@@ -159,6 +159,7 @@
 
   import { useImageProxy } from '~/composables/useImageProxy';
   import { mapCategoriesToCanonical, type RawCategoryRow } from '~/utils/adminCategories';
+  import { compressImageClient } from '~/utils/clientImageCompressor';
 
   const { t } = useI18n();
   const route = useRoute();
@@ -333,7 +334,8 @@
       formData.append('categoryId', String(selectedCategoryId.value));
       formData.append('deletedImageUrls', JSON.stringify(deletedImageUrls.value));
       for (const f of newFiles.value) {
-        formData.append('files', f);
+        const fileToSend = await compressImageClient(f);
+        formData.append('files', fileToSend);
       }
 
       await $fetch(`/api/admin/artworks/${artworkId.value}`, {

@@ -1,4 +1,7 @@
-import { S3Client, ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import sharp from 'sharp';
+
+import { slugify } from '../../utils/slugify';
 
 type CategoryRow = {
   id: number;
@@ -20,7 +23,7 @@ type ParsedForm = {
 };
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_MIME = new Set(['image/jpeg', 'image/png']);
+const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 function normalizeCategory(value?: string | null): string {
   return (value || '')
@@ -39,14 +42,20 @@ function resolveCategoryPrefix(category: CategoryRow): string | null {
     ['deployments', 'Deployments'],
     ['deploiement', 'Deployments'],
     ['deploiements', 'Deployments'],
-    ['drawings', 'Drawings+'],
-    ['drawing', 'Drawings+'],
-    ['dessin', 'Drawings+'],
-    ['drawings+', 'Drawings+'],
+    ['drawings', 'Drawings'],
+    ['drawing', 'Drawings'],
+    ['dessin', 'Drawings'],
+    ['drawings+', 'Drawings'],
     ['transcriptions', 'Transcriptions'],
     ['transcription', 'Transcriptions'],
   ]);
-  return map.get(normalized) || null;
+  const matched = map.get(normalized);
+  if (matched) return matched;
+
+  // Catégorie dynamique personnalisée (ex: Portraits, Auteurs...)
+  const raw = (category.path || category.name || '').replace(/^images\//, '').trim();
+  if (!raw) return null;
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
 }
 
 async function parseMultipart(event: H3Event): Promise<ParsedForm> {
@@ -100,33 +109,6 @@ async function parseMultipart(event: H3Event): Promise<ParsedForm> {
       data: p.data,
     })),
   };
-}
-
-async function listFolders(s3: S3Client, bucket: string, prefix: string): Promise<string[]> {
-  const folders = new Set<string>();
-  let continuationToken: string | undefined;
-  do {
-    const res = await s3.send(
-      new ListObjectsV2Command({
-        Bucket: bucket,
-        Prefix: `${prefix}/`,
-        Delimiter: '/',
-        ContinuationToken: continuationToken,
-      })
-    );
-    const prefixSlash = `${prefix}/`;
-    for (const common of res.CommonPrefixes || []) {
-      const p = common.Prefix;
-      if (p && p.startsWith(prefixSlash) && p.endsWith('/')) {
-        const sub = p.slice(prefixSlash.length, -1);
-        if (/^\d+$/.test(sub)) {
-          folders.add(sub);
-        }
-      }
-    }
-    continuationToken = res.IsTruncated ? res.NextContinuationToken : undefined;
-  } while (continuationToken);
-  return Array.from(folders);
 }
 
 export default defineEventHandler(async (event) => {
@@ -185,29 +167,44 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  const folders = await listFolders(s3, bucket, prefix);
-  const maxFolder = folders
-    .map((f) => Number(f))
-    .filter((n) => !Number.isNaN(n))
-    .sort((a, b) => b - a)[0];
-  const nextFolderNum = (maxFolder ?? 0) + 1;
-  const folder = String(nextFolderNum).padStart(2, '0');
-  const folderPath = `${prefix}/${folder}`;
-  const publicBase = config.public.apiUrl;
+  // Structure 100% plate sans sous-dossier (ex: Archetypes/jusqu-au-boutisme.webp)
+  const baseSlug = slugify(title).slice(0, 36) || 'oeuvre';
+  let fileSlug = baseSlug;
+  let counter = 1;
 
+  while (true) {
+    const candidateKey = `${prefix}/${fileSlug}.webp`;
+    const { data: existing } = await supabase
+      .from('artworks')
+      .select('id')
+      .ilike('image_urls', `%"${config.public.apiUrl}/${candidateKey}"%`)
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (!existing) {
+      break;
+    }
+    counter++;
+    fileSlug = `${baseSlug}-${counter}`;
+  }
+
+  const publicBase = config.public.apiUrl;
   const imageUrls: string[] = [];
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    const num = String(i + 1).padStart(2, '0');
-    const imageKey = `${folderPath}/${num}.jpg`;
+    const imageKey =
+      files.length === 1 ? `${prefix}/${fileSlug}.webp` : `${prefix}/${fileSlug}-${i + 1}.webp`;
+
+    // Conversion automatique en WebP optimisé avec sharp
+    const webpBuffer = await sharp(file.data).rotate().webp({ quality: 85 }).toBuffer();
 
     await s3.send(
       new PutObjectCommand({
         Bucket: bucket,
         Key: imageKey,
-        Body: file.data,
-        ContentType: file.type || 'image/jpeg',
+        Body: webpBuffer,
+        ContentType: 'image/webp',
       })
     );
 
@@ -224,8 +221,8 @@ export default defineEventHandler(async (event) => {
       description_fr: description || null,
       description_en: description || null,
       category_id: categoryId,
-      folder_path: folderPath,
-      subcategory: folder,
+      folder_path: prefix,
+      subcategory: fileSlug,
       image_urls: JSON.stringify(imageUrls),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

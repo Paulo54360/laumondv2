@@ -46,11 +46,16 @@ export function mapCategoriesToCanonical(
   rows: RawCategoryRow[]
 ): Array<{ id: number; name: string }> {
   const candidates = new Map<CanonicalEntry['key'], { row: RawCategoryRow; score: number }>();
+  const customCategories: Array<{ id: number; name: string }> = [];
+  const handledIds = new Set<number>();
 
   for (const row of rows ?? []) {
     const normalized = normalize(row.path || row.name);
     const key = VARIANTS.get(normalized);
-    if (!key) continue;
+    if (!key) {
+      customCategories.push({ id: row.id, name: row.name });
+      continue;
+    }
 
     const canonicalEntry = CANONICAL.find((entry) => entry.key === key);
     const pathMatch =
@@ -65,8 +70,21 @@ export function mapCategoriesToCanonical(
     }
   }
 
-  return CANONICAL.map((entry) => {
+  const result: Array<{ id: number; name: string }> = [];
+
+  for (const entry of CANONICAL) {
     const candidate = candidates.get(entry.key)?.row;
-    return candidate ? { id: candidate.id, name: entry.label } : null;
-  }).filter((entry): entry is { id: number; name: string } => entry !== null);
+    if (candidate) {
+      result.push({ id: candidate.id, name: entry.label });
+      handledIds.add(candidate.id);
+    }
+  }
+
+  for (const custom of customCategories) {
+    if (!handledIds.has(custom.id)) {
+      result.push(custom);
+    }
+  }
+
+  return result;
 }

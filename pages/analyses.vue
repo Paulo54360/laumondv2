@@ -355,12 +355,12 @@
   const currentImageIndex = ref(0);
   const showFullText = ref(false);
 
-  // Ajout des URLs des avatars pour simplifier
+  // URLs des avatars servies via le proxy média sécurisé
   const authorAvatars: Record<string, string> = {
-    'Marion Zilio': `${S3_BASE_URL}/authors/marion-zilio.jpg`,
-    'Isabelle de Maison Rouge': `${S3_BASE_URL}/authors/isabelle-de-maison-rouge.png`,
-    'Edith Herlemont-Lassiat': `${S3_BASE_URL}/authors/default-avatar.jpg`,
-    default: `${S3_BASE_URL}/authors/default-avatar.jpg`,
+    'Marion Zilio': '/api/media/autres/marion-zilio.jpg',
+    'Isabelle de Maison Rouge': '/api/media/autres/isabelle-de-maison-rouge.png',
+    'Edith Herlemont-Lassiat': '/api/media/autres/default-avatar.jpg',
+    default: '/api/media/autres/default-avatar.jpg',
   };
 
   const currentTab = computed((): ITab | undefined =>
