@@ -253,11 +253,10 @@ export function useS3(): IUseS3Return {
             return;
           }
 
-          const textData = await fetchTextMetadata(item.textUrl, bucketUrl);
           const artwork: IGalleryArtwork = {
-            titleFr: textData.title || item.titleFr || '',
-            titleEn: item.titleEn || textData.title || item.titleFr || '',
-            descriptionFr: textData.description || item.descriptionFr || '',
+            titleFr: item.titleFr || '',
+            titleEn: item.titleEn || item.titleFr || '',
+            descriptionFr: item.descriptionFr || '',
             descriptionEn: item.descriptionEn || '',
             images: item.images,
           };

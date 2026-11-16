@@ -237,16 +237,6 @@ export default defineEventHandler(async (event) => {
       .in('url', deletedImageUrls);
   }
 
-  const textKey = `${folderPath}/01.txt`;
-  await s3Client.send(
-    new PutObjectCommand({
-      Bucket: bucket,
-      Key: textKey,
-      Body: title,
-      ContentType: 'text/plain',
-    })
-  );
-
   const { error: updateError } = await supabase
     .from('artworks')
     .update({

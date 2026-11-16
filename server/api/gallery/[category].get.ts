@@ -96,13 +96,6 @@ function ensureArray(value: unknown): string[] {
   return [];
 }
 
-function buildTextUrl(imageUrl?: string, fallback?: string | null): string | null {
-  if (imageUrl) {
-    return imageUrl.replace(/\.(jpg|jpeg|png|webp)$/i, '.txt');
-  }
-  return fallback ?? null;
-}
-
 export default defineEventHandler(async (event): Promise<GalleryResponse> => {
   const categoryParam = event.context.params?.category || '';
   const normalizedParam = normalize(categoryParam);
@@ -170,9 +163,6 @@ export default defineEventHandler(async (event): Promise<GalleryResponse> => {
         images.push(`${publicBaseUrl}/${row.folder_path}/01.jpg`);
       }
 
-      const fallbackTextUrl =
-        publicBaseUrl && row.folder_path ? `${publicBaseUrl}/${row.folder_path}/01.txt` : null;
-
       const fallbackTitle = row.title || `Œuvre ${row.subcategory || ''}`.trim();
       const descFr = row.description_fr ?? row.description ?? '';
       const descEn = row.description_en ?? '';
@@ -186,7 +176,7 @@ export default defineEventHandler(async (event): Promise<GalleryResponse> => {
         images,
         folder: row.subcategory,
         folderPath: row.folder_path,
-        textUrl: buildTextUrl(images[0], fallbackTextUrl),
+        textUrl: null,
         createdAt: row.created_at,
       };
     }) ?? [];

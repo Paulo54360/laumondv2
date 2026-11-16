@@ -98,7 +98,8 @@ async function syncCategory(config: CategoryConfig) {
 
     if (createError || !newCat) {
       console.error(
-        `❌ Erreur lors de la création de la catégorie "${config.categoryName}":`,
+        '❌ Erreur lors de la création de la catégorie "%s":',
+        config.categoryName,
         createError?.message
       );
       return { added: 0, updated: 0, skipped: 0 };
@@ -182,7 +183,7 @@ async function syncCategory(config: CategoryConfig) {
                 suffix++;
                 uniqueTitle = `${cleanTitle} (${suffix})`;
               } else {
-                console.error(`     ⚠️  Erreur mise à jour "${cleanTitle}":`, updateError.message);
+                console.error('     ⚠️  Erreur mise à jour "%s":', cleanTitle, updateError.message);
                 skipped++;
                 break; // Erreur non gérée
               }
@@ -195,7 +196,8 @@ async function syncCategory(config: CategoryConfig) {
 
           if (!success && retryCount >= 10) {
             console.error(
-              `     ⚠️  Impossible de mettre à jour "${cleanTitle}" après plusieurs tentatives (doublons)`
+              '     ⚠️  Impossible de mettre à jour "%s" après plusieurs tentatives (doublons)',
+              cleanTitle
             );
             skipped++;
           }
@@ -235,7 +237,7 @@ async function syncCategory(config: CategoryConfig) {
               suffix = suffix === 0 ? 2 : suffix + 1;
               retryCount++;
             } else {
-              console.error(`     ❌ Erreur ajout "${uniqueTitle}":`, insertError.message);
+              console.error('     ❌ Erreur ajout "%s":', uniqueTitle, insertError.message);
               skipped++;
               break;
             }

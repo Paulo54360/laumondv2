@@ -33,6 +33,7 @@ function getNested(obj: I18nNode, path: string): string | undefined {
     if (p === '__proto__' || p === 'constructor' || p === 'prototype') return undefined;
     if (current == null || typeof current !== 'object') return undefined;
     if (!Object.prototype.hasOwnProperty.call(current, p)) return undefined;
+    // nosemgrep: javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop
     current = (current as I18nNode)[p];
   }
   return typeof current === 'string' ? current : undefined;
@@ -451,7 +452,7 @@ async function main(): Promise<void> {
       .from('site_texts')
       .upsert(payload, { onConflict: 'slug', ignoreDuplicates: false });
     if (error) {
-      console.error(`❌ Erreur pour ${entry.slug}:`, error.message);
+      console.error('❌ Erreur pour %s:', entry.slug, error.message);
       process.exit(1);
     }
     console.log(`✅ ${entry.slug}`);

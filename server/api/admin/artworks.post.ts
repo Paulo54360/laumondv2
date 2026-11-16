@@ -215,16 +215,6 @@ export default defineEventHandler(async (event) => {
     imageUrls.push(imageUrl);
   }
 
-  const textKey = `${folderPath}/01.txt`;
-  await s3.send(
-    new PutObjectCommand({
-      Bucket: bucket,
-      Key: textKey,
-      Body: title,
-      ContentType: 'text/plain',
-    })
-  );
-
   const { data: inserted, error: insertError } = await supabase
     .from('artworks')
     .insert({
