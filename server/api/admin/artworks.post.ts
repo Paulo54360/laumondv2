@@ -114,11 +114,15 @@ async function listFolders(s3: S3Client, bucket: string, prefix: string): Promis
         ContinuationToken: continuationToken,
       })
     );
-    const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const folderRegex = new RegExp(`^${escapedPrefix}/(\\d+)/$`);
+    const prefixSlash = `${prefix}/`;
     for (const common of res.CommonPrefixes || []) {
-      const match = common.Prefix?.match(folderRegex);
-      if (match?.[1]) folders.add(match[1]);
+      const p = common.Prefix;
+      if (p && p.startsWith(prefixSlash) && p.endsWith('/')) {
+        const sub = p.slice(prefixSlash.length, -1);
+        if (/^\d+$/.test(sub)) {
+          folders.add(sub);
+        }
+      }
     }
     continuationToken = res.IsTruncated ? res.NextContinuationToken : undefined;
   } while (continuationToken);

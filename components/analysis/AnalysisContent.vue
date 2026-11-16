@@ -40,6 +40,7 @@
       <div class="translations">
         <div v-for="(translation, lang) in translations" :key="lang" class="translation">
           <h3>{{ t(`analyses.languages.${lang}`) }}</h3>
+          <!-- nosemgrep: javascript.vue.security.audit.xss.templates.avoid-v-html.avoid-v-html -->
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="markdownToSafeHtml(translation)"></div>
         </div>

@@ -79,10 +79,7 @@ export default defineNuxtConfig({
     build: {
       rollupOptions: {
         onwarn(warning, warn) {
-          if (
-            warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
-            warning.message.includes('@supabase/')
-          ) {
+          if (warning.code === 'UNUSED_EXTERNAL_IMPORT' && warning.message.includes('@supabase/')) {
             return;
           }
           warn(warning);

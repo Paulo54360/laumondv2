@@ -152,11 +152,7 @@
 
         <!-- Cartes mobile / tablette -->
         <div class="admin-artworks__cards">
-          <article
-            v-for="item in items"
-            :key="item.id"
-            class="admin-artworks__card"
-          >
+          <article v-for="item in items" :key="item.id" class="admin-artworks__card">
             <div class="admin-artworks__card-thumb">
               <img
                 v-if="item.thumbnailUrl"

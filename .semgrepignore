@@ -1,0 +1,10 @@
+# Ignore BMAD workflow/agent templates and documentation
+_bmad/
+_bmad-output/
+
+# Build artifacts & dependencies
+node_modules/
+.nuxt/
+.output/
+dist/
+

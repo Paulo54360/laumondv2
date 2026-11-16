@@ -10,7 +10,7 @@ jobs:
     environment: Production
     steps:
       - name: Renew certificate over SSH
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@7eaf76671a0eb5032a50a3103cf29dceec7724da # v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}

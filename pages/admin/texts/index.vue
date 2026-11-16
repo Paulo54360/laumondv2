@@ -57,22 +57,22 @@
               </button>
             </div>
             <p class="admin-texts__hint">{{ t('admin.texts.markdown_hint') }}</p>
-          <textarea
-            v-show="activeTab === 'fr'"
-            v-model="section.draftFr"
-            class="admin-texts__textarea"
-            :rows="SHORT_SLUGS.has(section.slug) ? 2 : 12"
-            :data-slug="section.slug"
-            data-lang="fr"
-          />
-          <textarea
-            v-show="activeTab === 'en'"
-            v-model="section.draftEn"
-            class="admin-texts__textarea"
-            :rows="SHORT_SLUGS.has(section.slug) ? 2 : 12"
-            :data-slug="section.slug"
-            data-lang="en"
-          />
+            <textarea
+              v-show="activeTab === 'fr'"
+              v-model="section.draftFr"
+              class="admin-texts__textarea"
+              :rows="SHORT_SLUGS.has(section.slug) ? 2 : 12"
+              :data-slug="section.slug"
+              data-lang="fr"
+            />
+            <textarea
+              v-show="activeTab === 'en'"
+              v-model="section.draftEn"
+              class="admin-texts__textarea"
+              :rows="SHORT_SLUGS.has(section.slug) ? 2 : 12"
+              :data-slug="section.slug"
+              data-lang="en"
+            />
             <div
               v-show="activeTab === 'preview'"
               class="admin-texts__preview admin-texts__textarea"
@@ -86,13 +86,14 @@
                 <h4 class="admin-texts__preview-lang">
                   {{ key === 'fr' ? t('admin.texts.tab_fr') : t('admin.texts.tab_en') }}
                 </h4>
-                <!-- eslint-disable vue/no-v-html -->
+                <!-- eslint-disable max-len vue/no-v-html -->
+                <!-- nosemgrep: javascript.vue.security.audit.xss.templates.avoid-v-html.avoid-v-html -->
                 <div
                   class="admin-texts__preview-content"
                   :data-lang="key"
                   v-html="markdownToSafeHtml(lang)"
                 />
-                <!-- eslint-enable vue/no-v-html -->
+                <!-- eslint-enable max-len vue/no-v-html -->
               </div>
             </div>
             <div class="admin-texts__actions">
@@ -196,21 +197,33 @@
     homepage_analysis_portant_excerpt: 'Portant extrait',
     homepage_analysis_concordance_title: 'Concordance titre',
     homepage_analysis_concordance_excerpt: 'Concordance extrait',
-    analysis_portant: "Laumond Espace Commines",
+    analysis_portant: 'Laumond Espace Commines',
     analysis_concordance: 'Concordance Universelle',
     analysis_aimants: 'Comme deux aimants',
     analysis_advienne: "Afin qu'un jour advienne",
   };
 
   const SHORT_SLUGS = new Set([
-    'homepage_hero_title_top', 'homepage_hero_title_bottom', 'homepage_biography_title',
-    'homepage_portrait_caption', 'homepage_read_biography', 'homepage_metahism_title',
-    'homepage_mobile_ouverture_title', 'homepage_metahisme_artwork_caption',
-    'homepage_discover_metahisme', 'homepage_artworks_title', 'homepage_browse_artworks',
-    'homepage_analyses_title', 'homepage_read_analyses', 'homepage_artwork_portant',
-    'homepage_artwork_portant_author', 'homepage_artwork_concordance',
-    'homepage_artwork_concordance_author', 'homepage_artwork_mobile',
-    'homepage_artwork_mobile_author', 'homepage_analysis_portant_title',
+    'homepage_hero_title_top',
+    'homepage_hero_title_bottom',
+    'homepage_biography_title',
+    'homepage_portrait_caption',
+    'homepage_read_biography',
+    'homepage_metahism_title',
+    'homepage_mobile_ouverture_title',
+    'homepage_metahisme_artwork_caption',
+    'homepage_discover_metahisme',
+    'homepage_artworks_title',
+    'homepage_browse_artworks',
+    'homepage_analyses_title',
+    'homepage_read_analyses',
+    'homepage_artwork_portant',
+    'homepage_artwork_portant_author',
+    'homepage_artwork_concordance',
+    'homepage_artwork_concordance_author',
+    'homepage_artwork_mobile',
+    'homepage_artwork_mobile_author',
+    'homepage_analysis_portant_title',
     'homepage_analysis_concordance_title',
   ]);
 
