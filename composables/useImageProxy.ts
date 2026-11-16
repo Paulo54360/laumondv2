@@ -1,21 +1,50 @@
 /**
- * URL relative vers le proxy Nitro pour les assets sous NUXT_PUBLIC_API_URL (S3).
- * Utilisable pour les images et les .txt (titres) afin d'éviter le CORS navigateur.
+ * URL relative vers le gestionnaire de médias pour masquer S3 dans l'inspecteur d'élément.
+ * Convertit toute URL S3 absolue ou chemin relatif en route anonyme /api/media/...
  */
 export function proxyUrlForPublicS3Asset(
   assetUrl: string | null | undefined,
   publicBaseUrl: string
 ): string {
   if (!assetUrl || typeof assetUrl !== 'string' || !assetUrl.trim()) return '';
-  const base = publicBaseUrl.replace(/\/$/, '');
   const u = assetUrl.trim();
-  if (!base || !u.startsWith(base)) return u;
-  return `/api/image-proxy?url=${encodeURIComponent(u)}`;
+
+  // Si c'est déjà une route média locale
+  if (u.startsWith('/api/media/')) {
+    return u;
+  }
+
+  // Si c'est une URL S3 absolue (ex: https://plaumondpicture.s3.eu-west-3.amazonaws.com/...)
+  const base = publicBaseUrl ? publicBaseUrl.replace(/\/$/, '') : '';
+  if (base && u.startsWith(base)) {
+    const relativePath = u.slice(base.length).replace(/^\/+/, '');
+    return `/api/media/${relativePath}`;
+  }
+
+  // Si c'est une ancienne URL du proxy legacy
+  if (u.startsWith('/api/image-proxy?url=')) {
+    try {
+      const rawUrl = new URL(u, 'http://localhost').searchParams.get('url');
+      if (rawUrl) {
+        return proxyUrlForPublicS3Asset(rawUrl, publicBaseUrl);
+      }
+    } catch {
+      // Ignore
+    }
+  }
+
+  // Si c'est déjà une URL HTTP externe d'un autre domaine (non S3)
+  if (/^https?:\/\//i.test(u)) {
+    return u;
+  }
+
+  // Si c'est un chemin relatif pur (ex: Archetypes/02/01.jpg)
+  const cleanPath = u.replace(/^\/+/, '');
+  return `/api/media/${cleanPath}`;
 }
 
 /**
- * Retourne une URL passant par le proxy serveur pour les images S3,
- * afin d'éviter les blocages CORS quand le bucket n'envoie pas les bons en-têtes.
+ * Composable Nuxt retournant la fonction de masquage d'URL pour les images
  */
 export function useImageProxy(): (url: string | undefined | null) => string {
   const config = useRuntimeConfig();
