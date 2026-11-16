@@ -48,6 +48,7 @@ const CATEGORY_ALIASES: Record<string, string[]> = {
     'images/drawings',
     'drawingsplus',
   ],
+  autres: ['autres', 'autre', 'other', 'others', 'images/autres'],
 };
 
 const CATEGORY_REDIRECTS: Record<string, keyof typeof CATEGORY_ALIASES> = {
@@ -60,6 +61,10 @@ const CATEGORY_REDIRECTS: Record<string, keyof typeof CATEGORY_ALIASES> = {
   drawing: 'drawings',
   drawings: 'drawings',
   transcriptions: 'transcriptions',
+  autres: 'autres',
+  autre: 'autres',
+  other: 'autres',
+  others: 'autres',
 };
 
 function normalize(value?: string | null): string {

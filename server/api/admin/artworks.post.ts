@@ -48,6 +48,10 @@ function resolveCategoryPrefix(category: CategoryRow): string | null {
     ['drawings+', 'Drawings'],
     ['transcriptions', 'Transcriptions'],
     ['transcription', 'Transcriptions'],
+    ['autres', 'autres'],
+    ['autre', 'autres'],
+    ['other', 'autres'],
+    ['others', 'autres'],
   ]);
   const matched = map.get(normalized);
   if (matched) return matched;

@@ -50,34 +50,34 @@
   const drawingsLink = computed(() => `/${currentLocale.value}/drawings`);
   const transcriptionsLink = computed(() => `/${currentLocale.value}/transcriptions`);
 
-  // URLs des images - Modifiez directement ces tableaux avec vos liens
+  // URLs des images servies via le proxy média sécurisé
   const imageUrlsArchetypes = ref([
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/04/07.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/09/11.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/09/05.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Archetypes/03/02.jpg',
+    '/api/media/Archetypes/jusqu-au-boutisme.webp',
+    '/api/media/Archetypes/outreconscience.webp',
+    '/api/media/Archetypes/ubiquite-quantique.webp',
+    '/api/media/Archetypes/la-convergence-du-dialogue.webp',
   ]);
 
   const imageUrlsDeployments = ref([
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/05/01.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/01/03.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/02/01.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Deployments/00/03.jpg',
+    '/api/media/Deployments/cairn-blanc-galerie-du-theatre-de-la.webp',
+    '/api/media/Deployments/concordance-universelle-2022.webp',
+    '/api/media/Deployments/le-mobile-d-ouverture-des-univers-pa.webp',
+    '/api/media/Deployments/mutation-de-la-pensee-globale-et-la-.webp',
   ]);
 
   const imageUrlsDrawings = ref([
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/01.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/02.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/03.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Drawings+/01/04.jpg',
+    '/api/media/Drawings/etude-preparatoire-de-la-genese-de-p.webp',
+    '/api/media/Drawings/etude-preparatoire-de-la-genese-de-p-230.webp',
+    '/api/media/Drawings/etude-preparatoire-de-la-genese-de-p-231.webp',
+    '/api/media/Drawings/etude-preparatoire-de-la-genese-de-p-232.webp',
   ]);
 
   const imageUrlsTranscriptions = ref([
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/01.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/02.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/03.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/04.jpg',
-    'https://plaumondpicture.s3.eu-west-3.amazonaws.com/Transcriptions/02/05.jpg',
+    '/api/media/Transcriptions/alea-du-mi-clos.webp',
+    '/api/media/Transcriptions/au-dela-de-l-impact.webp',
+    '/api/media/Transcriptions/avant-maintenant-apres-a-m-a.webp',
+    '/api/media/Transcriptions/balance-des-blancs.webp',
+    '/api/media/Transcriptions/chrysalide.webp',
   ]);
 </script>
 

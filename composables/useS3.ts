@@ -44,6 +44,10 @@ const CATEGORY_SLUGS: Record<string, string> = {
   deployments: 'deployments',
   drawing: 'drawings',
   drawings: 'drawings',
+  autres: 'autres',
+  autre: 'autres',
+  other: 'autres',
+  others: 'autres',
 };
 
 async function isImageReachable(url?: string, publicBaseUrl?: string): Promise<boolean> {

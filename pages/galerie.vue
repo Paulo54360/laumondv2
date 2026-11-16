@@ -36,6 +36,7 @@
     { id: 'archetype', label: 'Archétypes' },
     { id: 'deploiement', label: 'Déploiements' },
     { id: 'drawing', label: 'Dessins+' },
+    { id: 'autres', label: 'Autres' },
   ];
 
   const currentCategory = ref(categories[0].id);

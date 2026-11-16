@@ -247,7 +247,8 @@
       "transcriptions": "Transcriptions",
       "archetype": "Archetypes",
       "deploiement": "Deployments",
-      "drawing": "Drawings"
+      "drawing": "Drawings",
+      "autres": "Other"
     }
   },
   "analyses": {
