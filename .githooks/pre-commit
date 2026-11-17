@@ -1,0 +1,22 @@
+#!/bin/sh
+# Git pre-commit hook — Patrick Laumond (laumond-nuxt)
+# Empêche de committer du code qui ne respecte pas le linter / formatage
+
+echo ""
+echo "🔍 [pre-commit] Vérification ESLint avant commit..."
+
+npm run lint
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo ""
+  echo "❌ [pre-commit] Erreur de linting détectée !"
+  echo "💡 Vous pouvez tenter de corriger automatiquement avec : npm run lint:fix"
+  echo "Commit annulé."
+  echo ""
+  exit 1
+fi
+
+echo "✅ [pre-commit] Linter validé avec succès."
+echo ""
+exit 0

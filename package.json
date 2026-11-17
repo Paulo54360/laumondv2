@@ -10,7 +10,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
+    "postinstall": "nuxt prepare && git config core.hooksPath .githooks 2>/dev/null || true",
     "test": "NODE_OPTIONS='--no-deprecation' vitest",
     "lint": "eslint --ext .js,.ts,.vue .",
     "lint:fix": "eslint --ext .js,.ts,.vue . --fix",
