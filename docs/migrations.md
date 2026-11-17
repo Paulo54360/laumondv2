@@ -2,12 +2,23 @@
 
 Migrations pour le back-office complet (œuvres + textes éditoriaux). À exécuter **dans l’ordre** via le SQL Editor Supabase (Dashboard → SQL Editor).
 
+> **En cas de restauration complète (Disaster Recovery / Crash)** :  
+> Le fichier unique `supabase/schema.sql` contient la totalité du schéma (tables, clés étrangères, index, RLS, catégories initiales) et peut être exécuté d'un seul bloc sur une base vierge.
+
 ## 1. Prérequis
 
 - Accès au projet Supabase (rôle owner ou équivalent)
 - `.env` configuré avec `SUPABASE_URL` et `SUPABASE_SERVICE_ROLE_KEY`
 
 ## 2. Ordre d’exécution
+
+### Étape 0 : Schéma initial categories et artworks
+
+Fichier : `supabase/migrations/20260203000000_initial_schema.sql`
+
+- Extensions (`pg_trgm`, `uuid-ossp`, `pgcrypto`)
+- Crée la table `categories` et pré-remplit les catégories par défaut
+- Crée la table de base `artworks`
 
 ### Étape 1 : Soft delete sur `artworks`
 

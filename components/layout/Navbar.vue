@@ -5,6 +5,13 @@
       <!-- Logo / Titre -->
       <div class="navbar-brand">
         <NuxtLink :to="localePath('/')" class="brand-link">
+          <img
+            src="/images/logo.webp"
+            alt="Patrick Laumond Logo"
+            class="brand-logo"
+            width="42"
+            height="42"
+          />
           <div class="brand-title">
             <span class="brand-name-top">Patrick</span>
             <span class="brand-name-bottom">Laumond</span>

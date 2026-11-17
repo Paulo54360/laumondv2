@@ -22,7 +22,7 @@ async function main() {
   const { width = 0, height = 0 } = meta;
   const size = Math.max(width, height, 256);
   const squared = await sharp(inputPath)
-    .resize(size, size, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
+    .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .resize(256, 256)
     .png()
     .toFile(tempSquarePath);
