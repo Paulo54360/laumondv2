@@ -7,6 +7,7 @@
     </main>
     <TheFooter />
     <ButtonUpPage />
+    <CuriousPath />
     <!-- Bouton flottant admin : visible uniquement si connecté et hors pages admin -->
     <ClientOnly>
       <AdminFloatingButton v-if="!isAdminPage" />
@@ -17,6 +18,7 @@
 <script setup lang="ts">
   import AdminFloatingButton from '~/components/admin/AdminFloatingButton.vue';
   import ButtonUpPage from '~/components/base/ButtonUpPage.vue';
+  import CuriousPath from '~/components/layout/CuriousPath.vue';
   import Navbar from '~/components/layout/Navbar.vue';
   import TheFooter from '~/components/layout/TheFooter.vue';
 

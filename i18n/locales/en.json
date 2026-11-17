@@ -231,6 +231,23 @@
     "search": "Search",
     "scroll_to_top": "Scroll to top"
   },
+  "easter_egg": {
+    "title": "Well done, you have a keen eye!",
+    "close": "Close",
+    "pill": "Curious path",
+    "pill_done": "Path completed",
+    "secret_intro": "You have read everything. To continue, type this phrase in the search bar:",
+    "panel_title": "The curious path",
+    "panel_text": "Read each of these pages all the way down: a surprise awaits those who go to the end.",
+    "pages": {
+      "home": "Home",
+      "biography": "Biography",
+      "metahism": "Metahism",
+      "artworks": "Artworks",
+      "analyses": "Analyses",
+      "mikado": "The Great Mikado"
+    }
+  },
   "gallery": {
     "default_title": "Gallery",
     "loading": "Loading artworks...",

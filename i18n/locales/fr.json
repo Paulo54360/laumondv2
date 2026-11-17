@@ -231,6 +231,23 @@
     "search": "Rechercher",
     "scroll_to_top": "Remonter en haut de la page"
   },
+  "easter_egg": {
+    "title": "Bravo, vous avez l'œil !",
+    "close": "Fermer",
+    "pill": "Parcours du curieux",
+    "pill_done": "Parcours terminé",
+    "secret_intro": "Vous avez tout lu. Pour la suite, recopiez cette phrase dans la barre de recherche :",
+    "panel_title": "Le parcours du curieux",
+    "panel_text": "Lisez chacune de ces pages jusqu'en bas. Une surprise attend ceux qui vont au bout.",
+    "pages": {
+      "home": "Accueil",
+      "biography": "Biographie",
+      "metahism": "Métahisme",
+      "artworks": "Œuvres",
+      "analyses": "Analyses",
+      "mikado": "Le grand Mikado"
+    }
+  },
   "gallery": {
     "default_title": "Galerie",
     "loading": "Chargement des œuvres...",

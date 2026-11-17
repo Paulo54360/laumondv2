@@ -5,6 +5,9 @@ import { useRoute, useRouter } from 'vue-router';
 // @ts-expect-error - Provided by Nuxt auto-imports at build time
 import { useLocalePath, useNuxtApp, useSwitchLocalePath } from '#imports';
 
+import { isSecretPhrase } from '../utils/easterEgg';
+import { easterEggVideoOpen } from '../utils/easterEggState';
+
 export interface IUseNavbarReturn {
   isScrolled: Ref<boolean>;
   isMobileMenuOpen: Ref<boolean>;
@@ -89,6 +92,14 @@ export function useNavbar(): IUseNavbarReturn {
   const performSearch = (): void => {
     const value = searchQuery.value.trim();
     if (!value) return;
+
+    // Easter egg : la phrase secrète ouvre la vidéo au lieu de lancer la recherche
+    if (isSecretPhrase(value)) {
+      easterEggVideoOpen.value = true;
+      searchQuery.value = '';
+      closeSearchPanel();
+      return;
+    }
 
     const searchUrl = localePath({ path: '/search', query: { q: value } });
     router.push(searchUrl);
