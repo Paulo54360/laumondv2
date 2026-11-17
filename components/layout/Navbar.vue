@@ -2,20 +2,16 @@
 <template>
   <header class="navbar" :class="{ 'navbar-scrolled': isScrolled }">
     <div class="navbar-container">
-      <!-- Logo / Titre -->
+      <!-- Logo -->
       <div class="navbar-brand">
-        <NuxtLink :to="localePath('/')" class="brand-link">
+        <NuxtLink :to="localePath('/')" class="brand-link" :aria-label="'Patrick Laumond'">
           <img
             src="/images/logo.webp"
-            alt="Patrick Laumond Logo"
+            alt="Patrick Laumond"
             class="brand-logo"
-            width="42"
-            height="42"
+            width="50"
+            height="50"
           />
-          <div class="brand-title">
-            <span class="brand-name-top">Patrick</span>
-            <span class="brand-name-bottom">Laumond</span>
-          </div>
         </NuxtLink>
       </div>
 
