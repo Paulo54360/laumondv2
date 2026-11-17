@@ -1,20 +1,7 @@
 import { runRealtimeReport, type RealtimeData } from '~/server/utils/googleAnalytics';
 
 export default defineEventHandler(async (event): Promise<RealtimeData> => {
-  // Vérification auth (pattern copié de artworks/index.get.ts)
-  const authHeader = getHeader(event, 'authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
-  }
-
-  const supabase = getSupabaseAdminClient();
-
-  const { data: userData, error: userError } = await supabase.auth.getUser(token);
-  if (userError || !userData.user) {
-    throw createError({ statusCode: 401, statusMessage: 'Session invalide' });
-  }
+  await requireAdminUser(event);
 
   // Vérifier la configuration GA
   const config = useRuntimeConfig();

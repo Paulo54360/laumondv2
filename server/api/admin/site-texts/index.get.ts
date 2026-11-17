@@ -53,22 +53,9 @@ type SiteTextsResponse = Array<{
 }>;
 
 export default defineEventHandler(async (event) => {
-  const authHeader = getHeader(event, 'authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
-  }
+  await requireAdminUser(event);
 
   const supabase = getSupabaseAdminClient();
-
-  const { data: userData, error: authError } = await supabase.auth.getUser(token);
-  if (authError || !userData.user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Session expirée. Veuillez vous reconnecter.',
-    });
-  }
 
   const { slug } = getQuery(event);
 

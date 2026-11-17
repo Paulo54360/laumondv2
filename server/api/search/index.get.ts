@@ -119,6 +119,7 @@ export default defineEventHandler(async (event) => {
     const { data: byTitle, error: errorTitle } = await supabase
       .from('artworks')
       .select(selectFields)
+      .is('deleted_at', null)
       .ilike('title', searchPattern)
       .limit(200);
 
@@ -126,6 +127,7 @@ export default defineEventHandler(async (event) => {
     const { data: byTitleEn, error: errorTitleEn } = await supabase
       .from('artworks')
       .select(selectFields)
+      .is('deleted_at', null)
       .not('title_en', 'is', null)
       .ilike('title_en', searchPattern)
       .limit(200);
@@ -142,18 +144,33 @@ export default defineEventHandler(async (event) => {
     const { data: byDescription, error: errorDescription } = await supabase
       .from('artworks')
       .select(selectFields)
+      .is('deleted_at', null)
       .not('description', 'is', null)
       .ilike('description', searchPattern)
+      .limit(200);
+
+    // Recherche 2b : dans description_fr
+    const { data: byDescriptionFr, error: errorDescriptionFr } = await supabase
+      .from('artworks')
+      .select(selectFields)
+      .is('deleted_at', null)
+      .not('description_fr', 'is', null)
+      .ilike('description_fr', searchPattern)
       .limit(200);
 
     if (errorDescription) {
       console.error('❌ Erreur recherche description:', errorDescription);
     }
 
+    if (errorDescriptionFr) {
+      console.error('❌ Erreur recherche description_fr:', errorDescriptionFr);
+    }
+
     // Recherche 3 : dans subcategory
     const { data: bySubcategory, error: errorSubcategory } = await supabase
       .from('artworks')
       .select(selectFields)
+      .is('deleted_at', null)
       .not('subcategory', 'is', null)
       .ilike('subcategory', searchPattern)
       .limit(200);
@@ -176,6 +193,7 @@ export default defineEventHandler(async (event) => {
       const { data: artworksByCategory, error: categoryArtworksError } = await supabase
         .from('artworks')
         .select(selectFields)
+        .is('deleted_at', null)
         .in('category_id', categoryIds)
         .limit(200);
 
@@ -191,6 +209,7 @@ export default defineEventHandler(async (event) => {
       ...(byTitle || []),
       ...(byTitleEn || []),
       ...(byDescription || []),
+      ...(byDescriptionFr || []),
       ...(bySubcategory || []),
       ...(byCategory || []),
     ];

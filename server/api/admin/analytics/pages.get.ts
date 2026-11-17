@@ -8,20 +8,7 @@ type PagesResponse = {
 };
 
 export default defineEventHandler(async (event): Promise<PagesResponse> => {
-  // Vérification auth
-  const authHeader = getHeader(event, 'authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
-  }
-
-  const supabase = getSupabaseAdminClient();
-
-  const { data: userData, error: userError } = await supabase.auth.getUser(token);
-  if (userError || !userData.user) {
-    throw createError({ statusCode: 401, statusMessage: 'Session invalide' });
-  }
+  await requireAdminUser(event);
 
   // Récupérer les paramètres
   const { startDate: rawStartDate, endDate: rawEndDate, country: rawCountry } = getQuery(event);

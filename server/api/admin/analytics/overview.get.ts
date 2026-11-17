@@ -1,20 +1,7 @@
 import { runOverviewReport, type OverviewData } from '~/server/utils/googleAnalytics';
 
 export default defineEventHandler(async (event): Promise<OverviewData> => {
-  // Vérification auth (pattern copié de artworks/index.get.ts)
-  const authHeader = getHeader(event, 'authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
-  }
-
-  const supabase = getSupabaseAdminClient();
-
-  const { data: userData, error: userError } = await supabase.auth.getUser(token);
-  if (userError || !userData.user) {
-    throw createError({ statusCode: 401, statusMessage: 'Session invalide' });
-  }
+  await requireAdminUser(event);
 
   // Récupérer les paramètres de période
   const { startDate: rawStartDate, endDate: rawEndDate } = getQuery(event);

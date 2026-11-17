@@ -85,12 +85,7 @@ async function parseMultipart(event: H3Event): Promise<ParsedForm> {
 }
 
 export default defineEventHandler(async (event) => {
-  const authHeader = getHeader(event, 'authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Non authentifié' });
-  }
+  await requireAdminUser(event);
 
   const id = getRouterParam(event, 'id');
   const artworkId = id ? Number(id) : NaN;
@@ -110,11 +105,6 @@ export default defineEventHandler(async (event) => {
   }
 
   const supabase = getSupabaseAdminClient();
-
-  const { data: userData, error: userError } = await supabase.auth.getUser(token);
-  if (userError || !userData.user) {
-    throw createError({ statusCode: 401, statusMessage: 'Session invalide' });
-  }
 
   const { title, description, categoryId, deletedImageUrls, files } = await parseMultipart(event);
 

@@ -42,6 +42,14 @@ Fichier : `supabase/migrations/20260203000005_add_site_texts_category.sql`
 
 - Ajoute la colonne `category` pour regrouper les textes dans l’admin (biography, metahism, homepage, analyses)
 
+### Étape 6 : Sécurisation RLS et Index
+
+Fichier : `supabase/migrations/20260203000006_enable_rls_and_indexes.sql`
+
+- Active Row Level Security (RLS) sur toutes les tables
+- Verrouille l'accès direct aux écritures via PostgREST/clé anon
+- Ajoute les index sur `category_id` et trigrammes `pg_trgm` pour la recherche
+
 ## 3. Migration des données existantes
 
 Après avoir exécuté les migrations SQL :
