@@ -37,6 +37,8 @@
 
   const images = computed(() =>
     Object.entries(presseImages)
+      // Uniquement le recto des affiches (fichiers se terminant par "-2027.jpg")
+      .filter(([path]) => path.endsWith('-2027.jpg'))
       .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
       .map(([path, src]) => ({
         src,
