@@ -1,15 +1,13 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="grand-mikado-page">
-    <section class="page-gallery" aria-label="Revue de presse en plein écran">
-      <figure v-for="image in images" :key="image.src" class="gallery-figure">
+    <section class="page-gallery" aria-label="Affiche en plein écran">
+      <figure class="gallery-figure">
         <picture class="gallery-picture">
-          <source media="(max-width: 768px)" :srcset="image.mobileSrc" />
           <img
-            :src="image.src"
-            :alt="image.alt"
-            class="gallery-image"
-            :class="{ 'gallery-image--mobile-rotated': image.mobileSrc !== image.src }"
+            :src="posterSrc"
+            :alt="pageTitle"
+            class="gallery-image gallery-image--mobile-rotated"
           />
         </picture>
       </figure>
@@ -21,31 +19,17 @@
   import { computed } from 'vue';
   import { useI18n } from 'vue-i18n';
 
+  import { useImageProxy } from '~/composables/useImageProxy';
+
   definePageMeta({ layout: 'default' });
 
   const { t } = useI18n();
-  const presseImages = import.meta.glob('../assets/images/common/presse/*.jpg', {
-    eager: true,
-    import: 'default',
-  }) as Record<string, string>;
-  const presseImagesMobile = import.meta.glob('../assets/images/common/presse vertical/*.jpg', {
-    eager: true,
-    import: 'default',
-  }) as Record<string, string>;
+  const proxify = useImageProxy();
+
+  // Affiche "affiche mikado" du dossier S3 "autres"
+  const posterSrc = proxify('autres/affiche-mikado.webp');
 
   const pageTitle = computed(() => t('grandMikado.pageTitle'));
-
-  const images = computed(() =>
-    Object.entries(presseImages)
-      // Uniquement le recto des affiches (fichiers se terminant par "-2027.jpg")
-      .filter(([path]) => path.endsWith('-2027.jpg'))
-      .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
-      .map(([path, src]) => ({
-        src,
-        mobileSrc: presseImagesMobile[path.replace('/presse/', '/presse vertical/')] ?? src,
-        alt: pageTitle.value,
-      }))
-  );
 
   useHead({
     title: pageTitle,
